@@ -1,4 +1,4 @@
-using NamedTupleTools
+export PDBAtom
 
 const PDBAtomExtras = @NamedTuple begin
     residue_id::Int
@@ -6,4 +6,7 @@ const PDBAtomExtras = @NamedTuple begin
     chain::String
 end
 
-const PDBAtom{T} = merge(Atom{T}, PDBAtomExtras)
+const PDBAtom{T} = NamedTuple{
+    (fieldnames(Atom{T})..., fieldnames(PDBAtomExtras)...), 
+    Tuple{fieldtypes(Atom{T})..., fieldtypes(PDBAtomExtras)...}
+}

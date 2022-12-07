@@ -1,4 +1,4 @@
-export Bond
+export Bond, BondOrder, BondOrderType
 
 using EnumX
 
@@ -16,4 +16,5 @@ const Bond = @NamedTuple begin
     a1::Int
     a2::Int
     order::BondOrderType
+    properties::Properties
 end
