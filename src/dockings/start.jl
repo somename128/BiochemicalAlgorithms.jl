@@ -66,14 +66,14 @@ function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
 
     # grid properties
     lower_left = (0,0,0)
-    N = 60
+    N = 64
     spcing_factor = 1
     upper_right = (N,N,N) 
     spcing = (N*spcing_factor, N*spcing_factor, N*spcing_factor)
 
     # create 3D grid with N/N*spcing_factor spacing in each dimension, origin at (0,0,0)
     grid = Meshes.CartesianGrid(lower_left, upper_right, dims=spcing)
-    println("Grid built...")
+    println(string(N) * "x" * string(N) * "x" * string(N) * " Grid built...")
     # centroid of each cell
     centroids = Meshes.centroid.(grid)
     println("Centroids loaded...")
@@ -87,7 +87,7 @@ function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
         b = Meshes.Ball(i, r)
         push!(atomballs, b)
     end
-    println("Atomballs built...")
+    println(string(length(atomballs)) * " Atomballs built...")
 
     #inside-outside
     colored_cells = Base.Vector{Int64}()
@@ -101,9 +101,11 @@ function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
             # for future calculations
             #
             # findall returns indice of i in centroids if a centroid i lies
-            # in an atomball j -> stored in colored_cells
+            # in an atomball j -> stored in colored_cells if not already in storage
             position = findall(item -> item == i, centroids)
-            push!(colored_cells,position[1])
+            if(!Base.in(position[1], colored_cells))
+                push!(colored_cells,position[1])
+            end
         end
     end
     println(string(length(colored_cells)) * " Colored cells found...")
@@ -129,18 +131,21 @@ function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
     return inner_outer_grid
 end
 
-t1 = Vector3{Float32}(20,20,20)
-# t2 = Vector3{Float32}(30,30,30)
+t1 = Vector3{Float32}(20,0,0)
+t2 = Vector3{Float32}(0,-40,0)
 
-A = grid_representation("5PTI.pdb", t1)
-# B = grid_representation("5PTI.pdb", t2)
+A = grid_representation("2ptc_protein.pdb", t1)
+B = grid_representation("2ptc_ligand.pdb", t2)
 
-println("Start writing in txt file...")
+println("Start writing grid A and B in txt files...")
 # write gird representation in txt file
-writedlm("grid.txt", A)
+writedlm("grid_A.txt", A)
+writedlm("grid_B.txt", B)
 
-#=
+println("Start correlation...")
 # correlation function
 C = dot(A,B)
-=#
+
+println("Scoring: " * string(C))
+
 end
