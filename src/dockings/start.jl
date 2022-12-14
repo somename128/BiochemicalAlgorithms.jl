@@ -3,12 +3,15 @@ using Makie, WGLMakie
 using Meshes, MeshViz
 using LinearAlgebra
 using BenchmarkTools
+using DelimitedFiles
+
 
 @time begin
 # function for calculating grid representation
 function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
     # load protein data from PDB
     protein = load_pdb(path_to_pdb)
+    println("PDB loaded...")
 
     # translation vector
     t = translation_vector
@@ -21,7 +24,7 @@ function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
     atoms_in_space = protein.atoms.r
 
     # transfer atom coordinates in mesh points
-    atoms_in_space_points = Vector{Meshes.Point3}()
+    atoms_in_space_points = Base.Vector{Meshes.Point3}()
 
     for i in atoms_in_space
         v = Meshes.Point(i[1],i[2],i[3])
@@ -69,21 +72,25 @@ function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
     spcing = (N*spcing_factor, N*spcing_factor, N*spcing_factor)
 
     # create 3D grid with N/N*spcing_factor spacing in each dimension, origin at (0,0,0)
-    grid = CartesianGrid(lower_left, upper_right, dims=spcing)
+    grid = Meshes.CartesianGrid(lower_left, upper_right, dims=spcing)
+    println("Grid built...")
     # centroid of each cell
-    centroids = centroid.(grid)
+    centroids = Meshes.centroid.(grid)
+    println("Centroids loaded...")
 
     # balls with radius r and atom points as center
     # TODO: different r for different atoms 
-    atomballs = Vector{Meshes.Ball}()
-    r = 0.5
+    atomballs = Base.Vector{Meshes.Ball}()
+    r = 1.8
 
     for i in atoms_in_space_points
         b = Meshes.Ball(i, r)
         push!(atomballs, b)
     end
+    println("Atomballs built...")
 
-    colored_cells = Vector{Int64}()
+    #inside-outside
+    colored_cells = Base.Vector{Int64}()
 
     # check if centroids of cells inside balls of atoms
     # and store position of colored cell 
@@ -99,24 +106,41 @@ function grid_representation(path_to_pdb, translation_vector::Vector3{Float32})
             push!(colored_cells,position[1])
         end
     end
+    println(string(length(colored_cells)) * " Colored cells found...")
 
     inner_outer_grid = zeros(N*N*N)
 
-    # set the grid-position where "centroid inside atomball" to 1
+    # set the grid-position where "centroid inside atomball"
+    # and all six cells around i are also into colored_cells (sourrounded by atoms)
+    # to -15 (inside atom)
+    # all other colored_cells are surface cells and set to 1
     for i in colored_cells
-        inner_outer_grid[i] = 1
+        if(Base.in(i-N*N, colored_cells) && Base.in(i-N,colored_cells) && Base.in(i-1, colored_cells)
+            && Base.in(i+1, colored_cells) && Base.in(i+N, colored_cells) && Base.in(i+N*N, colored_cells))
+            inner_outer_grid[i] = -15
+            # println("inside!")
+        else
+            inner_outer_grid[i] = 1
+            # println("surface!")
+        end
     end
+    println("Inner-outer-Grid built...")
 
     return inner_outer_grid
 end
 
 t1 = Vector3{Float32}(20,20,20)
-t2 = Vector3{Float32}(30,30,30)
+# t2 = Vector3{Float32}(30,30,30)
 
 A = grid_representation("5PTI.pdb", t1)
-B = grid_representation("5PTI.pdb", t2)
+# B = grid_representation("5PTI.pdb", t2)
 
+println("Start writing in txt file...")
+# write gird representation in txt file
+writedlm("grid.txt", A)
+
+#=
 # correlation function
 C = dot(A,B)
-
+=#
 end
