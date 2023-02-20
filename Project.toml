@@ -27,7 +27,7 @@ WGLMakie = "276b4fcb-3e11-5398-bf8b-a0c2d153d008"
 
 [compat]
 BenchmarkTools = "1"
-BioStructures = "1"
+BioStructures = "1, 2"
 BioSymbols = "4, 5"
 DataFrames = "1"
 DataFramesMeta = "0.12"
