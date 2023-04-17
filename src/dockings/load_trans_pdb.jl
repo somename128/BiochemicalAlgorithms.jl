@@ -22,31 +22,52 @@ function load_and_trans_pdb(path_to_pdb)
         push!(Z, i[3])
     end
 
-    # calculate x y z min for translation (max maybe needed one time)
+    # calculate x y z min and max for translation that 
+    # needed for optimal rotation
     min_x = minimum(X)
-    # max_x = maximum(X)
+    max_x = maximum(X)
     min_y = minimum(Y)
-    # max_y = maximum(Y)
+    max_y = maximum(Y)
     min_z = minimum(Z)
-    # max_z = maximum(Z)
+    max_z = maximum(Z)
+
+    # calculate "largest" diameter of protein
+    # translation adding this value in x y z ensure that
+    # protein do not "vanish" through rotation
+    # so far: for maximum function vector needed
+    RAD = Vector{Float32}()
+    push!(DIA,abs(min_x-max_x)/2)
+    push!(DIA,abs(min_y-max_y)/2)
+    push!(DIA,abs(min_z-max_z)/2)
+
+    # maximum radius of x y z added 3 for atom radians purposes
+    max_rad = maximum(DIA)+3
 
     # set translation vector depending on atom coordinates
+    # and maximum radius in x y z 
     if (min_x < 0 && min_y < 0 && min_z < 0)
-        translation_vector = Vector3{Float32}(abs(min_x)+1, abs(min_y)+1, abs(min_z)+1)
+        translation_vector = Vector3{Float32}(abs(min_x)+max_rad, 
+            abs(min_y)+max_rad, abs(min_z)+max_rad)
     elseif (min_x < 0 && min_y < 0 && min_z >= 0)
-        translation_vector = Vector3{Float32}(abs(min_x)+1, abs(min_y)+1, 0)
+        translation_vector = Vector3{Float32}(abs(min_x)+max_rad, 
+            abs(min_y)+max_rad, 0+max_rad)
     elseif (min_x < 0 && min_y >= 0 && min_z < 0)
-        translation_vector = Vector3{Float32}(abs(min_x)+1, 0, abs(min_z)+1)   
+        translation_vector = Vector3{Float32}(abs(min_x)+max_rad, 
+            0+max_rad, abs(min_z)+max_rad)   
     elseif (min_x < 0 && min_y >= 0 && min_z >= 0)
-        translation_vector = Vector3{Float32}(abs(min_x)+1, 0, 0)
+        translation_vector = Vector3{Float32}(abs(min_x)+max_rad, 
+            0+max_rad, 0+max_rad)
     elseif (min_x >= 0 && min_y < 0 && min_z < 0)
-        translation_vector = Vector3{Float32}(0, abs(min_y)+1, abs(min_z)+1)
+        translation_vector = Vector3{Float32}(0+max_rad, 
+            abs(min_y)+max_rad, abs(min_z)+max_rad)
     elseif (min_x >= 0 && min_y < 0 && min_z >= 0)
-        translation_vector = Vector3{Float32}(0, abs(min_y)+1, 0) 
+        translation_vector = Vector3{Float32}(0+max_rad, 
+            abs(min_y)+max_rad, 0+max_rad) 
     elseif (min_x >= 0 && min_y >= 0 && min_z < 0)
-        translation_vector = Vector3{Float32}(0, 0, abs(min_z)+1)
+        translation_vector = Vector3{Float32}(0+max_rad, 
+            0+max_rad, abs(min_z)+max_rad)
     else 
-        translation_vector = (0,0,0)
+        translation_vector = (0+max_rad,0+max_rad,0+max_rad)
     end
 
     # translate protein in "positive space"
