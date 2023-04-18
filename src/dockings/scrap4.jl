@@ -1,34 +1,17 @@
 using BiochemicalAlgorithms
+using JLD
 
-protein = load_pdb("2ptc_protein.pdb")
+include("extract_max.jl")
 
-# translate protein in positive space
-println("Translate protein in positive space...")
-# extract room coordinates of atoms of the protein
-atoms_in_space = protein.atoms.r
-# initalize vectors for storing x y z coordinates seperately
-X = Vector{Float32}()
-Y = Vector{Float32}()
-Z = Vector{Float32}()
+scoring_table = Table(α=[], β=[], γ=[], R=[], score=[])
+C = load("C_matrix.jld")["C"]
 
-# fill vectors with coordinates
-for i in atoms_in_space
-    push!(X, i[1])
-    push!(Y, i[2])
-    push!(Z, i[3])
-end
+max = extract_max(C)
 
-# calculate x y z min for translation (max maybe needed one time)
-min_x = minimum(X)
-max_x = maximum(X)
-min_y = minimum(Y)
-max_y = maximum(Y)
-min_z = minimum(Z)
-max_z = maximum(Z)
+record = (α=max.α, β=max.β, γ=max.γ, R=120, score=max.score)
+push!(scoring_table,record)
 
-DIA = Vector{Float32}()
-push!(DIA,abs(min_x-max_x)/2)
-push!(DIA,abs(min_y-max_y)/2)
-push!(DIA,abs(min_z-max_z)/2)
+# s = load("scoring_table.jld")["scoring_table"]
 
-maximum(DIA)
+m = scoring_table[findmax(scoring_table.score)[2]]
+

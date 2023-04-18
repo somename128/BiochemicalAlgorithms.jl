@@ -9,7 +9,7 @@ include("grid_representation.jl")
 include("extract_max.jl")
 include("create_rotations.jl")
 
-scoring_table = Table(α=[], β= [], γ=[], score=[])
+scoring_table = Table(α=[], β=[], γ=[], R=[], score=[])
 
 # load and translate protein a
 # protein_A = load_and_trans_pdb("2ptc_protein.pdb")
@@ -23,11 +23,11 @@ A = load("grid_rep_A.jld")["A"]
 # get rotations - build via rigid_transform! with translation vector (0,0,0)
 rotations = create_rotations()
 # rotate protein b by R
-for R in rotations
+for r in rotations
     # load and translate protein b per loop to use rotations relative to 
     # origin coordinates
     protein_B = load_and_trans_pdb("2ptc_ligand.pdb")
-    rigid_transform!(protein_B, R)
+    rigid_transform!(protein_B, r)
     # grid representation protein b
     B = grid_representation(protein_B)
     # fft-scoring
@@ -40,7 +40,9 @@ for R in rotations
     # -----------------------------------------
     # safe α,β,γ,R of max fft-scoring (c)
     max = extract_max(C)
-    push!(scoring_table,max)
+    # build record for scoring table
+    record = (α=max.α, β=max.β, γ=max.γ, R=r, score=max.score)
+    push!(scoring_table,record)
 end    
 # --------------------------------------------
 # safe results of run

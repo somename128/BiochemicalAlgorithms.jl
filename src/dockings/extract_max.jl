@@ -11,9 +11,10 @@ function extract_max(C)
     C_sparse = zero_small!(C_real,0.5)
 
     # walk through all values in 3D matrix and store them in table
-    for k = 1:size(C_sparse,3)
-        for j = 1:size(C_sparse,2)
-            for i = 1:size(C_sparse,1)
+    # indices and score
+    for k in axes(C_sparse, 3)
+        for j in axes(C_sparse, 2)
+            for i in axes(C_sparse, 1)
                 push!(t,(α=i, β=j, γ=k, score=C_sparse[i,j,k]))
             end
         end
