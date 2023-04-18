@@ -40,7 +40,6 @@ function grid_representation(protein)
         push!(atomballs, b)
     end
 
-    @time begin
     println("Set marked cells...")
     #inside-outside
     colored_cells = Base.Vector{Int64}()
@@ -60,7 +59,6 @@ function grid_representation(protein)
                 push!(colored_cells,position[1])
             end
         end
-    end
     end
 
     println("Build 1D grid representation...")
