@@ -2,50 +2,34 @@ using BiochemicalAlgorithms
 using Meshes
 using BenchmarkTools
 
+include("create_atomballs.jl")
+include("create_centroids.jl")
+
 function grid_representation(protein)
-    println("Extract room coordinates...")
-    # extract room coordinates of atoms of the protein
-    atoms_in_space = protein.atoms.r
+    # calculate atomballs around proteins atoms
+    atomballs = create_atomballs(protein)
+    println(length(atomballs))
+    # calculate centroids in a 128x128x128 grid with cells
+    # of 1 angström 
+    centroids = create_centroids(128,1)
 
-    # transfer atom coordinates in mesh points
-    atoms_in_space_points = Base.Vector{Meshes.Point3}()
-
-    for i in atoms_in_space
-        v = Meshes.Point(i[1],i[2],i[3])
-        push!(atoms_in_space_points, v)
-    end
-
-    println("Build grid...")
-    # grid properties
-    lower_left = (0,0,0)
-    N = 128
-    spcing_factor = 1
-    upper_right = (N,N,N) 
-    spcing = (N*spcing_factor, N*spcing_factor, N*spcing_factor)
-
-    # create 3D grid with N/N*spcing_factor spacing in each dimension, origin at (0,0,0)
-    grid = Meshes.CartesianGrid(lower_left, upper_right, dims=spcing)
-    # centroid of each cell
-    println("Build centroids...")
-    centroids = Meshes.centroid.(grid)
-
-    # balls with radius r and atom points as center
-    # TODO: different r for different atoms
-    println("Build atomballs...")
-    atomballs = Base.Vector{Meshes.Ball}()
-    r = 1.8
-
-    for i in atoms_in_space_points
-        b = Meshes.Ball(i, r)
-        push!(atomballs, b)
-    end
+    #extract min max (in rounded int) of atom coordinates of protein
+    min_max = min_max_atoms(protein)
+    min_x = min_max[1]
+    max_x = min_max[2]
+    min_y = min_max[3]
+    max_y = min_max[4]
+    min_z = min_max[5]
+    max_z = min_max[6]
 
     println("Set marked cells...")
-    #inside-outside
+    # inside-outside
+    # TODO: for loop with new colored_cells structure
     colored_cells = Base.Vector{Int64}()
 
     # check if centroids of cells inside balls of atoms
     # and store position of colored cell 
+    @time begin
     for i in centroids, j in atomballs
         if(Base.in(i,j))
             # returns vector thats why position[1]
@@ -58,7 +42,8 @@ function grid_representation(protein)
             if(!Base.in(position[1], colored_cells))
                 push!(colored_cells,position[1])
             end
-        end
+        end  
+    end
     end
 
     println("Build 1D grid representation...")
