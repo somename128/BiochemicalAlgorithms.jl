@@ -1,4 +1,5 @@
 using BiochemicalAlgorithms
+using BenchmarkTools
 using Makie, WGLMakie
 using Meshes, MeshViz
 using JLD
@@ -8,10 +9,12 @@ include("load_trans_pdb.jl")
 include("min_max_atoms.jl")
 
 
-protein = load_and_trans_pdb("2ptc_protein.pdb")
+protein = load_and_trans_pdb("2ptc_ligand.pdb")
 
 atomballs = create_atomballs(protein)
+println(length(atomballs))
 centroids = create_centroids(128,1)
+println(length(centroids))
 
 #extract min max (in rounded int) of atom coordinates of protein
 min_max = min_max_atoms(protein)
@@ -24,21 +27,37 @@ max_z = min_max[6]
 
 colored_cells = Vector{Meshes.CartesianIndex{3}}()
 
-for i in centroids[min_x:max_x,min_y:max_y,min_z:max_z], j in atomballs
-    if(Base.in(i,j))
-        # returns vector thats why position[1]
-        # dont know if vector of vectors or number better 
-        # for future calculations
-        #
-        # findall returns indice of i in centroids if a centroid i lies
-        # in an atomball j -> stored in colored_cells if not already in storage
-        position = findall(item -> item == i, centroids)
-        if(!Base.in(position[1], colored_cells))
-            push!(colored_cells,position[1])
+counter_j = 0
+counter_i = 0
+
+@time begin
+Threads.@threads for i in centroids[min_x:max_x,min_y:max_y,min_z:max_z]
+    global counter_j = 0
+    @time for j in atomballs
+        if(Base.in(i,j))
+            # returns vector thats why position[1]
+            # dont know if vector of vectors or number better 
+            # for future calculations
+            #
+            # findall returns indice of i in centroids if a centroid i lies
+            # in an atomball j -> stored in colored_cells if not already in storage
+            position = findall(item -> item == i, centroids)
+            if(!Base.in(position[1], colored_cells))
+                push!(colored_cells,position[1])
+            end
         end
-    end  
+        global counter_j += 1
+        println(counter_j,"/",length(atomballs))
+        println(Threads.threadid())
+    end
+    global counter_i += 1
+    println(counter_i,"/",length(centroids))
+    if(counter_i == 1000)
+        break
+    end
 end
-colored_cells
+end
+length(colored_cells)
 #=
 # grid properties
 lower_left = (0,0,0)
