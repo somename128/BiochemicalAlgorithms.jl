@@ -7,8 +7,8 @@ function create_rotations()
     angles = Vector{Float32}()
 
     # fill array with angle values from 0 to 360 stepsize 5
-    # for i in 1:73
-    for i in 1:2
+    for i in 1:73
+    # for i in 1:2
         a = (i-1) * 5
         push!(angles,a)
     end
