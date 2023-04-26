@@ -12,6 +12,7 @@ function grid_representation(protein)
     # calculate centroids in a 128x128x128 grid with cells
     # of 1 angström 
     centroids = create_centroids(128,1)
+    println(length(centroids))
 
     #extract min max (in rounded int) of atom coordinates of protein
     min_max = min_max_atoms(protein)
