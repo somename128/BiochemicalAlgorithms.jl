@@ -1,6 +1,7 @@
 using BiochemicalAlgorithms
+using ProgressBars
 
-function set_marked_cells(atomballs,centroids,protein)
+function set_marked_cells(atomballs::Vector{Ball},centroids::Array{Meshes.Point3, 3},protein::PDBMolecule{Float32})
     # initialize vector with datatype of centroids
     colored_cells = Vector{Meshes.CartesianIndex{3}}()
 
@@ -14,8 +15,7 @@ function set_marked_cells(atomballs,centroids,protein)
     max_z = min_max[6]
 
     # store centroids that are inside a atom radius in colored_cells
-    for j in atomballs
-        Threads.@threads for i in centroids[min_x:max_x,min_y:max_y,min_z:max_z]
+    for i in centroids[min_x:max_x,min_y:max_y,min_z:max_z], j in atomballs
             if(Base.in(i,j))
                 # returns vector thats why position[1]
                 # dont know if vector of vectors or number better 
@@ -28,7 +28,6 @@ function set_marked_cells(atomballs,centroids,protein)
                     push!(colored_cells,position[1])
                 end
             end
-        end
     end
 
     # return cells that represent protein in grid structure
