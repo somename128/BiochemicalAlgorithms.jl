@@ -30,9 +30,9 @@ min_max = min_max_atoms(protein)
 min_x = min_max[1]
 max_x = min_max[2]
 min_y = min_max[3]
-# max_y = min_max[4]
-# min_z = min_max[5]
-# max_z = min_max[6]
+max_y = min_max[4]
+min_z = min_max[5]
+max_z = min_max[6]
 
 colored_cells = Vector{Int64}()
 
