@@ -62,4 +62,3 @@ length(colored_cells)
 
 
 
-
