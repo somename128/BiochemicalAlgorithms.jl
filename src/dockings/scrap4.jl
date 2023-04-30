@@ -38,7 +38,7 @@ colored_cells = Vector{Int64}()
 
 # store centroids that are inside a atom radius in colored_cells
 @time begin
-for i in 1:length(centroids), j in 1:length(atomballs)
+for i in eachindex(centroids), j in eachindex(atomballs)
     if(Base.in(centroids[i],atomballs[j]))
         # returns vector thats why position[1]
         # dont know if vector of vectors or number better 
@@ -56,10 +56,3 @@ end
 end
 
 length(colored_cells)
-
-
-
-
-
-
-
