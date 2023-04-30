@@ -24,7 +24,7 @@ Profile.clear()
 @profile set_marked_cells(atomballs,centroids,protein)
 ProfileView.view()
 =#
-
+#=
 #extract min max (in rounded int) of atom coordinates of protein
 min_max = min_max_atoms(protein)
 min_x = min_max[1]
@@ -32,9 +32,10 @@ max_x = min_max[2]
 min_y = min_max[3]
 max_y = min_max[4]
 min_z = min_max[5]
-# max_z = min_max[6]
-
-colored_cells = Vector{Int64}()
+max_z = min_max[6]
+=#
+colored_cells_1 = Vector{Int64}()
+colored_cells_2 = Vector{Int64}()
 
 # store centroids that are inside a atom radius in colored_cells
 @time begin
@@ -47,12 +48,31 @@ for i in eachindex(centroids), j in eachindex(atomballs)
         # findall returns indice of i in centroids if a centroid i lies
         # in an atomball j -> stored in colored_cells if not already in storage
         position = i
-        println(position)
-        if(!Base.in(position, colored_cells))
-            push!(colored_cells,position[1])
+        # println(position)
+        if(!Base.in(position, colored_cells_1))
+            push!(colored_cells_1,position)
         end
     end
 end
 end
 
-length(colored_cells)
+@time begin
+for i in centroids, j in atomballs
+    if(Base.in(i,j))
+        # returns vector thats why position[1]
+        # dont know if vector of vectors or number better 
+        # for future calculations
+        #
+        # findall returns indice of i in centroids if a centroid i lies
+        # in an atomball j -> stored in colored_cells if not already in storage
+        position = findall(item -> item == i, centroids)
+        if(!Base.in(position[1], colored_cells_2))
+            push!(colored_cells_2,position[1])
+        end
+    end  
+end
+end
+
+colored_cells_1 == colored_cells_2
+
+

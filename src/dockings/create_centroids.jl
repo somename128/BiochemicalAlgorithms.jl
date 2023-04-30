@@ -17,7 +17,7 @@ function create_centroids(n, spfactor)
     centroids = Meshes.centroid.(grid)
     
     # reshape centroids 1D -> 3D 
-    centroids = reshape([centroids...], N, N, N)
+    # centroids = reshape([centroids...], N, N, N)
 
     return centroids
 end
