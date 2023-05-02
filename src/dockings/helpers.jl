@@ -8,3 +8,11 @@ function zero_small!(M, tol)
     M
 end
 
+# functions that check if protein boundaries are out of bounds
+function less_than_one!(x::Int64)
+    if x < 1
+        x = 1
+    end
+
+    return x
+end

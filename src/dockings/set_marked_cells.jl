@@ -1,11 +1,10 @@
 using BiochemicalAlgorithms
-using ProgressBars
 
-function set_marked_cells(atomballs::Vector{Ball},centroids::Array{Meshes.Point3, 3},protein::PDBMolecule{Float32})
+function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes.Point3,3},protein::PDBMolecule{Float32})
     # initialize vector with datatype of centroids
-    colored_cells = Vector{Meshes.CartesianIndex{3}}()
+    colored_cells = Vector{Int64}()
 
-    #extract min max (in rounded int) of atom coordinates of protein
+    #extract min max (in rounded int +/-2) of atom coordinates of protein
     min_max = min_max_atoms(protein)
     min_x = min_max[1]
     max_x = min_max[2]
@@ -14,20 +13,24 @@ function set_marked_cells(atomballs::Vector{Ball},centroids::Array{Meshes.Point3
     min_z = min_max[5]
     max_z = min_max[6]
 
+    # extract LinearIndices from centroids
+    # still not sure how this stuff works
+    I = LinearIndices(centroids)
+    
+    println("Set marked cells...")
     # store centroids that are inside a atom radius in colored_cells
-    for i in centroids[min_x:max_x,min_y:max_y,min_z:max_z], j in atomballs
-            if(Base.in(i,j))
-                # returns vector thats why position[1]
-                # dont know if vector of vectors or number better 
-                # for future calculations
-                #
-                # findall returns indice of i in centroids if a centroid i lies
-                # in an atomball j -> stored in colored_cells if not already in storage
-                position = findall(item -> item == i, centroids)
-                if(!Base.in(position[1], colored_cells))
-                    push!(colored_cells,position[1])
-                end
+    for i in CartesianIndices(centroids[min_x:max_x,min_y:max_y,min_z:max_z]), j in eachindex(atomballs)
+        # move cartesian index i via min_x,min_y,min_z to get right index
+        # I[] to get linear index of cartesian index
+        index = I[CartesianIndex(min_x,min_y,min_z)+i]
+        # check if centroid at index is in atomball j 
+        if(Base.in(centroids[index],atomballs[j]))
+            # stores indice of centroid if a centroid i lies
+            # in an atomball j -> stored in colored_cells if not already in storage
+            if(!Base.in(index, colored_cells))
+                push!(colored_cells,index)
             end
+        end
     end
 
     # return cells that represent protein in grid structure

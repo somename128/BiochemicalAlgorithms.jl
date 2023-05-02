@@ -4,13 +4,14 @@ using Meshes, MeshViz
 using LinearAlgebra
 using BenchmarkTools
 
-test = Vector{Int32}([1,2,3,4])
+include("load_trans_pdb.jl")
+include("helpers.jl")
+include("min_max_atoms.jl")
 
-insert = Vector{Int32}([1,2,5,6,7,4,3,2,1,2])
+protein = load_and_trans_pdb("2ptc_ligand.pdb") 
 
-for (index, value) in insert
-    println(index,"",value)
-end
+min_max_atoms(protein)[2]
+
 
 
 

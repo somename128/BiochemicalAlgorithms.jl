@@ -1,51 +1,16 @@
 using BiochemicalAlgorithms
-using Meshes
-using BenchmarkTools
 
 include("create_atomballs.jl")
 include("create_centroids.jl")
+include("set_marked_cells.jl")
 
-function grid_representation(protein)
+function grid_representation(protein::PDBMolecule{Float32}, gridsize, centroids)
+    # N for grid size
+    N = gridsize
     # calculate atomballs around proteins atoms
     atomballs = create_atomballs(protein)
-    println(length(atomballs))
-    # calculate centroids in a 128x128x128 grid with cells
-    # of 1 angström 
-    centroids = create_centroids(128,1)
-    println(length(centroids))
-
-    #extract min max (in rounded int) of atom coordinates of protein
-    min_max = min_max_atoms(protein)
-    min_x = min_max[1]
-    max_x = min_max[2]
-    min_y = min_max[3]
-    max_y = min_max[4]
-    min_z = min_max[5]
-    max_z = min_max[6]
-
-    println("Set marked cells...")
-    # inside-outside
-    # TODO: for loop with new colored_cells structure
-    colored_cells = Base.Vector{Int64}()
-
-    # check if centroids of cells inside balls of atoms
-    # and store position of colored cell 
-    @time begin
-    for i in centroids, j in atomballs
-        if(Base.in(i,j))
-            # returns vector thats why position[1]
-            # dont know if vector of vectors or number better 
-            # for future calculations
-            #
-            # findall returns indice of i in centroids if a centroid i lies
-            # in an atomball j -> stored in colored_cells if not already in storage
-            position = findall(item -> item == i, centroids)
-            if(!Base.in(position[1], colored_cells))
-                push!(colored_cells,position[1])
-            end
-        end  
-    end
-    end
+    # find all cells in grid which represent protein 
+    colored_cells = set_marked_cells(atomballs,centroids,protein)
 
     println("Build 1D grid representation...")
     inner_outer_grid = zeros(N*N*N)
