@@ -8,9 +8,10 @@ include("load_trans_pdb.jl")
 include("helpers.jl")
 include("min_max_atoms.jl")
 
-protein = load_and_trans_pdb("2ptc_ligand.pdb") 
+sys = load_pdb("2ptc_protein.pdb")
 
-min_max_atoms(protein)[2]
+molecules_df(sys).properties
+
 
 
 
