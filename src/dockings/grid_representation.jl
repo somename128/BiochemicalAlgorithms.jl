@@ -4,7 +4,7 @@ include("create_atomballs.jl")
 include("create_centroids.jl")
 include("set_marked_cells.jl")
 
-function grid_representation(protein::PDBMolecule{Float32}, gridsize, centroids)
+function grid_representation(protein::Molecule{Float32}, gridsize::Int64, centroids::Array{Meshes.Point3, 3})
     # N for grid size
     N = gridsize
     # calculate atomballs around proteins atoms

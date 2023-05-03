@@ -4,25 +4,35 @@ function create_rotations()
     
     # initialize arrays/vectors for rigidtransforms and angles for transforms
     rigidtransforms = Vector{RigidTransform}()
-    angles = Vector{Float32}()
+    angles_x = Vector{Float32}()
+    angles_y = Vector{Float32}()
+    angles_z = Vector{Float32}()
 
     # fill array with angle values from 0 to 360 stepsize 5
     # for i in 1:73
-    for i in 1:2
+    for i in 1:5
         a = (i-1) * 5
-        push!(angles,a)
+        push!(angles_x,a)
+        push!(angles_y,a)
     end
+
+    # fill array with angle values from 0 to 180 stepsize 5
+    # for i in 1:37
+    for i in 1:3
+        a = (i-1) * 5
+        push!(angles_z,a)
+    end
+
     
     # translationvector (no translation needed)
     t = Vector3{Float32}(0,0,0)
 
     # loop over angles to store all possible rotations
-    for α in angles, β in angles, γ in angles
-        # rotation matrices per axe, R as resulting rotation around x y z
-        R_x = Matrix3{Float32}([1 0 0; 0 cosd(α) -sind(α); 0 sind(α) cosd(α)])
-        R_y = Matrix3{Float32}([cosd(β) 0 sind(β); 0 1 0; -sind(β) 0 cosd(β)])
-        R_z = Matrix3{Float32}([cosd(γ) -sind(γ) 0; sind(γ) cosd(γ) 0; 0 0 1])
-        R = R_x * R_y * R_z
+    for ϕ in angles_z, Θ in angles_y, ψ in angles_x
+        # rotation matrix after xyz convention (see Goldsteins Classical Mechanics(1980))
+        R = Matrix3{Float32}([cosd(Θ)*cosd(ϕ) cosd(Θ)*sind(ϕ) -sind(Θ); 
+            sind(ψ)*sind(Θ)*cosd(ϕ)-cosd(ψ)*sind(ϕ) sind(ψ)*sind(Θ)*sind(ϕ)+cosd(ψ)*cosd(ϕ) cosd(Θ)*sind(ψ); 
+            cosd(ψ)*sind(Θ)*cos(ϕ)+sind(ψ)*sind(Θ) cosd(ψ)*sind(Θ)*sind(ϕ)-sind(ψ)*cosd(ϕ) cosd(Θ)*cosd(ψ)])
 
         # create Biochemicals rigidtransform
         rigidtransform = RigidTransform(R,t)

@@ -1,10 +1,10 @@
 using BiochemicalAlgorithms
 using Meshes
 
-function create_atomballs(protein)
+function create_atomballs(protein::Molecule{Float32})
     println("Extract room coordinates...")
     # extract room coordinates of atoms of the protein
-    atoms_in_space = protein.atoms.r
+    atoms_in_space = atoms_df(protein).r
 
     # transfer atom coordinates in mesh points
     atoms_in_space_points = Base.Vector{Meshes.Point3}()

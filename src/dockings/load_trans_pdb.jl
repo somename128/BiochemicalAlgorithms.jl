@@ -2,11 +2,13 @@ using BiochemicalAlgorithms
 
 include("mass_center.jl")
 
-function load_and_trans_pdb(path_to_pdb)
+function load_and_trans_pdb(path_to_pdb::String, gridsize::Int64)
 
     # load protein data from PDB
+    # first system, then molecule
+    # datatype protein: Molecule{Float32}
     println("Load PDB file...")
-    protein = load_pdb(path_to_pdb)
+    protein = molecules(load_pdb(path_to_pdb))[1]
 
     # translate protein in center of grid
     println("Translate protein in center of grid...")
@@ -18,8 +20,8 @@ function load_and_trans_pdb(path_to_pdb)
     # multiplication by -1 to change sign,
     # translation vector is the "inverse" of mass_center minus
     # grid_center (in this case N = 128, so (64,64,64)) 
-    translation_vector = (-1)*Vector3{Float32}(mc[1]-64, mc[2]-64, 
-        mc[3]-64)
+    translation_vector = (-1)*Vector3{Float32}(mc[1]-gridsize/2, mc[2]-gridsize/2, 
+        mc[3]-gridsize/2)
 
     # translate protein in to center of grid
     BiochemicalAlgorithms.translate!(protein,translation_vector)

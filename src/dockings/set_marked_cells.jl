@@ -1,6 +1,6 @@
 using BiochemicalAlgorithms
 
-function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes.Point3,3},protein::PDBMolecule{Float32})
+function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes.Point3,3},protein::Molecule{Float32})
     # initialize vector with datatype of centroids
     colored_cells = Vector{Int64}()
 

@@ -2,9 +2,9 @@ using BiochemicalAlgorithms
 
 include("helpers.jl")
 
-function min_max_atoms(protein)
+function min_max_atoms(protein::Molecule{Float32})
     # extract room coordinates of atoms of the protein
-    atoms_in_space = protein.atoms.r
+    atoms_in_space = atoms_df(protein).r
     # initalize vectors for storing x y z coordinates seperately
     X = Vector{Float32}()
     Y = Vector{Float32}()
