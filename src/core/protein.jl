@@ -1,24 +1,13 @@
-using DataFrames
+export Protein, ProteinTuple, protein_by_idx, proteins, proteins_df, eachprotein, nproteins,
+    parent_protein
 
-export Protein
-
-mutable struct Protein{T<:Real} <: AbstractMolecule{T}
-    name::String
-
-    atoms::DataFrame
-    bonds::DataFrame
-
-    chains::Vector{ProteinChain}
-
-    function Protein{T}(name = "", 
-                        atoms = DataFrame(PDBAtom{T}[]), 
-                        bonds = DataFrame(Bond[]),
-                        chains = ProteinChain[]) where {T<:Real}
-        new(name, atoms, bonds, chains)
-    end
-end
-
-Protein(name="",
-        atoms=DataFrame(PDBAtom{Float32}[]),
-        bonds=DataFrame(Bond[]),
-        chains=ProteinChain[]) = Protein{Float32}(name, atoms, bonds, chains)
+# TODO implement rules to distinguish from molecules
+const Protein{T} = Molecule{T}
+const ProteinTuple = MoleculeTuple
+_proteins(sys::System) = _molecules(sys)
+protein_by_idx(sys::System, idx::Int) = molecule_by_idx(sys, idx)
+proteins(sys::System) = molecules(sys)
+proteins_df(sys::System) = molecules_df(sys)
+eachprotein(sys::System) = eachmolecule(sys)
+nproteins(sys::System) = nmolecules(sys)
+parent_protein(ac::Union{Atom, Chain, Fragment, Nucleotide, Residue}) = parent_molecule(ac)

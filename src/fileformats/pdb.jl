@@ -58,6 +58,8 @@ function load_pdb(fname::String, T=Float32)
     orig_df  = DataFrame(collectatoms(orig_pdb))
 
     # then, convert to our representation
+    sys = System{T}(orig_pdb.name)
+    mol = Molecule(sys, sys.name)
 
     ### convert the atom positions
     r = Vector3{T}.(T.(orig_df.x), T.(orig_df.y), T.(orig_df.z))
@@ -69,52 +71,38 @@ function load_pdb(fname::String, T=Float32)
     atoms = DataFrame(
         number=orig_df.serial, 
         name=orig_df.atomname,
-        element=elements
+        element=elements,
+        r = r
     )
 
-    insertcols!(atoms, :atomtype => "")
-    atoms.r = r
-    atoms.v .= Ref(Vector3{T}(0.0, 0.0, 0.0))
-    atoms.F .= Ref(Vector3{T}(0.0, 0.0, 0.0))
-    atoms.has_velocity .= Ref(false)
-    atoms.has_force .= Ref(false)
-    atoms.frame_id = orig_df.modelnumber
+    # FIXME read charge from PDB file. BioStructures reads this as a string
+    # atoms.formal_charge .= orig_df.charge,
 
-    atoms.residue_id = orig_df.resnumber
-    atoms.residue_name= orig_df.resname
-    atoms.chain = orig_df.chainid
+    # convert other columns of interest to atom properties
+    atoms.properties = Properties.(
+        collect(
+                zip(
+                    Pair.(:tempfactor,            orig_df.tempfactor),
+                    Pair.(:occupancy,             orig_df.occupancy),
+                    Pair.(:is_hetero_atom,        orig_df.ishetero),
+                    Pair.(:insertion_code,        orig_df.inscode),
+                    Pair.(:alternate_location_id, orig_df.altlocid)
+                )
+        )
+    )
+
+    atoms.frame_id = orig_df.modelnumber
+    atoms.fragment_id = orig_df.resnumber
 
     # note: we will remove this column as soon as we have filtered out alternates
     atoms.altlocid = orig_df.altlocid
 
-    # convert other columns of interest to atom properties
-    atoms.properties = Properties.(
-                    collect(
-                            zip(
-                                Pair.("tempfactor",            orig_df.tempfactor),
-                                Pair.("occupancy",             orig_df.occupancy),
-                                Pair.("is_hetero_atom",        orig_df.ishetero),
-                                Pair.("insertion_code",        orig_df.inscode),
-                                Pair.("alternate_location_id", orig_df.altlocid)
-                            )
-                    )
-                )
-                
-    bonds = DataFrame(Bond[])
-
-    chains = Vector{PDBChain}()
-
-    orig_chains = collectchains(orig_pdb)
-    for chain in orig_chains
-        orig_residues = collectresidues(chain)
-
-        fragments = DataFrame(
-            number = getproperty.(orig_residues, :number),
-            name   = getproperty.(orig_residues, :name),
-            chain_id = repeat([chain.id], length(orig_residues))
-        )
-
-        push!(chains, PDBChain(chain.id, fragments))
+    # collect fragment information
+    for orig_chain in collectchains(orig_pdb)
+        chain = Chain(mol, orig_chain.id)
+        for orig_frag in collectresidues(orig_chain)
+            Fragment(chain, orig_frag.number, orig_frag.name)  # TODO push!
+        end
     end
 
     # now, handle alternate location ids
@@ -125,7 +113,7 @@ function load_pdb(fname::String, T=Float32)
     #   - for each atom that has alternative locations, find them
     #   - find the smallest alternate location id and use this as the base case
     #   - store all other variants as properties
-    all_altlocs = groupby(filter(:altlocid => !=(' '), atoms, view=true), [:residue_id, :name])
+    all_altlocs = groupby(filter(:altlocid => !=(' '), atoms, view=true), [:fragment_id, :name])
     for altlocs in all_altlocs
         sorted_altlocs = sort(altlocs, :altlocid, view=true)
 
@@ -134,7 +122,7 @@ function load_pdb(fname::String, T=Float32)
 
         if nrow(sorted_altlocs) > 1
             for altloc in eachrow(sorted_altlocs[2:end, :])
-                atoms.properties[base_case.number]["alternate_location_$(altloc.altlocid)"] = altloc
+                atoms.properties[base_case.number][Symbol("alternate_location_$(altloc.altlocid)")] = altloc
             end
         end
     end
@@ -142,8 +130,16 @@ function load_pdb(fname::String, T=Float32)
     # drop all alternates
     atoms = filter(:altlocid => ==(' '), atoms)
 
-    # drop the altlocid-column
-    select!(atoms, Not(:altlocid))
-    
-    p = PDBMolecule{T}(orig_pdb.name, atoms, bonds, chains)
+    # add all remaining atoms to the system
+    grp_atoms = groupby(atoms, :fragment_id)
+    for frag in eachfragment(mol)
+        for atom in eachrow(grp_atoms[(fragment_id = frag.number,)])
+            push!(frag, AtomTuple{T}(atom.number, atom.element;
+                name = atom.name,
+                r = atom.r,
+                properties = atom.properties,
+            ), frame_id = atom.frame_id)
+        end
+    end
+    sys
 end
