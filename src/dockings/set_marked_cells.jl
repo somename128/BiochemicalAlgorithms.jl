@@ -5,13 +5,13 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes
     colored_cells = Vector{Int64}()
 
     #extract min max (in rounded int +/-2) of atom coordinates of protein
-    min_max = min_max_atoms(protein)
-    min_x = min_max[1]
-    max_x = min_max[2]
-    min_y = min_max[3]
-    max_y = min_max[4]
-    min_z = min_max[5]
-    max_z = min_max[6]
+    min_max::NTuple{6, Int64} = min_max_atoms(protein)
+    min_x::Int64 = min_max[1]
+    max_x::Int64 = min_max[2]
+    min_y::Int64 = min_max[3]
+    max_y::Int64 = min_max[4]
+    min_z::Int64 = min_max[5]
+    max_z::Int64 = min_max[6]
 
     # extract LinearIndices from centroids
     # still not sure how this stuff works

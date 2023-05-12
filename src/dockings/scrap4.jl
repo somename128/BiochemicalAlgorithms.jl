@@ -15,7 +15,7 @@ include("set_marked_cells.jl")
 
 
 
-protein = load_and_trans_pdb("2ptc_protein.pdb")
+protein = load_and_trans_pdb("2ptc_ligand.pdb",128)
 
 atomballs = create_atomballs(protein)
 centroids = create_centroids(128,1)
@@ -25,7 +25,8 @@ Profile.clear()
 ProfileView.view()
 =#
 
-
+@benchmark set_marked_cells(atomballs,centroids,protein)
+#=
 min_max = min_max_atoms(protein)
 
 min_x = min_max[1]
@@ -44,12 +45,13 @@ end
 =#
 I = LinearIndices(centroids)
 
-@time begin
+@benchmark begin
 # store centroids that are inside a atom radius in colored_cells
 colored_cells_1 = set_marked_cells(atomballs,centroids,protein)
 end
 
 length(colored_cells_1)
+=#
 
 #=
 println(length(colored_cells_1))
