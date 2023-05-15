@@ -13,14 +13,14 @@ function create_rotations()
     for i in 1:5
         a = (i-1) * 5
         push!(angles_x,a)
-        push!(angles_y,a)
+        push!(angles_z,a)
     end
 
     # fill array with angle values from 0 to 180 stepsize 5
     # for i in 1:37
     for i in 1:3
         a = (i-1) * 5
-        push!(angles_z,a)
+        push!(angles_y,a)
     end
 
     
