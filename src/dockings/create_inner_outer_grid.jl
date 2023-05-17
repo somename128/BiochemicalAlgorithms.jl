@@ -1,4 +1,4 @@
-  function create_inner_outer_grid(colored_cells::Vector{Int64}, N::Int64)  
+function create_inner_outer_grid(colored_cells::Vector{Int64}, N::Int64)  
     # println("Build 1D grid representation...")
     inner_outer_grid = zeros(N*N*N)
 

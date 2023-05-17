@@ -11,7 +11,7 @@ include("generate_record.jl")
 
 function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int64)
     # initialize scoring table
-    scoring_table = Table(α=[], β=[], γ=[], R=[], score=[])
+    scoring_table = Table(α=[0.0], β=[0.0], γ=[0.0], R=[], score=[0.0])
     # set grid size N 
     N = gridsize
     # load and translate protein a
@@ -30,7 +30,9 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     for i in eachindex(rotations)
         # generate record for scoring table
         record = generate_record(A,rotations[i],path_to_proteinB,centroids,N)
-        push!(scoring_table,record)
+        if(scoring_table[1] < record.score)
+            scoring_table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
+        end
         println(i)
     end
     # --------------------------------------------

@@ -22,8 +22,8 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes
     
     # println("Set marked cells...")
     # store centroids that are inside a atom radius in colored_cells
-    @spawn for i in CartesianIndices(centroids[min_x:max_x,min_y:max_y,min_z:max_z]) 
-        @spawn for j in eachindex(atomballs)
+    for i in CartesianIndices(centroids[min_x:max_x,min_y:max_y,min_z:max_z]) 
+        for j in eachindex(atomballs)
             # move cartesian index i via min_x,min_y,min_z to get right index
             # I[] to get linear index of cartesian index
             index = I[CartesianIndex(min_x,min_y,min_z)+i]

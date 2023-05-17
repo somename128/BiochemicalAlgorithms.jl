@@ -1,17 +1,11 @@
-using Base.Threads
+using TypedTables
 
-a = zeros(10)
+a = ones(2,2,2)
+a[1,2,1] = 9
 
-@threads for i in eachindex(a)
-    a[i] = threadid()
-end
+println(a)
 
-print(a)
+t = Table(α=[], β=[], γ=[], R=[],score=[])
 
-
-
-
-
-
-
+record = generate
 
