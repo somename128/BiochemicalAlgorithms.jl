@@ -2,7 +2,7 @@ using BiochemicalAlgorithms
 using Meshes
 
 function create_centroids(gridsize::Int64, spfactor::Int64)
-    println("Build grid...")
+    # println("Build grid...")
     # grid properties
     lower_left = (0,0,0)
     N = gridsize
@@ -13,7 +13,7 @@ function create_centroids(gridsize::Int64, spfactor::Int64)
     # create 3D grid with N/N*spcing_factor spacing in each dimension, origin at (0,0,0)
     grid = Meshes.CartesianGrid(lower_left, upper_right, dims=spcing)
     # centroid of each cell
-    println("Build centroids...")
+    # println("Build centroids...")
     centroids = Meshes.centroid.(grid)
     
     # reshape centroids 1D -> 3D 

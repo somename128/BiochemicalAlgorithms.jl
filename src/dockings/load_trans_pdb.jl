@@ -7,11 +7,11 @@ function load_and_trans_pdb(path_to_pdb::String, gridsize::Int64)
     # load protein data from PDB
     # first system, then molecule
     # datatype protein: Molecule{Float32}
-    println("Load PDB file...")
+    # println("Load PDB file...")
     protein = molecules(load_pdb(path_to_pdb))[1]
 
     # translate protein in center of grid
-    println("Translate protein in center of grid...")
+    # println("Translate protein in center of grid...")
     # get mass_center of protein
     mc = mass_center(protein)
 

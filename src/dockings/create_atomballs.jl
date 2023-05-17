@@ -2,7 +2,7 @@ using BiochemicalAlgorithms
 using Meshes
 
 function create_atomballs(protein::Molecule{Float32})
-    println("Extract room coordinates...")
+    # println("Extract room coordinates...")
     # extract room coordinates of atoms of the protein
     atoms_in_space = atoms_df(protein).r
 
@@ -16,7 +16,7 @@ function create_atomballs(protein::Molecule{Float32})
 
     # balls with radius r and atom points as center
     # TODO: different r for different atoms
-    println("Build atomballs...")
+    # println("Build atomballs...")
     atomballs = Base.Vector{Meshes.Ball}() 
     r = 1.8
 
