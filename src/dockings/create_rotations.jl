@@ -3,22 +3,22 @@ using BiochemicalAlgorithms
 function create_rotations()
     
     # initialize arrays/vectors for rigidtransforms and angles for transforms
-    rigidtransforms = Vector{RigidTransform}()
+    rigidtransforms = Vector{RigidTransform{Float32}}()
     angles_x = Vector{Float32}()
     angles_y = Vector{Float32}()
     angles_z = Vector{Float32}()
 
     # fill array with angle values from 0 to 360 stepsize 5
-    for i in 1:73
-    # for i in 1:5
+    #for i in 1:73
+    for i in 1:10
         a = (i-1) * 5
         push!(angles_x,a)
         push!(angles_z,a)
     end
 
     # fill array with angle values from 0 to 180 stepsize 5
-    for i in 1:37
-    # for i in 1:3
+    # for i in 1:37
+    for i in 1:10
         a = (i-1) * 5
         push!(angles_y,a)
     end
@@ -35,7 +35,7 @@ function create_rotations()
             cosd(ψ)*sind(Θ)*cos(ϕ)+sind(ψ)*sind(Θ) cosd(ψ)*sind(Θ)*sind(ϕ)-sind(ψ)*cosd(ϕ) cosd(Θ)*cosd(ψ)])
 
         # create Biochemicals rigidtransform
-        rigidtransform = RigidTransform(R,t)
+        rigidtransform = RigidTransform{Float32}(R,t)
 
         # add to array/vector of rigidtransformations
         push!(rigidtransforms, rigidtransform)

@@ -24,11 +24,14 @@ t = Vector3{Float32}(0,0,0)
 R = Matrix3{Float32}([0 0 0; 
             0 0 0; 
             0 0 0])
+rt = RigidTransform{Float32}(R,t)
 
-table = Table(α=[0.0], β=[0.0], γ=[0.0], score=[0.0])
+
+table = Table(α=[0.0], β=[0.0], γ=[0.0], R=[rt], score=[0.0])
+
 
 # Profile.clear()
-@time record = generate_record(A, rotations[100], "2ptc_ligand.pdb", centroids,N)
+@time record = generate_record(A, rotations[5], "2ptc_ligand.pdb", centroids,N)
 # ProfileView.view()
 
 table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)

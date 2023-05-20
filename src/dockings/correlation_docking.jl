@@ -10,8 +10,12 @@ include("create_centroids.jl")
 include("generate_record.jl")
 
 function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int64)
+    # generating rigidtransform for initalizing scoring table
+    t = Vector3{Float32}(0,0,0)
+    R = Matrix3{Float32}([0 0 0; 0 0 0; 0 0 0])
+    rt = RigidTransform{Float32}(R,t)    
     # initialize scoring table
-    scoring_table = Table(α=[0.0], β=[0.0], γ=[0.0], R=[], score=[0.0])
+    scoring_table = Table(α=[0.0], β=[0.0], γ=[0.0], R=[rt], score=[0.0])
     # set grid size N 
     N = gridsize
     # load and translate protein a
@@ -25,15 +29,17 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     A = grid_representation(protein_A, N, centroids)
     # get rotations - build via rigid_transform! with translation vector (0,0,0)
     rotations = create_rotations()
-
+    # lock for threads (unsure how this really works)
+    lk = ReentrantLock() 
     # rotate protein b by R
-    for i in eachindex(rotations)
+    @threads :dynamic for i in eachindex(rotations)
         # generate record for scoring table
         record = generate_record(A,rotations[i],path_to_proteinB,centroids,N)
-        if(scoring_table[1] < record.score)
-            scoring_table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
+        lock(lk) do
+            if(scoring_table[1].score < record.score)
+                scoring_table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
+            end
         end
-        println(i)
     end
     # --------------------------------------------
     # safe results of run

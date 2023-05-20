@@ -1,11 +1,8 @@
-using TypedTables
+a = []
+lk = ReentrantLock() 
+Threads.@threads for i = 1:10
+    push!(a,Threads.threadid())
+end
 
-a = ones(2,2,2)
-a[1,2,1] = 9
-
-println(a)
-
-t = Table(α=[], β=[], γ=[], R=[],score=[])
-
-record = generate
+a
 
