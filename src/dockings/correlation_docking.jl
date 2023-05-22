@@ -32,7 +32,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     # lock for threads (unsure how this really works)
     lk = ReentrantLock() 
     # rotate protein b by R
-    @threads :dynamic for i in eachindex(rotations)
+    @threads for i in eachindex(rotations)
         # generate record for scoring table
         record = generate_record(A,rotations[i],path_to_proteinB,centroids,N)
         lock(lk) do

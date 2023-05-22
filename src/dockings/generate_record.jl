@@ -9,7 +9,7 @@ include("extract_max.jl")
 function generate_record(A::Array{Float64,3}, rotation::RigidTransform{Float32}, path_to_proteinB::String, centroids::Array{Meshes.Point3, 3}, gridsize::Int64)
     # load and translate protein b per loop to use rotations relative to 
     # origin coordinates
-    protein_B = load_and_trans_pdb(path_to_proteinB, gridsize)
+    @time protein_B = load_and_trans_pdb(path_to_proteinB, gridsize)
     rigid_transform!(protein_B, rotation)
     # grid representation protein b
     B = grid_representation(protein_B, gridsize, centroids)

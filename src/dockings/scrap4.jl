@@ -17,9 +17,14 @@ include("generate_record.jl")
 
 N = 128
 protein = load_and_trans_pdb("2ptc_protein.pdb",N)
-centroids = create_centroids(N,1)
-A = grid_representation(protein,N, centroids)
+atoms_1 = atoms_df(protein).r
+# centroids = create_centroids(N,1)
+# A = grid_representation(protein,N, centroids)
 rotations = create_rotations()
+rotations[5].rotation
+transpose(rotations[5].rotation)
+
+#=
 t = Vector3{Float32}(0,0,0)
 R = Matrix3{Float32}([0 0 0; 
             0 0 0; 
@@ -35,4 +40,4 @@ table = Table(α=[0.0], β=[0.0], γ=[0.0], R=[rt], score=[0.0])
 # ProfileView.view()
 
 table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
-
+=#
