@@ -8,6 +8,7 @@ include("grid_representation.jl")
 include("create_rotations.jl")
 include("create_centroids.jl")
 include("generate_record.jl")
+include("reset_rotation.jl")
 
 function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int64)
     # generating rigidtransform for initalizing scoring table
@@ -21,7 +22,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     # load and translate protein a
     protein_A = load_and_trans_pdb(path_to_proteinA, N)
     # load and translate protein b
-    # protein_B = load_and_trans_pdb(path_to_proteinB)
+    # protein_B = load_and_trans_pdb(path_to_proteinB, N)
     # calculate centroids in a NxNxN grid with cells
     # of 1 angström, only done once
     centroids = create_centroids(N, 1)
@@ -34,7 +35,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     # rotate protein b by R
     @threads for i in eachindex(rotations)
         # generate record for scoring table
-        record = generate_record(A,rotations[i],path_to_proteinB,centroids,N)
+        record = generate_record(A, rotations[i], path_to_proteinB, centroids,N)
         lock(lk) do
             if(scoring_table[1].score < record.score)
                 scoring_table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)

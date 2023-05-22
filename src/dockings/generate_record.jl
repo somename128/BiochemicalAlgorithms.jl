@@ -7,12 +7,12 @@ include("grid_representation.jl")
 include("extract_max.jl")
 
 function generate_record(A::Array{Float64,3}, rotation::RigidTransform{Float32}, path_to_proteinB::String, centroids::Array{Meshes.Point3, 3}, gridsize::Int64)
-    # load and translate protein b per loop to use rotations relative to 
-    # origin coordinates
-    @time protein_B = load_and_trans_pdb(path_to_proteinB, gridsize)
-    rigid_transform!(protein_B, rotation)
+    # load ant trans pdb each time to get origin coordinates
+    protein = load_and_trans_pdb(path_to_proteinB, gridsize)
+    # rotate protein by rotation
+    rigid_transform!(protein, rotation)
     # grid representation protein b
-    B = grid_representation(protein_B, gridsize, centroids)
+    B = grid_representation(protein, gridsize, centroids)
     # fft-scoring
     C = ifft(fft(A).*fft(B))
     # safe α,β,γ,R of max fft-scoring (c)
