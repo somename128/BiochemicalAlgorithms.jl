@@ -20,7 +20,7 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes
     # still not sure how this stuff works
     I = LinearIndices(centroids)
     # lock for threads (unsure how this really works)
-    lk = ReentrantLock() 
+    # lk = ReentrantLock() 
     # println("Set marked cells...")
     # store centroids that are inside a atom radius in colored_cells
     for i in CartesianIndices(centroids[min_x:max_x,min_y:max_y,min_z:max_z]) 
@@ -32,10 +32,8 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes
             if(Base.in(centroids[index],atomballs[j]))
                 # stores indice of centroid if a centroid i lies
                 # in an atomball j -> stored in colored_cells if not already in storage
-                lock(lk) do
-                    if(!Base.in(index, colored_cells))
-                        push!(colored_cells,index)
-                    end
+                if(!Base.in(index, colored_cells))
+                    push!(colored_cells,index)
                 end
             end
         end

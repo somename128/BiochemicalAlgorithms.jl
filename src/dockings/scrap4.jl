@@ -15,14 +15,15 @@ include("create_rotations.jl")
 include("set_marked_cells.jl")
 include("generate_record.jl")
 include("extract_roomcoordinates.jl")
-include("create_rotations.jl")
+include("create_atomballs.jl")
+include("correlation_docking.jl")
 
 N = 128
-# protein = load_and_trans_pdb("2ptc_protein.pdb",N)
-# atoms = extract_roomcoordinates(protein)
-# centroids = create_centroids(N,1)
+protein = load_and_trans_pdb("2ptc_protein.pdb",N)
+atoms = extract_roomcoordinates(protein)
+centroids = create_centroids(N,1)
+atomballs = create_atomballs(atoms)
 
 # A = grid_representation(atoms,N, centroids)
 
-create_rotations()
 
