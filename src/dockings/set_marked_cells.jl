@@ -3,12 +3,12 @@ using Base.Threads
 
 include("min_max_atoms.jl")
 
-function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes.Point3,3},protein::Molecule{Float32})
+function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes.Point3,3},atoms::Vector{Vector3{Float32}})
     # initialize vector with datatype of centroids
     colored_cells = Vector{Int64}()
 
     #extract min max (in rounded int +/-2) of atom coordinates of protein
-    min_max = min_max_atoms(protein)
+    min_max = min_max_atoms(atoms)
     min_x = min_max[1]
     max_x = min_max[2]
     min_y = min_max[3]
