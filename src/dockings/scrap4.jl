@@ -22,8 +22,15 @@ N = 128
 protein = load_and_trans_pdb("2ptc_ligand.pdb",N)
 atoms = extract_roomcoordinates(protein)
 centroids = create_centroids(N,1)
-atomballs = create_atomballs(atoms)
 
-@time colored_cells = set_marked_cells(atomballs, centroids, atoms)
+@time begin
+atomballs = create_atomballs(atoms)
+colored_cells = set_marked_cells(atomballs, centroids, atoms)
+grid = create_inner_outer_grid(colored_cells, N)
+end
+
+println("yey")
+
+
 
 
