@@ -24,6 +24,6 @@ atoms = extract_roomcoordinates(protein)
 centroids = create_centroids(N,1)
 atomballs = create_atomballs(atoms)
 
-# A = grid_representation(atoms,N, centroids)
+colored_cells = set_marked_cells(atomballs, centroids, atoms)
 
 

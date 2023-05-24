@@ -3,12 +3,12 @@ using Base.Threads
 
 include("min_max_atoms.jl")
 
-function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes.Point3,3},atoms::Vector{Vector3{Float32}})
+function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Array{Meshes.Point3,3}, roomcoordinates::Vector{Vector3{Float32}})
     # initialize vector with datatype of centroids
     colored_cells = Vector{Int64}()
 
     #extract min max (in rounded int +/-2) of atom coordinates of protein
-    min_max = min_max_atoms(atoms)
+    min_max = min_max_atoms(roomcoordinates)
     min_x = min_max[1]
     max_x = min_max[2]
     min_y = min_max[3]
@@ -19,8 +19,6 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball},centroids::Array{Meshes
     # extract LinearIndices from centroids
     # still not sure how this stuff works
     I = LinearIndices(centroids)
-    # lock for threads (unsure how this really works)
-    # lk = ReentrantLock() 
     # println("Set marked cells...")
     # store centroids that are inside a atom radius in colored_cells
     for i in CartesianIndices(centroids[min_x:max_x,min_y:max_y,min_z:max_z]) 

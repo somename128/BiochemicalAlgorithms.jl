@@ -15,7 +15,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     R = Matrix3{Float32}([0 0 0; 0 0 0; 0 0 0]) 
     # initialize scoring table
     scoring_table = Table(α=[0.0], β=[0.0], γ=[0.0], R=[R], score=[0.0])
-    # set grid size N 
+    # set gridsize N 
     N = gridsize
     # load and translate protein a
     protein_A = load_and_trans_pdb(path_to_proteinA, N)
@@ -42,11 +42,8 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
             end
         end
     end
-    # --------------------------------------------
-    # safe results of run
-    # save("scoring_table.jld", "scoring_table", scoring_table)
-    # --------------------------------------------
 
     # loop to rotation if "greatest" c not reached
+    # for now: return scoring table with greatest value
     return scoring_table
 end
