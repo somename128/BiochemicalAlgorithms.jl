@@ -5,7 +5,7 @@ include("min_max_atoms.jl")
 
 function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Array{Meshes.Point3,3}, roomcoordinates::Vector{Vector3{Float32}})
     # initialize vector with datatype of centroids
-    colored_cells = Vector{Int64}()
+    colored_cells = Vector()
 
     #extract min max (in rounded int +/-2) of atom coordinates of protein
     min_max = min_max_atoms(roomcoordinates)
@@ -16,16 +16,13 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Array{Meshe
     min_z = min_max[5]
     max_z = min_max[6]
 
-    # extract LinearIndices from centroids
-    # still not sure how this stuff works
-    I = LinearIndices(centroids)
     # println("Set marked cells...")
     # store centroids that are inside a atom radius in colored_cells
     for i in CartesianIndices(centroids[min_x:max_x,min_y:max_y,min_z:max_z]) 
         for j in eachindex(atomballs)
             # move cartesian index i via min_x,min_y,min_z to get right index
             # I[] to get linear index of cartesian index
-            index = I[CartesianIndex(min_x,min_y,min_z)+i]
+            index = CartesianIndex(min_x,min_y,min_z)+i
             # check if centroid at index is in atomball j 
             if(Base.in(centroids[index],atomballs[j]))
                 # stores indice of centroid if a centroid i lies
