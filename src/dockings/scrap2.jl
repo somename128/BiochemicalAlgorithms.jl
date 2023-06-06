@@ -1,8 +1,8 @@
-a = []
-lk = ReentrantLock() 
-Threads.@threads for i = 1:10
-    push!(a,Threads.threadid())
-end
+using Meshes
+N = 64
+grid = CartesianGrid(N,N,N)
+
+grid[20]
 
 
 
