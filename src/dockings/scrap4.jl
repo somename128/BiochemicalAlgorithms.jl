@@ -29,3 +29,5 @@ colored_cells = set_marked_cells(atomballs, centroids, atoms)
 grid = create_inner_outer_grid(colored_cells, N)
 end
 
+println("yey")
+

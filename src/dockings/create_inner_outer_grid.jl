@@ -8,8 +8,12 @@ function create_inner_outer_grid(colored_cells::Vector{Int64}, N::Int64)
     # all other colored_cells are surface cells and set to 1
     # TODO: all surrounding cells
     for i in colored_cells
-        if(Base.in(i-N*N, colored_cells) && Base.in(i-N,colored_cells) && Base.in(i-1, colored_cells)
-            && Base.in(i+1, colored_cells) && Base.in(i+N, colored_cells) && Base.in(i+N*N, colored_cells))
+        if(Base.in(i-N*N, colored_cells)
+            && Base.in(i-N,colored_cells)
+            && Base.in(i-1, colored_cells)
+            && Base.in(i+1, colored_cells)
+            && Base.in(i+N, colored_cells)
+            && Base.in(i+N*N, colored_cells))
             # inside
             inner_outer_grid[i] = -15
         else
