@@ -18,19 +18,18 @@ include("extract_roomcoordinates.jl")
 include("create_atomballs.jl")
 include("correlation_docking.jl")
 
-N = 64
-protein = load_and_trans_pdb("dummy_protein.pdb",N)
+N = Int32(64)
+protein = load_and_trans_pdb("dummy_ligand.pdb",N)
 atoms = extract_roomcoordinates(protein)
 
-centroids = create_centroids(N,1)
+centroids = create_centroids(64,1)
 
 
 atomballs = create_atomballs(atoms)
-viz(atomballs)
 colored_cells = set_marked_cells(atomballs, centroids, atoms)
 grid = create_inner_outer_grid(colored_cells, N)
 
-
+typeof(centroids)
 
 
 

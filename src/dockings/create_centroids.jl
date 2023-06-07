@@ -1,12 +1,12 @@
 using BiochemicalAlgorithms
 using Meshes
 
-function create_centroids(gridsize::Int64, spfactor::Int64)
+function create_centroids(gridsize::Int32, spfactor::Int32)
     # println("Build grid...")
     # grid properties
     lower_left = (0,0,0)
-    N = gridsize
-    spcing_factor = spfactor
+    N = Int64(gridsize)
+    spcing_factor = Int64(spfactor)
     upper_right = (N,N,N) 
     spcing = (N*spcing_factor, N*spcing_factor, N*spcing_factor)
 

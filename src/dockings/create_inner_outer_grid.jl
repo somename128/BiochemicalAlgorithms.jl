@@ -1,6 +1,6 @@
-function create_inner_outer_grid(colored_cells::Vector{Int64}, N::Int64)  
+function create_inner_outer_grid(colored_cells::Vector{Int32}, N::Int32)  
     # println("Build 1D grid representation...")
-    inner_outer_grid = zeros(N*N*N)
+    inner_outer_grid = zeros(Float32, N*N*N)
 
     # set the grid-position where "centroid inside atomball"
     # and all six cells around i are also into colored_cells (sourrounded by atoms)
@@ -24,7 +24,7 @@ function create_inner_outer_grid(colored_cells::Vector{Int64}, N::Int64)
 
     # change 1D to 3D for FFTW library
     # println("Build 3D grid representation...")
-    inner_outer_grid_3D = zeros(N,N,N)
+    inner_outer_grid_3D = zeros(Float32, N,N,N)
 
     for i in 1:N*N*N
         inner_outer_grid_3D[i] = inner_outer_grid[i]

@@ -1,5 +1,5 @@
 # function to set all very small values to zero
-function zero_small!(M, tol)
+function zero_small!(M, tol::Float64)
     for ι in eachindex(M)
         if abs(M[ι]) ≤ tol
             M[ι] = 0

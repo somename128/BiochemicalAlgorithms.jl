@@ -10,7 +10,7 @@ include("create_centroids.jl")
 include("generate_record.jl")
 include("extract_roomcoordinates.jl")
 
-function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int64)
+function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int32)
     # generating matrix for initalizing scoring table
     R = Matrix3{Float32}([0 0 0; 0 0 0; 0 0 0]) 
     # initialize scoring table
@@ -25,7 +25,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
     # calculate centroids in a NxNxN grid with cells
     # of 1 angström, only done once
-    centroids = create_centroids(N, 1)
+    centroids = create_centroids(N, one(Int32))
     # grid representation protein a
     A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
     # get rotations - build via rigid_transform! with translation vector (0,0,0)

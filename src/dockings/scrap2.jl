@@ -1,8 +1,5 @@
-using Meshes
-N = 64
-grid = CartesianGrid(N,N,N)
+N = Int32(64)
 
-grid[20]
-
+typeof(N)
 
 

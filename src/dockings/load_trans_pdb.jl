@@ -2,7 +2,7 @@ using BiochemicalAlgorithms
 
 include("mass_center.jl")
 
-function load_and_trans_pdb(path_to_pdb::String, gridsize::Int64)
+function load_and_trans_pdb(path_to_pdb::String, gridsize::Int32)
 
     # load protein data from PDB
     # first system, then molecule
