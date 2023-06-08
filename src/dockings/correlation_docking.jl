@@ -31,16 +31,17 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     # get rotations - build via rigid_transform! with translation vector (0,0,0)
     rotations = create_rotations()
     # lock for threads (unsure how this really works)
-    lk = ReentrantLock() 
+    # lk = ReentrantLock() 
     # rotate protein b by R
-    @threads for i in eachindex(rotations)
+    for i in eachindex(rotations)
         # generate record for scoring table
         record = generate_record(A, rotations[i], roomcoordiantes_atoms_B, centroids,N)
-        lock(lk) do
+        # lock(lk) do
             if(scoring_table[1].score < record.score)
                 scoring_table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
             end
-        end
+        # end
+        println(i,"/",length(rotations))
     end
 
     # loop to rotation if "greatest" c not reached

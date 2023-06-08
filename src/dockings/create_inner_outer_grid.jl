@@ -15,10 +15,10 @@ function create_inner_outer_grid(colored_cells::Vector{Int32}, N::Int32)
             && Base.in(i+N, colored_cells)
             && Base.in(i+N*N, colored_cells))
             # inside
-            inner_outer_grid[i] = -15
+            inner_outer_grid[i] = Float32(-15)
         else
             # surface
-            inner_outer_grid[i] = 1
+            inner_outer_grid[i] = one(Float32)
         end
     end
 

@@ -7,6 +7,7 @@ using ProfileView
 using ProgressBars
 using Profile
 using TypedTables
+using LinearAlgebra
 
 include("grid_representation.jl")
 include("load_trans_pdb.jl")
@@ -22,14 +23,24 @@ N = Int32(64)
 protein = load_and_trans_pdb("dummy_ligand.pdb",N)
 atoms = extract_roomcoordinates(protein)
 
-centroids = create_centroids(64,1)
+centroids = create_centroids(N,one(Int32))
 
 
 atomballs = create_atomballs(atoms)
 colored_cells = set_marked_cells(atomballs, centroids, atoms)
 grid = create_inner_outer_grid(colored_cells, N)
 
-typeof(centroids)
+ # transfer atom coordinates in mesh points
+ atoms_in_space_points = Base.Vector{Meshes.Point3}()
+
+ for i in CartesianIndices(grid)
+    if(grid[i] != 0)
+        v = Meshes.Point(i[1],i[2],i[3])
+        push!(atoms_in_space_points, v)
+    end
+end
+
+min_max_atoms(atoms)
 
 
 
