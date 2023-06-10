@@ -1,4 +1,5 @@
 using BiochemicalAlgorithms
+using Rotations
 
 function create_rotations()
     
@@ -25,10 +26,7 @@ function create_rotations()
     # loop over angles to store all possible rotations
     for ϕ in angles_z, Θ in angles_y, ψ in angles_x
         # rotation matrix after xyz convention (see Goldsteins Classical Mechanics(1980))
-        R = Matrix3{Float32}([cosd(Θ)*cosd(ϕ) cosd(Θ)*sind(ϕ) -sind(Θ); 
-            sind(ψ)*sind(Θ)*cosd(ϕ)-cosd(ψ)*sind(ϕ) sind(ψ)*sind(Θ)*sind(ϕ)+cosd(ψ)*cosd(ϕ) cosd(Θ)*sind(ψ); 
-            cosd(ψ)*sind(Θ)*cos(ϕ)+sind(ψ)*sind(Θ) cosd(ψ)*sind(Θ)*sind(ϕ)-sind(ψ)*cosd(ϕ) cosd(Θ)*cosd(ψ)])
-
+        R = RotYXZ(Θ,ψ,ϕ)
         # add to array/vector of rigidtransformations
         push!(rotations, R)
     end

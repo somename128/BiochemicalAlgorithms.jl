@@ -1,5 +1,6 @@
-N = Int32(64)
+using LinearAlgebra
 
-typeof(N)
+N = Int32(64)
+norm(0.0)
 
 
