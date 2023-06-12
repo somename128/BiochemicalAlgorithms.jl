@@ -1,6 +1,6 @@
-using LinearAlgebra
+include("helpers.jl")
 
-N = Int32(64)
-norm(0.0)
+rot = create_rotations()
 
+rot[1777]
 

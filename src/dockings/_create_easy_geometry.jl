@@ -19,19 +19,19 @@ NR = 5
 # to have no overlap and exactly the amount of colored cells 
 # during algorithm
 # portein cube
-for i in 2:NP+2, j in 2:NP+2, k in 2:NP+2
+for i in 2:NP+1, j in 2:NP+1, k in 2:NP+1
   v = [i+0.5,j+0.5,k+0.5]
   push!(atoms_protein, v)
 end
 
 # ligand cube
-for i in 2:NL+2, j in 2:NL+2, k in 2:NL+2
+for i in 2:NL+1, j in 2:NL+1, k in 2:NL+1
   v = [i+0.5,j+0.5,k+0.5]
   push!(atoms_ligand, v)
 end
 
 # missing part in protein cube
-for i in 2:NR+2, j in 2:NR+2, k in 2:NR+2
+for i in 2:NR+1, j in 2:NR+1, k in 2:NR+1
   v = [i+0.5,j+0.5,k+0.5]
   push!(atoms_remove, v)
 end
@@ -47,7 +47,7 @@ for i in atoms_protein_cleaned
   push!(atoms_protein_indexed,i)
 end
 
-#=
+
 # change atom coordinates in pdb of protein
 protein = readPDB("2ptc_protein_copy.pdb")
 for i in eachindex(atoms_protein_indexed)
@@ -56,7 +56,7 @@ for i in eachindex(atoms_protein_indexed)
    protein[i].z = atoms_protein_indexed[i][3]
    protein[i].segname = string(protein[i].name[1])
 end
-=#
+
 # change atom coordinates in pdb of ligand
 ligand = readPDB("2ptc_ligand_copy.pdb")
 for i in eachindex(atoms_ligand)
@@ -67,7 +67,7 @@ for i in eachindex(atoms_ligand)
 end
 
 # write changed atoms of protein and/or ligand (only atoms of pdb) in pdb file
-# writePDB(protein,"atoms_dummy_protein.pdb")
+writePDB(protein,"atoms_dummy_protein.pdb")
 writePDB(ligand,"atoms_dummy_ligand.pdb")
 
   
