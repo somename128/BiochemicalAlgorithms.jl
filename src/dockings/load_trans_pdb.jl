@@ -1,6 +1,7 @@
 using BiochemicalAlgorithms
 
 include("mass_center.jl")
+include("extract_roomcoordinates.jl")
 
 function load_and_trans_pdb(path_to_pdb::String, gridsize::Int32)
 
@@ -9,11 +10,11 @@ function load_and_trans_pdb(path_to_pdb::String, gridsize::Int32)
     # datatype protein: Molecule{Float32}
     # println("Load PDB file...")
     protein = molecules(load_pdb(path_to_pdb))[1]
-
+    atoms = extract_roomcoordinates(protein)
     # translate protein in center of grid
     # println("Translate protein in center of grid...")
     # get mass_center of protein
-    mc = mass_center(protein)
+    mc = mass_center(atoms)
 
     # set translation vector depending on mass center
     # set mass center in center of grid

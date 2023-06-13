@@ -1,15 +1,13 @@
 include("extract_roomcoordinates.jl")
 
-function mass_center(protein::Molecule{Float32})
-    # extract room coordinates of atoms of the protein
-    atoms_in_space = extract_roomcoordinates(protein)
+function mass_center(atoms::Vector{Vector3{Float32}})
     # initalize vectors for storing x y z coordinates seperately
     X = Vector{Float32}()
     Y = Vector{Float32}()
     Z = Vector{Float32}()
 
     # fill vectors with coordinates
-    for i in atoms_in_space
+    for i in atoms
         push!(X, i[1])
         push!(Y, i[2])
         push!(Z, i[3])

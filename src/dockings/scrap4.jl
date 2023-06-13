@@ -30,10 +30,11 @@ protein_A = load_and_trans_pdb("src/dockings/dummy_protein.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
 protein_B = load_and_trans_pdb("src/dockings/dummy_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
-atoms_in_space_points = Base.Vector{Meshes.Point3}()
+B_r = rotate_atoms(roomcoordiantes_atoms_B, rotations[3335], N)
 
+#=
 for i in eachindex(rotations)
-    B_r = rotate_atoms(roomcoordiantes_atoms_B,rotations[i])
+    B_r = rotate_atoms(roomcoordiantes_atoms_B,rotations[i], N)
 
     for a in B_r
         v = Meshes.Point(a[1],a[2],a[3])
@@ -43,7 +44,7 @@ for i in eachindex(rotations)
     end
     println(i,"/",length(rotations))
 end
-
+=#
 
 #=
 centroids = create_centroids(N, one(Int32))
@@ -52,20 +53,20 @@ B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
 C = ifft(fft(A).*fft(B))
 C_real = real(C)
 C_sparse = zero_small!(C_real,0.5)
-
+=#
 atoms_in_space_points = Base.Vector{Meshes.Point3}()
 for i in roomcoordiantes_atoms_A
     v = Meshes.Point(i[1],i[2],i[3])
     push!(atoms_in_space_points, v)
 end
 
-for i in B_r1
+for i in B_r
     v = Meshes.Point(i[1],i[2],i[3])
     if (!Base.in(v, atoms_in_space_points))
         push!(atoms_in_space_points, v)
     end
 end
-=#
+
 viz(atoms_in_space_points)
 
 

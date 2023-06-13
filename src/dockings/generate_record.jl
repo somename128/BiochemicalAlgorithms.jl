@@ -9,7 +9,7 @@ include("rotate_atoms.jl")
 
 function generate_record(A::Array{Float32,3}, rotation::Matrix3{Float32}, roomcoordinates::Vector{Vector3{Float32}}, centroids::Array{Meshes.Point3, 3}, gridsize::Int32)
     # rotate atoms by rotation
-    atoms = rotate_atoms(roomcoordinates, rotation)
+    atoms = rotate_atoms(roomcoordinates, rotation, gridsize)
     # grid representation protein b
     B = grid_representation(atoms, gridsize, centroids)
     # fft-scoring

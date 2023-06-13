@@ -29,7 +29,7 @@ f(v::Vector3{Float32}) = rotations[5] * v
 
 atoms_f = f.(atoms)
 
-atoms_r = rotate_atoms(atoms, rotations[5])
+atoms_r = rotate_atoms(atoms, rotations[5],N)
 
 println(atoms ≈ atoms_f)
 println(atoms_r ≈ atoms_f)
