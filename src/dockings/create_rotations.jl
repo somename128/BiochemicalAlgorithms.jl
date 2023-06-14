@@ -17,7 +17,7 @@ function create_rotations()
     end
 
     # fill array with angle values from 0 to 360 stepsize 20
-    for i in 1:19
+    for i in 1:10
         a = deg2rad((i-1) * 5)
         push!(angles_y,a)
     end

@@ -14,4 +14,4 @@ roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 
 atoms = rotate_atoms(roomcoordiantes_atoms_B, rotations[1777], N)
 
-typeof(atoms)
+length(rotations)
