@@ -1,17 +1,26 @@
+using FFTW
 using BiochemicalAlgorithms
+using DSP
+using FourierTools
 
-include("create_rotations.jl")
-include("load_trans_pdb.jl")
-include("extract_roomcoordinates.jl")
-include("mass_center.jl")
-include("rotate_atoms.jl")
+include("extract_max.jl")
 
-N = Int32(64)
-rotations = create_rotations()
+N = 10
 
-protein_B = load_and_trans_pdb("src/dockings/dummy_ligand.pdb", N)
-roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
+A = zeros(Float32, N, N, N)
+B = zeros(Float32, N, N, N)
 
-atoms = rotate_atoms(roomcoordiantes_atoms_B, rotations[1777], N)
+for i in 1:N*N*N
+    A[i] = i
+end
 
-length(rotations)
+B[3,5,9] = 1
+
+C = ifft(fft(A).*fft(B))
+#C_max = extract_max(C)
+#D = irfft(rfft(A).*rfft(B), N)
+#D_max = extract_max(D)
+#E = DSP.conv(A,B)
+#E_max = extract_max(E)
+ccorr(A,B;centered=false)
+

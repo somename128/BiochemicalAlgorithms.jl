@@ -3,7 +3,7 @@ using BenchmarkTools
 
 include("helpers.jl")
 
-# function that extracts the maximum value of a complex 3D matrix
+# function that extracts the maximum value of a complex or real 3D matrix
 function extract_max(C)
     C_real = real(C)
     

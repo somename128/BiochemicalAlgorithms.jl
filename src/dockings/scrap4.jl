@@ -25,14 +25,40 @@ include("helpers.jl")
 
 N = Int32(64)
 rotations = create_rotations()
-
-protein_A = load_and_trans_pdb("src/dockings/dummy_protein.pdb", N)
+centroids = create_centroids(N, one(Int32))
+protein_A = load_and_trans_pdb("dummy_protein.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("src/dockings/dummy_ligand.pdb", N)
+protein_B = load_and_trans_pdb("dummy_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
-B_r = rotate_atoms(roomcoordiantes_atoms_B, rotations[4], N)
+A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
+B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
+B_r = rotate_atoms(roomcoordiantes_atoms_B, rotations[21], N)
+mc = mass_center(B_r)
+h(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mc[1]-2, mc[2]-2, 
+        mc[3]-2) + v
+atoms_rotated = h.(B_r)
 atoms_in_space_points = Base.Vector{Meshes.Point3}()
+
 #=
+# show grid rep
+for i in CartesianIndices(A)
+    if (A[i] != 0)
+        v = Meshes.Point(i[1],i[2],i[3])
+        push!(atoms_in_space_points, v)
+    end
+end
+
+for i in CartesianIndices(B)
+    if (B[i] != 0)
+        v = Meshes.Point(i[1],i[2],i[3])
+        if (!Base.in(v, atoms_in_space_points))
+            push!(atoms_in_space_points, v)
+        end
+    end
+end
+=#
+#=
+# way of rotations
 for i in eachindex(rotations)
     B_r = rotate_atoms(roomcoordiantes_atoms_B,rotations[i], N)
 
@@ -46,12 +72,14 @@ for i in eachindex(rotations)
 end
 
 =# 
-for i in roomcoordiantes_atoms_A
+
+# show protein and rotated ligand
+for i in atoms_A_translated
     v = Meshes.Point(i[1],i[2],i[3])
     push!(atoms_in_space_points, v)
 end
 
-for i in B_r
+for i in atoms_rotated
     v = Meshes.Point(i[1],i[2],i[3])
     if (!Base.in(v, atoms_in_space_points))
         push!(atoms_in_space_points, v)

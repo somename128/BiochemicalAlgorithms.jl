@@ -19,7 +19,8 @@ function create_atomballs(roomcoordinates::Vector{Vector3{Float32}})
     # println("Build atomballs...")
     atomballs = Base.Vector{Meshes.Ball}()
     # for easy geometry for better couting of colored_cells 
-    r = 0.9
+    # normally 1.8 Å or indiviual for every element
+    r = 0.7
 
     for i in atoms_in_space_points
         b = Meshes.Ball(i, r)
