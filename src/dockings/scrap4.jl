@@ -9,6 +9,7 @@ using Profile
 using TypedTables
 using LinearAlgebra
 using FFTW
+using FourierTools
 
 include("grid_representation.jl")
 include("load_trans_pdb.jl")
@@ -32,17 +33,19 @@ protein_B = load_and_trans_pdb("dummy_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
 B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
-B_r = rotate_atoms(roomcoordiantes_atoms_B, rotations[21], N)
-mc = mass_center(B_r)
-h(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mc[1]-2, mc[2]-2, 
-        mc[3]-2) + v
-atoms_rotated = h.(B_r)
+B_r = rotate_atoms(roomcoordiantes_atoms_B, rotations[1], N)
+# mcA = mass_center(roomcoordiantes_atoms_A)
+mcB = mass_center(B_r)
+g(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcA[1]-33, mcA[2]-30, 
+        mcA[3]-2) + v
+h(v::Vector3{Float32}) = (-1)*Vector3{Float32}(33, 30, 2) + v
+atoms_translated_A = h.(roomcoordiantes_atoms_A)
+atoms_translated_B = h.(B_r)
 atoms_in_space_points = Base.Vector{Meshes.Point3}()
-
 #=
 # show grid rep
 for i in CartesianIndices(A)
-    if (A[i] != 0)
+    if (A[i] != 0 && A[i] != -15)
         v = Meshes.Point(i[1],i[2],i[3])
         push!(atoms_in_space_points, v)
     end
@@ -51,9 +54,9 @@ end
 for i in CartesianIndices(B)
     if (B[i] != 0)
         v = Meshes.Point(i[1],i[2],i[3])
-        if (!Base.in(v, atoms_in_space_points))
+        # if (!Base.in(v, atoms_in_space_points))
             push!(atoms_in_space_points, v)
-        end
+        # end
     end
 end
 =#
@@ -74,21 +77,20 @@ end
 =# 
 
 # show protein and rotated ligand
-for i in atoms_A_translated
+for i in atoms_translated_A
     v = Meshes.Point(i[1],i[2],i[3])
     push!(atoms_in_space_points, v)
 end
 
-for i in atoms_rotated
+for i in atoms_translated_B
     v = Meshes.Point(i[1],i[2],i[3])
-    if (!Base.in(v, atoms_in_space_points))
+    #if (!Base.in(v, atoms_in_space_points))
         push!(atoms_in_space_points, v)
-    end
+    #end
 end
 
-viz(atoms_in_space_points)
 
-
-
+viz(atoms_in_space_points, color = 1:length(atoms_in_space_points))
+# viz(atoms_in_space_points)
 
 

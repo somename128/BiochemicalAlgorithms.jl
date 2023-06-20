@@ -1,38 +1,19 @@
-using BiochemicalAlgorithms
-using Makie, WGLMakie
-using Meshes, MeshViz
-using LinearAlgebra
-using BenchmarkTools
+using DataFrames
 
-include("load_trans_pdb.jl")
-include("helpers.jl")
-include("min_max_atoms.jl")
-include("mass_center.jl")
-include("create_centroids.jl")
-include("extract_roomcoordinates.jl")
-include("create_atomballs.jl")
-include("create_rotations.jl")
-include("mass_center.jl")
-include("rotate_atoms.jl")
+# generating matrix for initalizing scoring table
+R = Matrix3{Float32}([0 0 0; 0 0 0; 0 0 0]) 
+R1 = Matrix3{Float32}([1 0 0; 0 1 0; 0 0 1]) 
+# initialize scoring table
+scoring_table = DataFrame(α=[zero(Float32)], β=[zero(Float32)], γ=[zero(Float32)], R=[R], score=[zero(Float32)])
 
-N = 128
-protein = load_and_trans_pdb("2ptc_ligand.pdb", N)
-# atomballs = create_atomballs(protein)
-rotations = create_rotations()
-# @time mc = mass_center(protein)
-# @time min_max = min_max_atoms(protein)
+for i in 1:10
+    record = (α=Float32(1.0), β=Float32(1.0), γ=Float32(1.0), R=R1, score=Float32(i))
+    push!(scoring_table,record)
+end
 
-# atoms_m = Vector{Vector3{Float32}}()
-atoms = extract_roomcoordinates(protein)
+sort!(scoring_table, [:score], rev=[true])
+scoring_table[1:5,:]
 
-f(v::Vector3{Float32}) = rotations[5] * v 
-
-atoms_f = f.(atoms)
-
-atoms_r = rotate_atoms(atoms, rotations[5],N)
-
-println(atoms ≈ atoms_f)
-println(atoms_r ≈ atoms_f)
 
 
 

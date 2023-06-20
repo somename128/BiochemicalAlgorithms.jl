@@ -5,22 +5,24 @@ using FourierTools
 
 include("extract_max.jl")
 
-N = 10
+N = Int32(10)
 
-A = zeros(Float32, N, N, N)
-B = zeros(Float32, N, N, N)
+A = zeros(Float64, N, N)
+B = zeros(Float64, N, N)
 
-for i in 1:N*N*N
+for i in 3:10
     A[i] = i
 end
 
-B[3,5,9] = 1
+# B[3,5,9] = 1
 
-C = ifft(fft(A).*fft(B))
+# C = ifft(fft(A).*fft(B))
 #C_max = extract_max(C)
 #D = irfft(rfft(A).*rfft(B), N)
 #D_max = extract_max(D)
 #E = DSP.conv(A,B)
 #E_max = extract_max(E)
-ccorr(A,B;centered=false)
+# max = extract_max(ccorr(A,B;centered=false))
+fft([1,0,0])
+
 

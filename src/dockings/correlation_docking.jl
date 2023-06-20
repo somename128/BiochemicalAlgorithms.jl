@@ -1,7 +1,7 @@
 using BiochemicalAlgorithms
 using BenchmarkTools
 using JLD
-using TypedTables
+using DataFrames
 
 include("load_trans_pdb.jl")
 include("grid_representation.jl")
@@ -14,7 +14,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     # generating matrix for initalizing scoring table
     R = Matrix3{Float32}([0 0 0; 0 0 0; 0 0 0]) 
     # initialize scoring table
-    scoring_table = Table(α=[0.0], β=[0.0], γ=[0.0], R=[R], score=[0.0])
+    scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=[R], score=zero(Float32))
     # set gridsize N 
     N = gridsize
     # load and translate protein a
@@ -37,15 +37,20 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
         # generate record for scoring table
         record = generate_record(A, rotations[i], roomcoordiantes_atoms_B, centroids,N)
         lock(lk) do
-            if(scoring_table[1].score < record.score)
-                scoring_table[1] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
+            #=
+            if(scoring_table.score[1] < record.score)
+                scoring_table[1,:] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
                 println(i)
             end
+            =#
+            push!(scoring_table, record)
         end
         # println(i,"/",length(rotations))
     end
 
-    # loop to rotation if "greatest" c not reached
-    # for now: return scoring table with greatest value
-    return scoring_table
+    # sort scoring_table
+    sort!(scoring_table, [:score], rev=[true])
+
+    # return ten greatest values
+    return scoring_table[1:10, :]
 end
