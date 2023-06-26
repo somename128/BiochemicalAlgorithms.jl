@@ -2,27 +2,32 @@ using FFTW
 using BiochemicalAlgorithms
 using DSP
 using FourierTools
+using DataFrames
+using SparseArrays
 
-include("extract_max.jl")
+include("create_rotations.jl")
+include("get_degrees.jl")
+include("generate_record.jl")
 
-N = Int32(10)
+N = 4
 
-A = zeros(Float64, N, N)
-B = zeros(Float64, N, N)
+A = zeros(Float32, N,N,N)
+B = zeros(Float32, N,N,N)
 
-for i in 3:10
-    A[i] = i
+for i in CartesianIndices(A[2:3,2:3,2:3])
+    A[i+CartesianIndex(1,1,1)] = 1
 end
 
-# B[3,5,9] = 1
+for i in eachindex(B)
+    if (i%2==0)
+        B[i] = -i
+    else
+        B[i] = i
+    end
+end
 
-# C = ifft(fft(A).*fft(B))
-#C_max = extract_max(C)
-#D = irfft(rfft(A).*rfft(B), N)
-#D_max = extract_max(D)
-#E = DSP.conv(A,B)
-#E_max = extract_max(E)
-# max = extract_max(ccorr(A,B;centered=false))
-fft([1,0,0])
+C = ifft(fft(A).*fft(B))
 
+max = extract_max(C)
+println(max.α[1]-N," ",max.β[1]-N," ",max.γ[1]-N)
 

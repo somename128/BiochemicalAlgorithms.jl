@@ -10,11 +10,9 @@ include("create_centroids.jl")
 include("generate_record.jl")
 include("extract_roomcoordinates.jl")
 
-function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int32)
-    # generating matrix for initalizing scoring table
-    R = Matrix3{Float32}([0 0 0; 0 0 0; 0 0 0]) 
+function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int32) 
     # initialize scoring table
-    scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=[R], score=zero(Float32))
+    scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=(zero(Float32), zero(Float32), zero(Float32)), score=zero(Float32))
     # set gridsize N 
     N = gridsize
     # load and translate protein a
@@ -52,5 +50,5 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     sort!(scoring_table, [:score], rev=[true])
 
     # return ten greatest values
-    return scoring_table[1:10, :]
+    return scoring_table[1:50, :]
 end

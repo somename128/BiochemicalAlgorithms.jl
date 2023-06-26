@@ -10,6 +10,7 @@ using TypedTables
 using LinearAlgebra
 using FFTW
 using FourierTools
+using Rotations
 
 include("grid_representation.jl")
 include("load_trans_pdb.jl")
@@ -26,21 +27,26 @@ include("helpers.jl")
 
 N = Int32(64)
 rotations = create_rotations()
+R = Vector{Matrix3{Float32}}()
+r = RotXYZ(deg2rad(-100),deg2rad(80),deg2rad(0))
+push!(R,r)
 centroids = create_centroids(N, one(Int32))
-protein_A = load_and_trans_pdb("dummy_protein.pdb", N)
+protein_A = load_and_trans_pdb("dummy_protein_vol2.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("dummy_ligand.pdb", N)
+protein_B = load_and_trans_pdb("dummy_ligand_vol2.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
 B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
-B_r = rotate_atoms(roomcoordiantes_atoms_B, rotations[1], N)
-# mcA = mass_center(roomcoordiantes_atoms_A)
+shift = CartesianIndex(-61+N/2,-61+N/2,-3)
+B_r = rotate_atoms(roomcoordiantes_atoms_B, R[1], N)
+B_grid = grid_representation(B_r, N, centroids)
+mcA = mass_center(roomcoordiantes_atoms_A)
 mcB = mass_center(B_r)
-g(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcA[1]-33, mcA[2]-30, 
-        mcA[3]-2) + v
-h(v::Vector3{Float32}) = (-1)*Vector3{Float32}(33, 30, 2) + v
-atoms_translated_A = h.(roomcoordiantes_atoms_A)
+# g(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcB[1]-33, mcB[2]-30, mcB[3]-2) + v
+h(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcB[1]-N/2+2, mcB[2]-N/2+2, mcB[3]-N/2+2) + v
+# atoms_translated_A = g.(roomcoordiantes_atoms_A)
 atoms_translated_B = h.(B_r)
+
 atoms_in_space_points = Base.Vector{Meshes.Point3}()
 #=
 # show grid rep
@@ -50,16 +56,16 @@ for i in CartesianIndices(A)
         push!(atoms_in_space_points, v)
     end
 end
-
-for i in CartesianIndices(B)
-    if (B[i] != 0)
+=#
+for i in CartesianIndices(B_grid)
+    if (B_grid[i] != 0)
         v = Meshes.Point(i[1],i[2],i[3])
-        # if (!Base.in(v, atoms_in_space_points))
+        #if (Base.in(v, atoms_in_space_points))
             push!(atoms_in_space_points, v)
-        # end
+        #end
     end
 end
-=#
+
 #=
 # way of rotations
 for i in eachindex(rotations)
@@ -75,20 +81,20 @@ for i in eachindex(rotations)
 end
 
 =# 
-
+#=
 # show protein and rotated ligand
-for i in atoms_translated_A
+for i in roomcoordiantes_atoms_A
     v = Meshes.Point(i[1],i[2],i[3])
     push!(atoms_in_space_points, v)
 end
 
 for i in atoms_translated_B
     v = Meshes.Point(i[1],i[2],i[3])
-    #if (!Base.in(v, atoms_in_space_points))
+    if (Base.in(v, atoms_in_space_points))
         push!(atoms_in_space_points, v)
-    #end
+    end
 end
-
+=#
 
 viz(atoms_in_space_points, color = 1:length(atoms_in_space_points))
 # viz(atoms_in_space_points)

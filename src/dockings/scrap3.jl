@@ -1,19 +1,46 @@
-using DataFrames
+using BiochemicalAlgorithms
+using BenchmarkTools
+using Makie, WGLMakie
+using Meshes, MeshViz
+using JLD
+using ProfileView
+using ProgressBars
+using Profile
+using TypedTables
+using LinearAlgebra
+using FFTW
+using FourierTools
+using Rotations
 
-# generating matrix for initalizing scoring table
-R = Matrix3{Float32}([0 0 0; 0 0 0; 0 0 0]) 
-R1 = Matrix3{Float32}([1 0 0; 0 1 0; 0 0 1]) 
-# initialize scoring table
-scoring_table = DataFrame(α=[zero(Float32)], β=[zero(Float32)], γ=[zero(Float32)], R=[R], score=[zero(Float32)])
+include("grid_representation.jl")
+include("load_trans_pdb.jl")
+include("min_max_atoms.jl")
+include("create_rotations.jl")
+include("set_marked_cells.jl")
+include("generate_record.jl")
+include("extract_roomcoordinates.jl")
+include("create_atomballs.jl")
+include("correlation_docking.jl")
+include("mass_center.jl")
+include("rotate_atoms.jl")
+include("helpers.jl")
 
-for i in 1:10
-    record = (α=Float32(1.0), β=Float32(1.0), γ=Float32(1.0), R=R1, score=Float32(i))
-    push!(scoring_table,record)
-end
+N = Int32(64)
+rotations = create_rotations()
+R = Vector{Matrix3{Float32}}()
+r = RotXYZ(deg2rad(80),deg2rad(0),deg2rad(0))
+push!(R,r)
+centroids = create_centroids(N, one(Int32))
+protein_A = load_and_trans_pdb("dummy_protein_vol2.pdb", N)
+roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
+protein_B = load_and_trans_pdb("dummy_ligand_vol2.pdb", N)
+roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
+A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
+B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
 
-sort!(scoring_table, [:score], rev=[true])
-scoring_table[1:5,:]
+C = ifft(fft(A).*fft(B))
 
+display(A)
 
 
 
