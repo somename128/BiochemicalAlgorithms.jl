@@ -50,5 +50,5 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     sort!(scoring_table, [:score], rev=[true])
 
     # return ten greatest values
-    return scoring_table[1:50, :]
+    return scoring_table[1:10, :]
 end

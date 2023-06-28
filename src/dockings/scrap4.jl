@@ -37,18 +37,18 @@ protein_B = load_and_trans_pdb("dummy_ligand_vol2.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
 B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
-shift = CartesianIndex(-61+N/2,-61+N/2,-3)
+shift = CartesianIndex(-3,-3, 3)
 B_r = rotate_atoms(roomcoordiantes_atoms_B, R[1], N)
 B_grid = grid_representation(B_r, N, centroids)
-mcA = mass_center(roomcoordiantes_atoms_A)
-mcB = mass_center(B_r)
+# mcA = mass_center(roomcoordiantes_atoms_A)
+# mcB = mass_center(B_r)
 # g(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcB[1]-33, mcB[2]-30, mcB[3]-2) + v
-h(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcB[1]-N/2+2, mcB[2]-N/2+2, mcB[3]-N/2+2) + v
+# h(v::Vector3{Float32}) = Vector3{Float32}(3, 3, -3) + v
 # atoms_translated_A = g.(roomcoordiantes_atoms_A)
-atoms_translated_B = h.(B_r)
+# atoms_translated_B = h.(B_r)
 
 atoms_in_space_points = Base.Vector{Meshes.Point3}()
-#=
+
 # show grid rep
 for i in CartesianIndices(A)
     if (A[i] != 0 && A[i] != -15)
@@ -56,10 +56,10 @@ for i in CartesianIndices(A)
         push!(atoms_in_space_points, v)
     end
 end
-=#
+
 for i in CartesianIndices(B_grid)
-    if (B_grid[i] != 0)
-        v = Meshes.Point(i[1],i[2],i[3])
+    if (B_grid[i] != 0 && B_grid[i] != -15)
+        v = Meshes.Point(i[1]+shift[1],i[2]+shift[2],i[3]+shift[3])
         #if (Base.in(v, atoms_in_space_points))
             push!(atoms_in_space_points, v)
         #end
@@ -90,9 +90,9 @@ end
 
 for i in atoms_translated_B
     v = Meshes.Point(i[1],i[2],i[3])
-    if (Base.in(v, atoms_in_space_points))
+    # if (!Base.in(v, atoms_in_space_points))
         push!(atoms_in_space_points, v)
-    end
+    # end
 end
 =#
 

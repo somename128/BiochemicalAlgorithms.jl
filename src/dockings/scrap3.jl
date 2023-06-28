@@ -40,7 +40,20 @@ B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
 
 C = ifft(fft(A).*fft(B))
 
-display(A)
+min_x = 0
+min_y = 0
+min_z = 0
+# find first element
+for i in CartesianIndices(B)
+    if (B[i] != 0)
+        global min_x = i[1]
+        global min_y = i[2]
+        global min_z = i[3]
+        break
+    end
+end
+
+min_z
 
 
 
