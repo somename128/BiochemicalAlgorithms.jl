@@ -9,15 +9,15 @@ function extract_max(C)
     
     # initialize record for max
     # to get access to first element filled with one element
-    t = DataFrame(α=zero(Float32), β=zero(Float32), #=γ=zero(Float32),=# score=zero(Float32))
+    t = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), score=zero(Float32))
 
-    C_sparse = zero_small!(C_real,0.5)
+    C_sparse = zero_small!(C_real,Float32(0.5))
 
     # walk through all values in 3D matrix and store them in table
     # indices and score
     for i in CartesianIndices(C_sparse)
         if (t.score[1] < C_sparse[i])
-            t[1,:] = (α=Float32(i[1]), β=Float32(i[2]), #=γ=Float32(i[3]),=# score=Float32(C_sparse[i]))
+            t[1,:] = (α=Float32(i[1]), β=Float32(i[2]), γ=Float32(i[3]), score=Float32(C_sparse[i]))
         end
     end
 
