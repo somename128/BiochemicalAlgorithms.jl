@@ -28,32 +28,32 @@ include("helpers.jl")
 N = Int32(64)
 rotations = create_rotations()
 R = Vector{Matrix3{Float32}}()
-r = RotXYZ(deg2rad(0),deg2rad(0),deg2rad(0))
+r = RotXYZ(deg2rad(140),deg2rad(20),deg2rad(-40))
 push!(R,r)
 centroids = create_centroids(N, one(Int32))
-protein_A = load_and_trans_pdb("dummy_protein.pdb", N)
+protein_A = load_and_trans_pdb("2ptc_protein.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("dummy_ligand_vol2.pdb", N)
+protein_B = load_and_trans_pdb("2ptc_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false)
 B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
-shift = CartesianIndex(0, 0, 0)
+# shift = CartesianIndex(7, 1, 6)
 B_r = rotate_atoms(roomcoordiantes_atoms_B, R[1], N)
-B_grid = grid_representation(B_r, N, centroids, true)
+# B_grid = grid_representation(B_r, N, centroids, true)
 # mcA = mass_center(roomcoordiantes_atoms_A)
 # mcB = mass_center(B_r)
 # g(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcB[1]-33, mcB[2]-30, mcB[3]-2) + v
-#h(v::Vector3{Float32}) = Vector3{Float32}(-2, 4, -2) + v
+h(v::Vector3{Float32}) = Vector3{Float32}(7, 1, 6) + v
 # atoms_translated_A = g.(roomcoordiantes_atoms_A)
-#atoms_translated_B = h.(B_r)
+atoms_translated_B = h.(B_r)
 
 scoring = Base.Vector{Meshes.Point3}()
 atoms_in_space_points = Base.Vector{Meshes.Point3}()
 
-
+#=
 # show grid rep
 for i in CartesianIndices(A)
-    if (A[i] != 0)
+    if (A[i] != 0 && A[i] != -15)
         v = Meshes.Point(i[1],i[2],i[3])
         push!(atoms_in_space_points, v)
     end
@@ -67,7 +67,7 @@ for i in CartesianIndices(B_grid)
         #end
     end
 end
-
+=#
 #=
 # way of rotations
 for i in eachindex(rotations)
@@ -83,7 +83,7 @@ for i in eachindex(rotations)
 end
 
 =# 
-#=
+
 # show protein and rotated ligand
 for i in roomcoordiantes_atoms_A
     v = Meshes.Point(i[1],i[2],i[3])
@@ -96,7 +96,7 @@ for i in atoms_translated_B
         push!(atoms_in_space_points, v)
     # end
 end
-=#
+
 #=
 C = ifft(fft(A).*conj(fft(B_grid)))
 
