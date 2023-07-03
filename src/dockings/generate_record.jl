@@ -12,7 +12,7 @@ function generate_record(A::Array{Float32,3}, rotation::Matrix3{Float32}, roomco
     # rotate atoms by rotation
     atoms = rotate_atoms(roomcoordinates, rotation, gridsize)
     # grid representation protein b
-    B = grid_representation(atoms, gridsize, centroids)
+    B = grid_representation(atoms, gridsize, centroids, true)
     # fft-scoring
     C = ifft(fft(A).*conj(fft(B)))
     # cross-correlation over three dimensions
@@ -24,7 +24,8 @@ function generate_record(A::Array{Float32,3}, rotation::Matrix3{Float32}, roomco
     # build record for scoring table
     # transfer position of greatest value of C into
     # shifts in xyz direction
-    record = (α=max.α[1], β=max.β[1], γ=max.γ[1], R=rot_in_deg, score=max.score[1])
+    record = (α=interp!(max.α[1],gridsize), β=interp!(max.β[1],gridsize), γ=interp!(max.γ[1],gridsize), 
+        R=rot_in_deg, score=max.score[1])
 
     return record
 end

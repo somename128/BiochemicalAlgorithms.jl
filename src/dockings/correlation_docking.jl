@@ -9,12 +9,13 @@ include("create_rotations.jl")
 include("create_centroids.jl")
 include("generate_record.jl")
 include("extract_roomcoordinates.jl")
+include("set_gridsize.jl")
 
-function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, gridsize::Int32) 
+function correlation_docking(path_to_proteinA::String, path_to_proteinB::String) 
     # initialize scoring table
     scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=(zero(Float32), zero(Float32), zero(Float32)), score=zero(Float32))
-    # set gridsize N 
-    N = gridsize
+    # set gridsize N against protein size of greater protein
+    N = set_gridsize(path_to_proteinA, path_to_proteinB)
     # load and translate protein a
     protein_A = load_and_trans_pdb(path_to_proteinA, N)
     roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
@@ -25,7 +26,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     # of 1 angström, only done once
     centroids = create_centroids(N, one(Int32))
     # grid representation protein a
-    A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
+    A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false)
     # get rotations - build via rigid_transform! with translation vector (0,0,0)
     rotations = create_rotations()
     # lock for threads (unsure how this really works)
@@ -50,5 +51,5 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     sort!(scoring_table, [:score], rev=[true])
 
     # return ten greatest values
-    return scoring_table[1:10, :]
+    return scoring_table[1:5, :]
 end

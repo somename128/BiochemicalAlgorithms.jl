@@ -26,3 +26,14 @@ function less_than_one!(x::Int64)
 
     return x
 end
+
+# function that interprets value from fft
+# if value is greater than gridsize/2
+# values are interpret as negativ shifts 
+function interp!(x::Int32, N::Int32)
+    if x > N/2
+        x -= N
+    end
+
+    return x
+end

@@ -24,38 +24,9 @@ include("correlation_docking.jl")
 include("mass_center.jl")
 include("rotate_atoms.jl")
 include("helpers.jl")
+include("set_gridsize.jl")
+include("helpers.jl")
 
-N = Int32(64)
-rotations = create_rotations()
-R = Vector{Matrix3{Float32}}()
-r = RotXYZ(deg2rad(80),deg2rad(0),deg2rad(0))
-push!(R,r)
-centroids = create_centroids(N, one(Int32))
-protein_A = load_and_trans_pdb("dummy_protein_vol2.pdb", N)
-roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("dummy_ligand_vol2.pdb", N)
-roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
-A = grid_representation(roomcoordiantes_atoms_A, N, centroids)
-B = grid_representation(roomcoordiantes_atoms_B, N, centroids)
-
-C = ifft(fft(A).*fft(B))
-
-min_x = 0
-min_y = 0
-min_z = 0
-# find first element
-for i in CartesianIndices(B)
-    if (B[i] != 0)
-        global min_x = i[1]
-        global min_y = i[2]
-        global min_z = i[3]
-        break
-    end
-end
-
-min_z
-
-
-
-
-
+N = set_gridsize("dummy_protein_vol2.pdb","dummy_ligand_vol2.pdb")
+a = Int32(31)
+interp!(a,N)
