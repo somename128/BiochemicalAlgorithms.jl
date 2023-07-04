@@ -4,13 +4,13 @@ using Makie, WGLMakie
 using Meshes, MeshViz
 using JLD
 using ProfileView
-using ProgressBars
 using Profile
 using TypedTables
 using LinearAlgebra
 using FFTW
 using FourierTools
 using Rotations
+using DelimitedFiles
 
 include("grid_representation.jl")
 include("load_trans_pdb.jl")
@@ -24,33 +24,30 @@ include("correlation_docking.jl")
 include("mass_center.jl")
 include("rotate_atoms.jl")
 include("helpers.jl")
+include("extract_max.jl")
 
-N = Int32(64)
+N = Int32(32)
 rotations = create_rotations()
 R = Vector{Matrix3{Float32}}()
-r = RotXYZ(deg2rad(140),deg2rad(20),deg2rad(-40))
+r = RotXYZ(deg2rad(0),deg2rad(0),deg2rad(-140))
 push!(R,r)
 centroids = create_centroids(N, one(Int32))
-protein_A = load_and_trans_pdb("2ptc_protein.pdb", N)
+protein_A = load_and_trans_pdb("dummy_protein_vol2.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("2ptc_ligand.pdb", N)
+protein_B = load_and_trans_pdb("dummy_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false)
-B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
-# shift = CartesianIndex(7, 1, 6)
+# B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
+# shift = CartesianIndex(-1, -1, -1)
 B_r = rotate_atoms(roomcoordiantes_atoms_B, R[1], N)
-# B_grid = grid_representation(B_r, N, centroids, true)
-# mcA = mass_center(roomcoordiantes_atoms_A)
-# mcB = mass_center(B_r)
-# g(v::Vector3{Float32}) = (-1)*Vector3{Float32}(mcB[1]-33, mcB[2]-30, mcB[3]-2) + v
-h(v::Vector3{Float32}) = Vector3{Float32}(7, 1, 6) + v
-# atoms_translated_A = g.(roomcoordiantes_atoms_A)
+h(v::Vector3{Float32}) = Vector3{Float32}(-1, -1, -7) + v
 atoms_translated_B = h.(B_r)
+B_grid = grid_representation(atoms_translated_B, N, centroids, true)
 
-scoring = Base.Vector{Meshes.Point3}()
+# scoring = Base.Vector{Meshes.Point3}()
 atoms_in_space_points = Base.Vector{Meshes.Point3}()
 
-#=
+
 # show grid rep
 for i in CartesianIndices(A)
     if (A[i] != 0 && A[i] != -15)
@@ -61,13 +58,11 @@ end
 
 for i in CartesianIndices(B_grid)
     if (B_grid[i] != 0)
-        v = Meshes.Point(i[1]+shift[1],i[2]+shift[2],i[3]+shift[3])
-        #if (Base.in(v, atoms_in_space_points))
-            push!(atoms_in_space_points, v)
-        #end
+        v = Meshes.Point(i[1],i[2],i[3])
+        push!(atoms_in_space_points, v)
     end
 end
-=#
+
 #=
 # way of rotations
 for i in eachindex(rotations)
@@ -83,7 +78,7 @@ for i in eachindex(rotations)
 end
 
 =# 
-
+#=
 # show protein and rotated ligand
 for i in roomcoordiantes_atoms_A
     v = Meshes.Point(i[1],i[2],i[3])
@@ -92,19 +87,19 @@ end
 
 for i in atoms_translated_B
     v = Meshes.Point(i[1],i[2],i[3])
-    # if (!Base.in(v, atoms_in_space_points))
-        push!(atoms_in_space_points, v)
-    # end
+    push!(atoms_in_space_points, v)
 end
+=#
 
+# C = ifft(fft(A).*conj(fft(B_grid)))
 #=
-C = ifft(fft(A).*conj(fft(B_grid)))
-
 for i in CartesianIndices(C)
     v = Meshes.Point(i[1],i[2],real(C[i]))
     push!(scoring, v)
 end
-=#  
+=#
+
+# println(extract_max(zero_small!(real(C),Float32(0.5))))
 
 viz(atoms_in_space_points, color = 1:length(atoms_in_space_points))
 # viz(atoms_in_space_points)

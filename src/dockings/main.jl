@@ -4,6 +4,6 @@ using ProfileView
 
 include("correlation_docking.jl")
 
-@time score = correlation_docking("src/dockings/2ptc_protein.pdb","src/dockings/2ptc_ligand.pdb")
+@time score = correlation_docking("src/dockings/dummy_protein_vol2.pdb","src/dockings/dummy_ligand.pdb")
 
 

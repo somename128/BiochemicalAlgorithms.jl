@@ -22,10 +22,12 @@ function generate_record(A::Array{Float32,3}, rotation::Matrix3{Float32}, roomco
     # get degrees of rotation around x,y,z axis
     rot_in_deg = get_degrees(rotation)
     # build record for scoring table
-    # transfer position of greatest value of C into
-    # shifts in xyz direction
-    record = (α=interp!(max.α[1],gridsize), β=interp!(max.β[1],gridsize), γ=interp!(max.γ[1],gridsize), 
-        R=rot_in_deg, score=max.score[1])
+    # transfer position of greatest value of C into shifts 
+    # in xyz direction
+    # minus 1 in each direction for start at (0,0,0) in upper 
+    # left corner (not (1,1,1))
+    record = (α=interp!(max.α[1],gridsize)-one(Float32), β=interp!(max.β[1],gridsize)-one(Float32), 
+        γ=interp!(max.γ[1],gridsize)-one(Float32), R=rot_in_deg, score=max.score[1])
 
     return record
 end
