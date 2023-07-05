@@ -26,7 +26,7 @@ function create_rotations()
     # loop over angles to store all possible rotations
     for γ in angles_z, β in angles_y, α in angles_x
         # rotation matrix after xyz convention (see Goldsteins Classical Mechanics(1980))
-        R = RotXYZ(α,β,γ)
+        R = RotXYZ{Float32}(α,β,γ)
         # add to array/vector of rigidtransformations
         push!(rotations, R)
     end

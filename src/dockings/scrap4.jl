@@ -2,7 +2,6 @@ using BiochemicalAlgorithms
 using BenchmarkTools
 using Makie, WGLMakie
 using Meshes, MeshViz
-using JLD
 using ProfileView
 using Profile
 using TypedTables
@@ -29,18 +28,18 @@ include("extract_max.jl")
 N = Int32(32)
 rotations = create_rotations()
 R = Vector{Matrix3{Float32}}()
-r = RotXYZ(deg2rad(0),deg2rad(0),deg2rad(0))
+r = RotXYZ(deg2rad(155.811),deg2rad(85.644),deg2rad(-163.139))
 push!(R,r)
 centroids = create_centroids(N, one(Int32))
-protein_A = load_and_trans_pdb("dummy_protein_vol2.pdb", N)
+protein_A = load_and_trans_pdb("dummy_protein.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("dummy_ligand_vol3.pdb", N)
+protein_B = load_and_trans_pdb("dummy_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false)
 # B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
 # shift = CartesianIndex(-1, -1, -1)
 B_r = rotate_atoms(roomcoordiantes_atoms_B, R[1], N)
-h(v::Vector3{Float32}) = Vector3{Float32}(-4, 6, 1) + v
+h(v::Vector3{Float32}) = Vector3{Float32}(-2, -2, -2) + v
 atoms_translated_B = h.(B_r)
 B_grid = grid_representation(atoms_translated_B, N, centroids, true)
 

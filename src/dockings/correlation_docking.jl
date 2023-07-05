@@ -49,6 +49,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String)
     # sort scoring_table
     sort!(scoring_table, [:score], rev=[true])
 
-    # return ten greatest values
-    return scoring_table[1:5, :]
+    # return five greatest values, grid representation of A,
+    # roomcoordinates of B, centroids and gridsize for refinement
+    return scoring_table[1:5, :], A, roomcoordiantes_atoms_B, centroids, N
 end
