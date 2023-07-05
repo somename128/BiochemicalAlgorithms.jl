@@ -28,7 +28,7 @@ function refine!(results_docking::Tuple, runs::Int32)
         # must have; error instead dont exactly know why 
         R = Vector{Matrix3{Float32}}()
         # create rotation and push in vector
-        r = RotXYZ(α,β,γ)
+        r = RotXYZ{Float32}(α,β,γ)
         push!(R,r)
 
         # generate record and use last added rotation 
