@@ -3,7 +3,7 @@ using Rotations
 function create_rotations()
     
     # initialize arrays/vectors for rotation matrices and angles for rotations
-    rotations = Vector{Matrix3{Float32}}()
+    rotations = Vector{RotXYZ{Float32}}()
     angles_x = Vector{Float32}()
     angles_y = Vector{Float32}()
     angles_z = Vector{Float32}()

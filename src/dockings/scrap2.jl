@@ -13,5 +13,9 @@ rotations = create_rotations()
 # create rotation and push in vector
 r = RotXYZ{Float32}(α,β,γ)
 
-typeof(r)
+v = Vector3{Float32}(1,2,3)
 
+v_rotated = r*v
+
+println(r)
+r[1,3]

@@ -1,6 +1,6 @@
 include("helpers.jl")
 
-function get_degrees(rotation::Matrix3{Float32})
+function get_degrees(rotation::RotXYZ{Float32})
 
     if (rotation[1,3] == 1 || rotation[1,3] == -1)
         β = rotation[1,3]*90
