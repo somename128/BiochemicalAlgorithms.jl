@@ -25,7 +25,4 @@ function extract_min_max(roomcoordinates::Vector{Vector3{Float32}})
     max_z = maximum(Z)
 
     return min_x, max_x, min_y, max_y, min_z, max_z
-
-
-
 end

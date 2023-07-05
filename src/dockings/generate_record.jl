@@ -1,8 +1,6 @@
-using BiochemicalAlgorithms
+using FFTW
 using FourierTools
-using BenchmarkTools
 
-include("load_trans_pdb.jl")
 include("grid_representation.jl")
 include("extract_max.jl")
 include("rotate_atoms.jl")

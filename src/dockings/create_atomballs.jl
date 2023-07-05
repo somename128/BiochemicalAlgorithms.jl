@@ -1,7 +1,4 @@
-using BiochemicalAlgorithms
 using Meshes
-
-include("extract_roomcoordinates.jl")
 
 function create_atomballs(roomcoordinates::Vector{Vector3{Float32}})
     # println("Extract room coordinates...")

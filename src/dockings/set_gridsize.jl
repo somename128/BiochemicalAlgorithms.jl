@@ -47,5 +47,4 @@ function set_gridsize(path_protein_A::String, path_protein_B::String)
     end
     
     return gridsize
-
 end

@@ -1,6 +1,3 @@
-using BiochemicalAlgorithms
-using Base.Threads
-
 include("min_max_atoms.jl")
 
 function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Array{Meshes.Point3,3}, roomcoordinates::Vector{Vector3{Float32}})

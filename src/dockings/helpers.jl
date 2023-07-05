@@ -29,7 +29,7 @@ end
 
 # function that interprets value from fft
 # if value is greater than gridsize/2
-# values are interpret as negativ shifts 
+# values are interpret as negativ shifts (value - gridsize)
 function interp!(x::Int32, N::Int32)
     if x > N/2
         x -= N

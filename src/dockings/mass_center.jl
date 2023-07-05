@@ -1,5 +1,3 @@
-include("extract_roomcoordinates.jl")
-
 function mass_center(atoms::Vector{Vector3{Float32}})
     # initalize vectors for storing x y z coordinates seperately
     X = Vector{Float32}()

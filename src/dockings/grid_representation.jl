@@ -1,7 +1,4 @@
-using BiochemicalAlgorithms
-
 include("create_atomballs.jl")
-include("create_centroids.jl")
 include("set_marked_cells.jl")
 include("create_inner_outer_grid.jl")
 

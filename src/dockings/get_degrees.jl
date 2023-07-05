@@ -18,5 +18,4 @@ function get_degrees(rotation::Matrix3{Float32})
     γ = zero_small_one_value(γ, Float32(0.5))
 
     return α, β, γ
-
 end

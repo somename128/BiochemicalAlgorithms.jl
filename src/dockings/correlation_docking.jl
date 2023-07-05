@@ -1,6 +1,5 @@
-using BiochemicalAlgorithms
-using BenchmarkTools
 using DataFrames
+using Base.Threads
 
 include("load_trans_pdb.jl")
 include("grid_representation.jl")

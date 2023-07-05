@@ -1,4 +1,3 @@
-using BiochemicalAlgorithms
 using Meshes
 
 function create_centroids(gridsize::Int32, spfactor::Int32)

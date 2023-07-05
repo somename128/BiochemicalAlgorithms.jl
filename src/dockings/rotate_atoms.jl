@@ -1,5 +1,3 @@
-using BiochemicalAlgorithms
-
 function rotate_atoms(roomcoordinates::Vector{Vector3{Float32}}, rotation::Matrix3{Float32}, gridsize::Int32)
     # needed because of race conditions of every thread
     # every thread makes a copy of roomcoordinates

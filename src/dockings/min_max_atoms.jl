@@ -1,5 +1,3 @@
-using BiochemicalAlgorithms
-
 include("helpers.jl")
 
 function min_max_atoms(roomcoordinates::Vector{Vector3{Float32}})

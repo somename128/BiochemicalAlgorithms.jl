@@ -1,5 +1,4 @@
 using DataFrames
-using BenchmarkTools
 
 include("helpers.jl")
 
