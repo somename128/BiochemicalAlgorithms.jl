@@ -23,7 +23,7 @@ results_docking = correlation_docking("dummy_protein.pdb","dummy_ligand.pdb")
 save_object("results_docking.jld2", results_docking)
 =#
 # load results of docking
-results_docking = load_object("results_docking.jld2")
+results_docking = load_object("src/dockings/results_docking.jld2")
 
-results_docking[1] == refine!(results_docking, Int32(100000))
+refine!(results_docking, Int32(10))
 

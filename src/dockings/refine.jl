@@ -24,20 +24,16 @@ function refine!(results_docking::Tuple, runs::Int32)
         β = deg2rad(rand(Uniform(rot_y-Float32(20),rot_y+Float32(20))))
         γ = deg2rad(rand(Uniform(rot_z-Float32(20),rot_z+Float32(20))))
 
-        # generate vector for rotations
-        # must have; error instead dont exactly know why 
-        R = Vector{Matrix3{Float32}}()
-        # create rotation and push in vector
-        r = RotXYZ{Float32}(α,β,γ)
-        push!(R,r)
-
+        # create rotation 
+        R = RotXYZ{Float32}(α,β,γ)
+        
         # generate record and use last added rotation 
         # maybe nice
-        record = generate_record(grid_A, R[1], roomcoordiantes_B, centroids, gridsize)
+        record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize)
         
         # check if record is better than first one in
         # current results
-        if(results_docking[1][1,:].score[1] < record.score)
+        if (results_docking[1][1,:].score[1] < record.score)
             push!(results_docking[1], record)
             # sort scoring_table
             sort!(results_docking[1], [:score], rev=[true])
