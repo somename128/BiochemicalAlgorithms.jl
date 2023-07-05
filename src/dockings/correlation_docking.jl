@@ -1,6 +1,5 @@
 using BiochemicalAlgorithms
 using BenchmarkTools
-using JLD
 using DataFrames
 
 include("load_trans_pdb.jl")

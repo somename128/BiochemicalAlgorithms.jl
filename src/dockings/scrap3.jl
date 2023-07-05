@@ -2,9 +2,8 @@ using BiochemicalAlgorithms
 using BenchmarkTools
 using Makie, WGLMakie
 using Meshes, MeshViz
-using JLD
+using JLD2
 using ProfileView
-using ProgressBars
 using Profile
 using TypedTables
 using LinearAlgebra
@@ -12,21 +11,15 @@ using FFTW
 using FourierTools
 using Rotations
 
-include("grid_representation.jl")
-include("load_trans_pdb.jl")
-include("min_max_atoms.jl")
-include("create_rotations.jl")
-include("set_marked_cells.jl")
-include("generate_record.jl")
-include("extract_roomcoordinates.jl")
-include("create_atomballs.jl")
 include("correlation_docking.jl")
-include("mass_center.jl")
-include("rotate_atoms.jl")
-include("helpers.jl")
-include("set_gridsize.jl")
-include("helpers.jl")
+include("refine.jl")
 
-N = set_gridsize("dummy_protein_vol2.pdb","dummy_ligand_vol2.pdb")
-a = Int32(31)
-interp!(a,N)
+# do correlation_docking
+# score = correlation_docking("dummy_protein_vol2.pdb","dummy_ligand_vol3.pdb")
+# save results
+# save_object("score.jld2", score)
+
+scoring_table = load_object("score.jld2")
+
+refine(scoring_table,Int32(10))
+

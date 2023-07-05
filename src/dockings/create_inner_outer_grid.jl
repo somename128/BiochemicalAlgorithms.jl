@@ -1,5 +1,3 @@
-using SparseArrays
-
 function create_inner_outer_grid(colored_cells::Vector{Int32}, N::Int32, is_smaller::Bool)  
     # println("Build 1D grid representation...")
     inner_outer_grid = zeros(Float32, N*N*N)
