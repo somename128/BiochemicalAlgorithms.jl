@@ -12,7 +12,7 @@ using FourierTools
 using Rotations
 
 include("correlation_docking.jl")
-include("refine.jl")
+include("refine!.jl")
 
 #=
 # do correlation_docking and store results 
