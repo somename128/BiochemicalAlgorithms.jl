@@ -1,6 +1,9 @@
 include("helpers.jl")
+include("quaternion_functions.jl")
 
-function get_degrees(rotation::RotXYZ{Float32})
+function get_degrees(quat_rotation::QuaternionF32)
+
+    rotation = rotmatrix_from_quat(quat_rotation)
 
     if (rotation[1,3] == 1 || rotation[1,3] == -1)
         β = rotation[1,3]*90

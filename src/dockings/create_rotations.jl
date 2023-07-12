@@ -1,9 +1,11 @@
-using Rotations
+using Quaternions
+
+include("quaternion_functions.jl")
 
 function create_rotations()
     
     # initialize arrays/vectors for rotation matrices and angles for rotations
-    rotations = Vector{RotXYZ{Float32}}()
+    rotations = Vector{QuaternionF32}()
     angles_x = Vector{Float32}()
     angles_y = Vector{Float32}()
     angles_z = Vector{Float32}()
@@ -24,10 +26,16 @@ function create_rotations()
 
     # loop over angles to store all possible rotations
     for γ in angles_z, β in angles_y, α in angles_x
-        # rotation matrix after xyz convention (see Goldsteins Classical Mechanics(1980))
-        R = RotXYZ{Float32}(α,β,γ)
-        # add to array/vector of rigidtransformations
-        push!(rotations, R)
+        # α degrees rotation aroud x-axis
+        q1 = quat_from_axisangle([1,0,0], deg2rad(α))
+        # β degrees rotation aroud y-axis
+        q2 = quat_from_axisangle([0,1,0], deg2rad(β))
+        # β degrees rotation aroud z-axis
+        q3 = quat_from_axisangle([0,0,1], deg2rad(γ))
+        # combine quaternions for full rotation around xyz
+        q = q1*q2*q3
+        # add to array/vector of quaternions
+        push!(rotations, q)
     end
 
     return rotations

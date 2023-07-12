@@ -11,19 +11,19 @@ using FFTW
 using FourierTools
 using Rotations
 
-include("correlation_docking.jl")
-include("refine!.jl")
+include("quaternion_functions.jl")
+include("create_rotations.jl")
 
-#=
-# do correlation_docking and store results 
-# results are: scoring_table, grid_A, coord_B, centroids, gridsize
-results_docking = correlation_docking("dummy_protein.pdb","dummy_ligand.pdb")
+rotations = create_rotations()
 
-# save results in files
-save_object("results_docking.jld2", results_docking)
-=#
-# load results of docking
-results_docking = load_object("src/dockings/results_docking.jld2")
+atoms_in_space_points = Vector{Vector3{Float32}}()
+v = Vector3{Float32}(1,2,3)
+push!(atoms_in_space_points, v)
+w = Vector3{Float32}(3,4,5)
+push!(atoms_in_space_points, w)
 
-refine!(results_docking, Int32(10))
+g(v::Vector3{Float32}) = rotate_vector(rotations[11], v)
+atoms_rotated = g.(atoms_in_space_points)
+
+typeof(atoms_rotated)
 

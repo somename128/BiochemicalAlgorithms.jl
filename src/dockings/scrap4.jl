@@ -24,6 +24,7 @@ include("mass_center.jl")
 include("rotate_atoms.jl")
 include("helpers.jl")
 include("extract_max.jl")
+include("quaternion_functions.jl")
 
 N = Int32(128)
 rotations = create_rotations()
@@ -98,8 +99,9 @@ end
 
 # println(extract_max(zero_small!(real(C),Float32(0.5))))
 
-viz(atoms_in_space_points, color = 1:length(atoms_in_space_points))
+# viz(atoms_in_space_points, color = 1:length(atoms_in_space_points))
 # viz(atoms_in_space_points)
 
 #viz(scoring, color = 1:length(scoring))
 
+rotate_vector(rotations[22], [1,2,3])
