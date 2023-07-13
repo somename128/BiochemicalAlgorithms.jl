@@ -28,17 +28,18 @@ include("quaternion_functions.jl")
 
 N = Int32(128)
 rotations = create_rotations()
-r = RotXYZ{Float32}(deg2rad(-20),deg2rad(80),deg2rad(-160))
+r = RotXYZ{Float32}(deg2rad(0),deg2rad(0),deg2rad(6.28319))
+q = quat_from_rotmatrix(r)
 centroids = create_centroids(N, one(Int32))
-protein_A = load_and_trans_pdb("src/dockings/dummy_protein.pdb", N)
+protein_A = load_and_trans_pdb("dummy_protein.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("src/dockings/dummy_ligand.pdb", N)
+protein_B = load_and_trans_pdb("dummy_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false)
 # B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
 # shift = CartesianIndex(-1, -1, -1)
-B_r = rotate_atoms(roomcoordiantes_atoms_B, r, N)
-h(v::Vector3{Float32}) = Vector3{Float32}(-4, -6, -1) + v
+B_r = rotate_atoms(roomcoordiantes_atoms_B, q, N)
+h(v::Vector3{Float32}) = Vector3{Float32}(0, -4, -2) + v
 atoms_translated_B = h.(B_r)
 B_grid = grid_representation(atoms_translated_B, N, centroids, true)
 
@@ -53,14 +54,14 @@ for i in CartesianIndices(A)
         push!(atoms_in_space_points, v)
     end
 end
-#=
+
 for i in CartesianIndices(B_grid)
     if (B_grid[i] != 0)
         v = Meshes.Point(i[1],i[2],i[3])
         push!(atoms_in_space_points, v)
     end
 end
-=#
+
 #=
 # way of rotations
 for i in eachindex(rotations)
@@ -99,9 +100,7 @@ end
 
 # println(extract_max(zero_small!(real(C),Float32(0.5))))
 
-# viz(atoms_in_space_points, color = 1:length(atoms_in_space_points))
+viz(atoms_in_space_points, color = 1:length(atoms_in_space_points))
 # viz(atoms_in_space_points)
 
 #viz(scoring, color = 1:length(scoring))
-
-rotate_vector(rotations[22], [1,2,3])

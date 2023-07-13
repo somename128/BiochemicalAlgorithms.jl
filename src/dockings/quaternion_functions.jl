@@ -1,4 +1,5 @@
 using Quaternions
+using LinearAlgebra
 
 # rotation around a vector/axis
 function quat_from_axisangle(axis::AbstractVector, theta::Real)
@@ -17,7 +18,7 @@ function rotate_vector(q::QuaternionF32, u::AbstractVector)
     end
     q_u = QuaternionF32(0, u[1], u[2], u[3])
     q_v = q*q_u*conj(q)
-    return [imag_part(q_v)...]
+    return Vector3{Float32}(imag_part(q_v)...)
 end
 
 # convert quaternion to rotation matrix
@@ -29,4 +30,12 @@ function rotmatrix_from_quat(q::QuaternionF32)
             xy + sz   1 - (xx + zz)    yz - sx;
             xz - sy      yz + sx  1 - (xx + yy)]
     return r
+end
+
+# convert rotation matrix to quaternion
+function quat_from_rotmatrix(dcm::AbstractMatrix{T}) where {T<:Real}
+    a2 = 1 + dcm[1,1] + dcm[2,2] + dcm[3,3]
+    a = sqrt(a2)/2
+    b,c,d = (dcm[3,2]-dcm[2,3])/4a, (dcm[1,3]-dcm[3,1])/4a, (dcm[2,1]-dcm[1,2])/4a
+    return QuaternionF32(a,b,c,d)
 end

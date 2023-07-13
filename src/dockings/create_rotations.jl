@@ -27,11 +27,11 @@ function create_rotations()
     # loop over angles to store all possible rotations
     for γ in angles_z, β in angles_y, α in angles_x
         # α degrees rotation aroud x-axis
-        q1 = quat_from_axisangle([1,0,0], deg2rad(α))
+        q1 = quat_from_axisangle([1,0,0], α)
         # β degrees rotation aroud y-axis
-        q2 = quat_from_axisangle([0,1,0], deg2rad(β))
+        q2 = quat_from_axisangle([0,1,0], β)
         # β degrees rotation aroud z-axis
-        q3 = quat_from_axisangle([0,0,1], deg2rad(γ))
+        q3 = quat_from_axisangle([0,0,1], γ)
         # combine quaternions for full rotation around xyz
         q = q1*q2*q3
         # add to array/vector of quaternions
