@@ -1,5 +1,4 @@
 using FFTW
-using FourierTools
 
 include("grid_representation.jl")
 include("extract_max.jl")
@@ -13,8 +12,6 @@ function generate_record(A::Array{Float32,3}, rotation::QuaternionF32, roomcoord
     B = grid_representation(atoms, gridsize, centroids, true)
     # fft-scoring
     C = ifft(fft(A).*conj(fft(B)))
-    # cross-correlation over three dimensions
-    # C = ccorr(A,B; centered=false)
     # safe α,β,γ of max fft-scoring (c)
     max = extract_max(C)
     # get degrees of rotation around x,y,z axis

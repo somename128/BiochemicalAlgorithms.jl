@@ -1,7 +1,8 @@
+# functions from quaternions.jl
 using Quaternions
 using LinearAlgebra
 
-# rotation around a vector/axis
+# build the quaternion which represents rotation around a axis 
 function quat_from_axisangle(axis::AbstractVector, theta::Real)
     if length(axis) != 3
         error("Must be a 3-vector")
@@ -11,6 +12,14 @@ function quat_from_axisangle(axis::AbstractVector, theta::Real)
     return QuaternionF32(c, s*axis[1], s*axis[2], s*axis[3])
 end
 
+# recovers the axis and the angle from a quaternion
+function axisangle_from_quat(q::QuaternionF32)
+    axis = Vector3{Float32}(q.v1, q.v2, q.v3)/sqrt(q.v1^2 + q.v2^2 + q.v3^2)
+    angle = 2*atan(sqrt(q.v1^2 + q.v2^2 + q.v3^2), q.s)
+    
+    return axis, angle 
+end
+
 # rotate vector with quaternion
 function rotate_vector(q::QuaternionF32, u::AbstractVector)
     if length(u) != 3
@@ -18,7 +27,7 @@ function rotate_vector(q::QuaternionF32, u::AbstractVector)
     end
     q_u = QuaternionF32(0, u[1], u[2], u[3])
     q_v = q*q_u*conj(q)
-    return Vector3{Float32}(imag_part(q_v)...)
+    return Vector3{Float32}(imag_part(q_v))
 end
 
 # convert quaternion to rotation matrix

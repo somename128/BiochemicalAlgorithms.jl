@@ -34,7 +34,6 @@ q3 = quat_from_axisangle([0,0,1], deg2rad(20))
 # combine quaternions for full rotation around xyz
 q = q1*q2*q3
 
+R = rotmatrix_from_quat(q)
+typeof(R)
 
-for i in rotations[1:20]
-    println(get_degrees(i))
-end
