@@ -9,7 +9,7 @@ function generate_record(A::Array{Float32,3}, rotation::QuaternionF32, roomcoord
     # rotate atoms by rotation
     atoms = rotate_atoms(roomcoordinates, rotation, gridsize)
     # grid representation protein b
-    B = grid_representation(atoms, gridsize, centroids, true)
+    B = grid_representation(atoms, gridsize, centroids, true, false)
     # fft-scoring
     C = ifft(fft(A).*conj(fft(B)))
     # safe α,β,γ of max fft-scoring (c)

@@ -1,6 +1,6 @@
 using Meshes
 
-function create_atomballs(roomcoordinates::Vector{Vector3{Float32}})
+function create_atomballs(roomcoordinates::Vector{Vector3{Float32}}, radius::Float32)
     # println("Extract room coordinates...")
 
     # transfer atom coordinates in mesh points
@@ -15,12 +15,11 @@ function create_atomballs(roomcoordinates::Vector{Vector3{Float32}})
     # TODO: different r for different atoms
     # println("Build atomballs...")
     atomballs = Base.Vector{Meshes.Ball}()
-    # for easy geometry for better couting of colored_cells 
-    # normally 1.8 Å or indiviual for every element
-    r = 0.7
 
+    # for easy geometry radius = 0.7 for better couting of colored_cells 
+    # normally 1.8 Å or indiviual for every element
     for i in atoms_in_space_points
-        b = Meshes.Ball(i, r)
+        b = Meshes.Ball(i, radius)
         push!(atomballs, b)
     end
 

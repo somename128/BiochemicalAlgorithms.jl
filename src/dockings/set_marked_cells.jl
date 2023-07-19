@@ -1,7 +1,7 @@
 include("min_max_atoms.jl")
 
 function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Array{Meshes.Point3,3}, roomcoordinates::Vector{Vector3{Float32}})
-    # initialize vector with datatype of centroids
+    # initialize vector for storing index of colored cells
     colored_cells = Vector{Int32}()
 
     #extract min max (in rounded int +/-2) of atom coordinates of protein

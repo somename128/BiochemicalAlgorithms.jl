@@ -9,7 +9,10 @@ include("generate_record.jl")
 include("extract_roomcoordinates.jl")
 include("set_gridsize.jl")
 
-function correlation_docking(path_to_proteinA::String, path_to_proteinB::String) 
+# function that takes two paths to pdb structure of proteins and do correlation docking
+# it also gets a tuple with information about the if vdW surface is set and which surface
+# thickness is choosen
+function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, vdW::Bool)
     # initialize scoring table
     scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=(zero(Float32), zero(Float32), zero(Float32)), score=zero(Float32))
     # set gridsize N against protein size of greater protein
@@ -24,7 +27,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String)
     # of 1 angström, only done once
     centroids = create_centroids(N, one(Int32))
     # grid representation protein a
-    A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false)
+    A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false, vdW)
     # get rotations - build via rigid_transform! with translation vector (0,0,0)
     rotations = create_rotations()
     # lock for threads (unsure how this really works)

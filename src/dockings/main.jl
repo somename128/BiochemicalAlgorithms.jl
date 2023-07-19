@@ -3,7 +3,7 @@
 include("correlation_docking.jl")
 include("refine!.jl")
 
-@time score = correlation_docking("src/dockings/dummy_protein.pdb", "src/dockings/dummy_ligand.pdb")
+@time score = correlation_docking("src/dockings/2ptc_protein.pdb", "src/dockings/2ptc_ligand.pdb", true)
 
 println(score[1])
 # CSV.write("score_before_refinement.csv", score[1])
