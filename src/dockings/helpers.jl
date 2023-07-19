@@ -28,12 +28,14 @@ function less_than_one!(x::Int64)
 end
 
 # function that interprets value from fft
-# if value is greater than gridsize/2
-# values are interpret as negativ shifts (value - gridsize)
-function interp!(x::Int32, N::Int32)
-    if x > N/2
-        x -= N
+# if value is greater than gridsize*res/2
+# values are interpreted as negativ shifts (value - gridsize*res)
+# to transform in 1 angstöm steps for using in angstöm space
+# x is returned as division through resolution value
+function interp!(x::Int32, N::Int32, res::Int32)
+    if x > N*res/2
+        x -= N*res
     end
 
-    return x
+    return x/res
 end

@@ -1,6 +1,8 @@
-function create_inner_outer_grid_vdW(inner_cells::Vector{Int32}, surface_cells::Vector{Int32}, N::Int32)
+function create_inner_outer_grid_vdW(inner_cells::Vector{Int32}, surface_cells::Vector{Int32}, N::Int32, res::Int32)
     # initalize grid in 1D
-    inner_outer_grid = zeros(Float32, N*N*N)
+    # size needed is M = N*res
+    M = N*res
+    inner_outer_grid = zeros(Float32, M*M*M)
 
     # set inner grid cells to -15
     for i in inner_cells
@@ -13,9 +15,9 @@ function create_inner_outer_grid_vdW(inner_cells::Vector{Int32}, surface_cells::
     end
 
     # change 1D to 3D for FFTW library
-    inner_outer_grid_3D = zeros(Float32, N,N,N)
+    inner_outer_grid_3D = zeros(Float32, M,M,M)
 
-    for i in 1:N*N*N
+    for i in 1:M*M*M
         inner_outer_grid_3D[i] = inner_outer_grid[i]
     end
 

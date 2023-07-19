@@ -10,9 +10,10 @@ include("extract_roomcoordinates.jl")
 include("set_gridsize.jl")
 
 # function that takes two paths to pdb structure of proteins and do correlation docking
-# it also gets a tuple with information about the if vdW surface is set and which surface
-# thickness is choosen
-function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, vdW::Bool)
+# it also gets a boolean if vdW surface is choosen
+# additionally it gets the resolution which means how small the cubes of the
+# grid representation should be
+function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, resolution::Int32, vdW::Bool)
     # initialize scoring table
     scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=(zero(Float32), zero(Float32), zero(Float32)), score=zero(Float32))
     # set gridsize N against protein size of greater protein
@@ -25,9 +26,9 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
     # calculate centroids in a NxNxN grid with cells
     # of 1 angström, only done once
-    centroids = create_centroids(N, one(Int32))
+    centroids = create_centroids(N, resolution)
     # grid representation protein a
-    A = grid_representation(roomcoordiantes_atoms_A, N, centroids, false, vdW)
+    A = grid_representation(roomcoordiantes_atoms_A, N, centroids, resolution, false, vdW)
     # get rotations - build via rigid_transform! with translation vector (0,0,0)
     rotations = create_rotations()
     # lock for threads (unsure how this really works)
@@ -35,7 +36,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     # rotate protein b by R
     @threads for i in eachindex(rotations)
         # generate record for scoring table
-        record = generate_record(A, rotations[i], roomcoordiantes_atoms_B, centroids,N)
+        record = generate_record(A, rotations[i], roomcoordiantes_atoms_B, centroids, N, resolution)
         lock(lk) do
             #=
             if(scoring_table.score[1] < record.score)

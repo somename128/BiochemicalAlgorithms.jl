@@ -1,22 +1,18 @@
 using Meshes
 
-function create_centroids(gridsize::Int32, spfactor::Int32)
-    # println("Build grid...")
-    # grid properties
-    lower_left = (0,0,0)
-    N = Int64(gridsize)
-    spcing_factor = Int64(spfactor)
-    upper_right = (N,N,N) 
-    spcing = (N*spcing_factor, N*spcing_factor, N*spcing_factor)
+function create_centroids(gridsize::Int32, resolution::Int32)
+    # initialize vector for points 
+    # size is gridsize*resolution and
+    # we would like to have only the centroids of the cells
+    # not he "boundary" points
+    centroids = Vector{Meshes.Point3f}()
+    resfactor = 1/resolution
 
-    # create 3D grid with N/N*spcing_factor spacing in each dimension, origin at (0,0,0)
-    grid = Meshes.CartesianGrid(lower_left, upper_right, dims=spcing)
-    # centroid of each cell
-    # println("Build centroids...")
-    centroids = Meshes.centroid.(grid)
-    
-    # reshape centroids 1D -> 3D 
-    centroids = reshape([centroids...], N, N, N)
+    for k in 1:gridsize*resolution, j in 1:gridsize*resolution, i in 1:gridsize*resolution
+        c = Meshes.Point3f((i-1)*resfactor + resfactor/2, (j-1)*resfactor + resfactor/2, 
+            (k-1)*resfactor + resfactor/2)
+        push!(centroids, c)
+    end
 
     return centroids
 end

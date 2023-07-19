@@ -2,8 +2,6 @@ using Distributions
 using Rotations
 using Quaternions
 
-include("quaternion_functions.jl")
+include("create_gridpoints.jl")
 
-print("type a number.")
-number = readline()
-typeof(number)
+gridpoints = create_gridpoints(Int32(32), Int32(4))
