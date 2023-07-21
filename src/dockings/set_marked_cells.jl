@@ -18,17 +18,16 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Vector{Mesh
     I = LinearIndices(centroids)
     # println("Set marked cells...")
     # store centroids that are inside a atom radius in colored_cells
-    # for i in CartesianIndices(centroids[min_x*res:max_x*res,min_y*res:max_y*res,min_z*res:max_z*res]), j in eachindex(atomballs)
-    for i in eachindex(centroids), j in eachindex(atomballs)
+    for i in CartesianIndices(centroids[min_x*res:max_x*res,min_y*res:max_y*res,min_z*res:max_z*res]), j in eachindex(atomballs)
         # move cartesian index i via min_x,min_y,min_z to get right index
         # I[] to get linear index of cartesian index
-        # index = I[CartesianIndex(min_x*res,min_y*res,min_z*res)+i]
+        index = I[CartesianIndex(min_x*res,min_y*res,min_z*res)+i]
         # check if centroid at index is in atomball j 
-        if(Base.in(centroids[i],atomballs[j]))
+        if (Base.in(centroids[index],atomballs[j]))
             # stores indice of centroid if a centroid i lies
             # in an atomball j -> stored in colored_cells if not already in storage
-            if(!Base.in(i, colored_cells))
-                push!(colored_cells,i)
+            if (!Base.in(index, colored_cells))
+                push!(colored_cells,index)
             end
         end
     end
