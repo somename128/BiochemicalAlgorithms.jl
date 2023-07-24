@@ -5,7 +5,7 @@ include("extract_max.jl")
 include("rotate_atoms.jl")
 include("get_degrees.jl")
 
-function generate_record(A::Array{Float32,3}, rotation::QuaternionF32, roomcoordinates::Vector{Vector3{Float32}}, centroids::Array{Meshes.Point3, 3}, gridsize::Int32, res::Int32)
+function generate_record(A::Array{Float32,3}, rotation::QuaternionF32, roomcoordinates::Vector{Vector3{Float32}}, centroids::Array{Meshes.Point3f, 3}, gridsize::Int32, res::Int32)
     # rotate atoms by rotation
     atoms = rotate_atoms(roomcoordinates, rotation, gridsize)
     # grid representation protein b

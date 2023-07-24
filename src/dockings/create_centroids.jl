@@ -1,17 +1,17 @@
 using Meshes
 
-function create_centroids(gridsize::Int32, resolution::Int32)
-    # initialize vector for points 
+function create_centroids(gridsize::Int32, res::Int32)
+    # initialize array for points 
     # size is gridsize*resolution and
     # we would like to have only the centroids of the cells
-    # not he "boundary" points
-    centroids = Vector{Meshes.Point3f}()
-    resfactor = 1/resolution
+    # not the "boundary" points
+    M = gridsize*res
+    centroids = Array{Meshes.Point3f}(undef,M,M,M) 
+    resfactor = 1/res
 
-    for k in 1:gridsize*resolution, j in 1:gridsize*resolution, i in 1:gridsize*resolution
-        c = Meshes.Point3f((i-1)*resfactor + resfactor/2, (j-1)*resfactor + resfactor/2, 
+    for k in 1:M, j in 1:M, i in 1:M
+        centroids[i,j,k] = Meshes.Point3f((i-1)*resfactor + resfactor/2, (j-1)*resfactor + resfactor/2, 
             (k-1)*resfactor + resfactor/2)
-        push!(centroids, c)
     end
 
     return centroids

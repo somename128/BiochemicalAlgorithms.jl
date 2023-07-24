@@ -1,6 +1,6 @@
 include("min_max_atoms.jl")
 
-function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Vector{Meshes.Point3f}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
+function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Array{Meshes.Point3f, 3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
     # initialize vector for storing index of colored cells
     colored_cells = Vector{Int32}()
 
@@ -27,7 +27,7 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Vector{Mesh
             # stores indice of centroid if a centroid i lies
             # in an atomball j -> stored in colored_cells if not already in storage
             if (!Base.in(index, colored_cells))
-                push!(colored_cells,index)
+                push!(colored_cells, index)
             end
         end
     end

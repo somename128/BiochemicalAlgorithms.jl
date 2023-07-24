@@ -1,6 +1,6 @@
 include("min_max_atoms.jl")
 
-function set_surface_cells(inner_radius::Vector{Meshes.Ball}, outer_radius::Vector{Meshes.Ball}, centroids::Array{Meshes.Point3,3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
+function set_surface_cells(inner_radius::Vector{Meshes.Ball}, outer_radius::Vector{Meshes.Ball}, centroids::Array{Meshes.Point3f,3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
     # initalize vector for storing index of surface cells
     surface_cells = Vector{Int32}()
 
@@ -29,7 +29,7 @@ function set_surface_cells(inner_radius::Vector{Meshes.Ball}, outer_radius::Vect
             # stores indice of centroid if a centroid i lies
             # in the surface area j -> stored in surface_cells if not already in storage
             if(!Base.in(index, surface_cells))
-                push!(surface_cells,index)
+                push!(surface_cells, index)
             end
         end
     end

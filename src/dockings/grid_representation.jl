@@ -4,7 +4,7 @@ include("create_inner_outer_grid.jl")
 include("set_surface_cells.jl")
 include("create_inner_outer_grid_vdW.jl")
 
-function grid_representation(atoms::Vector{Vector3{Float32}}, gridsize::Int32, centroids::Vector{Meshes.Point3f}, res::Int32, is_smaller::Bool, vdW::Bool)
+function grid_representation(atoms::Vector{Vector3{Float32}}, gridsize::Int32, centroids::Array{Meshes.Point3f, 3}, res::Int32, is_smaller::Bool, vdW::Bool)
 
     # atom radius to 1.8 Å
     radius = Float32(1.8)
@@ -23,7 +23,7 @@ function grid_representation(atoms::Vector{Vector3{Float32}}, gridsize::Int32, c
     else
         # calculate atomballs around proteins atoms with
         # radius r
-        atomballs = create_atomballs(atoms, Float32(0.7))
+        atomballs = create_atomballs(atoms, radius)
         # find all cells in grid which represent protein 
         colored_cells = set_marked_cells(atomballs, centroids, atoms, res)
 
