@@ -19,20 +19,20 @@ NR = 5
 # to have no overlap and exactly the amount of colored cells 
 # during algorithm
 # portein cube
-for i in 2:NP+1, j in 2:NP+1, k in 2:NP+1
-  v = [i+0.5,j+0.5,k+0.5]
+for i in 1:NP+1, j in 1:NP+1, k in 1:NP+1
+  v = [i,j,k]
   push!(atoms_protein, v)
 end
 
 # ligand cube
-for i in 2:NL+1, j in 2:NL+1, k in 2:NL+1
-  v = [i+0.5,j+0.5,k+0.5]
+for i in 1:NL+1, j in 1:NL+1, k in 1:NL+1
+  v = [i,j,k]
   push!(atoms_ligand, v)
 end
 
 # missing part in protein cube
-for i in 2:NR+1, j in 2:NR+1, k in 2:NR+1
-  v = [i+0.5,j+0.5,k+0.5]
+for i in 1:NR+1, j in 1:NR+1, k in 1:NR+1
+  v = [i,j,k]
   push!(atoms_remove, v)
 end
 
@@ -67,7 +67,7 @@ for i in eachindex(atoms_ligand)
 end
 
 # write changed atoms of protein and/or ligand (only atoms of pdb) in pdb file
-writePDB(protein,"atoms_dummy_protein.pdb")
-writePDB(ligand,"atoms_dummy_ligand.pdb")
+writePDB(protein,"atoms_dummy_protein_vol4.pdb")
+writePDB(ligand,"atoms_dummy_ligand_vol4.pdb")
 
   

@@ -1,6 +1,7 @@
 # functions from quaternions.jl
 using Quaternions
 using LinearAlgebra
+using DataFrames
 
 # build the quaternion which represents rotation around a axis 
 function quat_from_axisangle(axis::AbstractVector, theta::Real)
@@ -47,4 +48,15 @@ function quat_from_rotmatrix(dcm::AbstractMatrix{T}) where {T<:Real}
     a = sqrt(a2)/2
     b,c,d = (dcm[3,2]-dcm[2,3])/4a, (dcm[1,3]-dcm[3,1])/4a, (dcm[2,1]-dcm[1,2])/4a
     return QuaternionF32(a,b,c,d)
+end
+
+# extract quaternion from scoring table at row number [row]
+function extract_quaternion(row::DataFrameRow{DataFrame, DataFrames.Index})
+    # retransform rotation angles in scoring table to quaternions for rotation
+    q_x = quat_from_axisangle([1,0,0], deg2rad(row.R[1]))
+    q_y = quat_from_axisangle([0,1,0], deg2rad(row.R[2]))
+    q_z = quat_from_axisangle([0,0,1], deg2rad(row.R[3]))
+    q = q_x*q_y*q_z
+
+    return q
 end
