@@ -12,11 +12,7 @@ function extract_min_max(roomcoordinates::Vector{Vector3{Float32}})
         push!(Z, i[3])
     end
 
-    # calculate min max per axis and round+int it (for relevant
-    # centroids indexing)
-    # adding -2 and +2 to add extra space to get all relevant
-    # centroids which are inside atom radius (=1.8A) 
-    # if a value is less than one it's set to one
+    # calculate min max per axis 
     min_x = minimum(X)
     max_x = maximum(X)
     min_y = minimum(Y)

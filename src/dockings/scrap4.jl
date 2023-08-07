@@ -29,9 +29,9 @@ include("create_centroids.jl")
 
 N = Int32(64)
 rotations = create_rotations()
-r = RotXYZ{Float32}(deg2rad(0),deg2rad(0),deg2rad(0))
+r = RotXYZ{Float32}(deg2rad(144.147),deg2rad(87.1869),deg2rad(-142.355))
 q = quat_from_rotmatrix(r)
-res = Int32(2)
+res = Int32(1)
 centroids = create_centroids(N, res)
 protein_A = load_and_trans_pdb("dummy_protein_vol4.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
@@ -41,7 +41,7 @@ A = grid_representation(roomcoordiantes_atoms_A, N, centroids, res, false, false
 # B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
 # shift = CartesianIndex(-1, -1, -1)
 B_r = rotate_atoms(roomcoordiantes_atoms_B, q, N)
-h(v::Vector3{Float32}) = Vector3{Float32}(-4.5, -4.5, -4.5) + v
+h(v::Vector3{Float32}) = Vector3{Float32}(-5, -5, -5) + v
 atoms_translated_B = h.(B_r)
 B_grid = grid_representation(atoms_translated_B, N, centroids, res, true, false)
 

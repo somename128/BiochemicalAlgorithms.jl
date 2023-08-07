@@ -1,6 +1,5 @@
 using Rotations
 using Distributions
-using Meshes, MeshViz
 
 include("generate_record.jl")
 include("quaternion_functions.jl")
@@ -42,8 +41,7 @@ function refine!(results_docking::Tuple, runs::Int32)
         # sample new rotation
         R = metropolis_hastings_sampler(Q[1], Λ, V, S, F, Int32(100000))
         push!(generated_rotations, Meshes.Point3f(R.v1, R.v2, R.v3))
-        # generate record and use last added rotation 
-        # maybe nice
+        # generate record with new sampled rotation
         record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize, resolution)
         # check if record is better than first one in
         # current results

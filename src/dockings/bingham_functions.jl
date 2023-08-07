@@ -85,7 +85,6 @@ function estimate_Λ(Q::Vector{QuaternionF32}, V::Matrix{Float32}, F::Array{Floa
         # maximize L function
         L = tr(Λ*Transpose(V)*X*Transpose(X)*V) - length(Q)*F[-λ1, -λ2, -λ3]
         if (L > max_L)
-            println("yey")
             max_L = L
             max_Λ = Λ
         end
@@ -103,7 +102,7 @@ function metropolis_hastings_sampler(start_q::QuaternionF32, Λ::Matrix{Int32}, 
     v = Float32[start_q.s, start_q.v1, start_q.v2, start_q.v3]
     # generate new vector via multidimensional gauss
     for i in 1:iter
-        v_next = rand(MvNormal(v, S))
+        v_next = normalize(rand(MvNormal(v, S)))
         # calculate acceptance rotation
         α = bingham(v_next,Λ,V,F)/bingham(v,Λ,V,F)
         #accept or reject
@@ -113,9 +112,8 @@ function metropolis_hastings_sampler(start_q::QuaternionF32, Λ::Matrix{Int32}, 
         end
     end
 
-    # transform vector back to unit quaternion
+    # transform vector back to quaternion
     q = QuaternionF32(v[1],v[2],v[3],v[4])
-    q *= 1/norm(q)
     
     return q
 end
