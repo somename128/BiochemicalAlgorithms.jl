@@ -1,38 +1,15 @@
-using Distributions
-using Rotations
+using BiochemicalAlgorithms
+using Meshes
 using Quaternions
-using BenchmarkTools
-using JLD2
-using SpecialFunctions
 
-include("bingham_functions.jl")
+include("load_trans_pdb.jl")
+include("extract_roomcoordinates.jl")
+include("rotate_atoms.jl")
 include("create_rotations.jl")
-include("correlation_docking.jl")
 
-results_docking = load_object("results_docking.jld2")
-
-scoring_table = results_docking[1]
-# extract N best quaternions (current value: twenty)
-Q = Vector{QuaternionF32}()
-for i in eachrow(scoring_table)
-    q = extract_quaternion(i)
-    push!(Q, q)
-end
-
-# generate lookup table F for Bingham dirstribution
-F = create_lookup_table_F()
-# estimate V
-# V = estimate_V(Q)
-# estimate Λ
-# Λ = estimate_Λ(Q, V, F)
-
-#=
-# generate scatter matrix
-S = scatter_matrix(Q)
-# sample new point
-R = metropolis_hastings_sampler(Q[1], Λ, V, S, F, Int32(10))
-
-R *= 1/norm(R)
-norm(R)
-=#
-
+N = Int32(128)
+protein = load_and_trans_pdb("dummy_protein_vol4.pdb", N)
+atoms = extract_roomcoordinates(protein)
+# radii = Dict("C" => 1.7, "H" => 1.0, "N" => 1.5, "O" => 1.4)
+# rotations = create_rotations() 
+# rotated_tuple = rotate_atoms(atoms, rotations[2], N)

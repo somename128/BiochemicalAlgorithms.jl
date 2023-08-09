@@ -5,8 +5,8 @@ include("extract_max.jl")
 include("rotate_atoms.jl")
 include("get_degrees.jl")
 
-function generate_record(A::Array{Float32,3}, rotation::QuaternionF32, roomcoordinates::Vector{Vector3{Float32}}, centroids::Array{Meshes.Point3f, 3}, gridsize::Int32, res::Int32)
-    # rotate atoms by rotation
+function generate_record(A::Array{Float32,3}, rotation::QuaternionF32, roomcoordinates::Vector{Tuple{String, Vector3{Float32}}}, centroids::Array{Meshes.Point3f, 3}, gridsize::Int32, res::Int32)
+    # rotate atoms roomcoordinates by rotation
     atoms = rotate_atoms(roomcoordinates, rotation, gridsize)
     # grid representation protein b
     B = grid_representation(atoms, gridsize, centroids, res, true, false)

@@ -7,7 +7,7 @@ include("refine!.jl")
 
 res = Int32(1)
 
-@time score = correlation_docking("src/dockings/dummy_protein_vol4.pdb", "src/dockings/dummy_ligand_vol4.pdb", res, false)
+@time score = correlation_docking("src/dockings/dummy_protein_vol4.pdb", "src/dockings/dummy_ligand_vol4.pdb", res, true)
 
 println(score[1])
 # save_object("src/dockings/results_docking.jld2", score)

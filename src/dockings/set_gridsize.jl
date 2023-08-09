@@ -9,10 +9,15 @@ function set_gridsize(path_protein_A::String, path_protein_B::String)
     protein_B = molecules(load_pdb(path_protein_B))[1]
     atoms_A = extract_roomcoordinates(protein_A)
     atoms_B = extract_roomcoordinates(protein_B)
+    # extract roomcoordinates from tuples
+    atomsA = Vector{Vector3{Float32}}()
+    [push!(atomsA, i[2]) for i in atoms_A]
+    atomsB = Vector{Vector3{Float32}}()
+    [push!(atomsB, i[2]) for i in atoms_B]
 
     # function for extracting min and max in xyz direction
-    min_max_A = extract_min_max(atoms_A)
-    min_max_B = extract_min_max(atoms_B)
+    min_max_A = extract_min_max(atomsA)
+    min_max_B = extract_min_max(atomsB)
 
     # get the diameters via maximum - minimum for each dimension xyz
     diameters = Vector{Float32}()

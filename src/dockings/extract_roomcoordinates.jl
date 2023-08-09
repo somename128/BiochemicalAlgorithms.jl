@@ -2,14 +2,10 @@ using BiochemicalAlgorithms
 
 function extract_roomcoordinates(protein::Molecule{Float32})
     # store roomcoordinates
-    atoms_r = atoms_df(protein).r
-    # initialize vector for roomcoordinates of atoms
-    roomcoordinates_atoms = Vector{Vector3{Float32}, Float32}()
+    atoms = atoms_df(protein)
 
-    # extract the roomcoordinates from dataframe
-    for i in eachindex(atoms_r)
-        push!(roomcoordinates_atoms, atoms_r[i])
-    end
+    # extract elements and roomcoordinates from dataframe
+    roomcoordinates_atoms = [(i.name, i.r) for i in eachrow(atoms)]
 
     return roomcoordinates_atoms
 
