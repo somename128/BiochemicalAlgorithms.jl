@@ -29,7 +29,7 @@ include("create_centroids.jl")
 
 N = Int32(64)
 rotations = create_rotations()
-r = RotXYZ{Float32}(deg2rad(144.147),deg2rad(87.1869),deg2rad(-142.355))
+r = RotXYZ{Float32}(deg2rad(0),deg2rad(0),deg2rad(0))
 q = quat_from_rotmatrix(r)
 res = Int32(1)
 centroids = create_centroids(N, res)
@@ -41,8 +41,11 @@ A = grid_representation(roomcoordiantes_atoms_A, N, centroids, res, false, false
 # B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
 # shift = CartesianIndex(-1, -1, -1)
 B_r = rotate_atoms(roomcoordiantes_atoms_B, q, N)
-h(v::Vector3{Float32}) = Vector3{Float32}(-5, -5, -5) + v
-atoms_translated_B = h.(B_r)
+atoms = Vector{Vector3{Float32}}()
+[push!(atoms, i[2]) for i in B_r] 
+h(v::Vector3{Float32}) = Vector3{Float32}(1, 1, 2) + v
+atoms_translated = h.(atoms)
+atoms_translated_B= [(B_r[i][1], atoms_translated[i]) for i in eachindex(B_r)]
 B_grid = grid_representation(atoms_translated_B, N, centroids, res, true, false)
 
 # scoring = Base.Vector{Meshes.Point3}()

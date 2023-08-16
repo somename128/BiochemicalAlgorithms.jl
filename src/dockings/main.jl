@@ -15,4 +15,4 @@ println(score[1])
 @time score_refined = refine!(score, Int32(1000))
 
 println(score_refined[1])
-viz(score_refined[2])
+# viz(score_refined[2])

@@ -63,3 +63,17 @@ function sample_quaternions(μ, λ, nsamples=1)
 
     sample(M, Z, nsamples)
 end
+
+function sample_xyz(X, Y, Z, λ, nsamples=1)
+    # X,y,z, [0,2π]
+    r_euler = RotXYZ(X, Y, Z)
+    μ = Rotations.params(QuatRotation(r_euler))
+
+    μ_new = sample_quaternions(μ, λ, nsamples)
+
+    r_euler_new = [RotXYZ(QuatRotation(q)) for q in μ_new]
+
+    convert_angles = s -> getproperty.(r_euler_new, Ref(s))
+
+    return convert_angles(:theta1), convert_angles(:theta2), convert_angles(:theta3)
+end
