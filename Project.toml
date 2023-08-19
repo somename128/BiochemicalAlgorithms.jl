@@ -37,7 +37,7 @@ TypedTables = "9d95f2ec-7b3d-5a63-8d20-e2491e220bb9"
 WGLMakie = "276b4fcb-3e11-5398-bf8b-a0c2d153d008"
 
 [compat]
-AutoHashEquals = "0.2"
+AutoHashEquals = "0.2, 1"
 BioStructures = "1, 2"
 BioSymbols = "4, 5"
 DataFrames = "1"
