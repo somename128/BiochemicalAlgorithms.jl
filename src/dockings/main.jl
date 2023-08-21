@@ -4,15 +4,16 @@ using Makie, WGLMakie
 
 include("correlation_docking.jl")
 include("refine!.jl")
+include("refine2!.jl")
 
 res = Int32(1)
 
-@time score = correlation_docking("src/dockings/dummy_protein_vol4.pdb", "src/dockings/dummy_ligand_vol4.pdb", res, true)
+@time score = correlation_docking("src/dockings/2ptc_protein.pdb", "src/dockings/2ptc_ligand.pdb", res, false)
 
 println(score[1])
 # save_object("src/dockings/results_docking.jld2", score)
 
-@time score_refined = refine!(score, Int32(1000))
+@time score_refined = refine2!(score, Int32(100))
 
-println(score_refined[1])
+println(score_refined)
 # viz(score_refined[2])
