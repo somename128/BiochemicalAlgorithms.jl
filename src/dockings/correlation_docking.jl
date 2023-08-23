@@ -8,6 +8,7 @@ include("create_centroids.jl")
 include("generate_record.jl")
 include("extract_roomcoordinates.jl")
 include("set_gridsize.jl")
+include("create_rotations2.jl")
 
 # function that takes two paths to pdb structure of proteins and do correlation docking
 # it also gets a boolean if vdW surface is choosen
@@ -29,8 +30,8 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     centroids = create_centroids(N, resolution)
     # grid representation protein a
     A = grid_representation(roomcoordiantes_atoms_A, N, centroids, resolution, false, vdW)
-    # get rotations - build via rigid_transform! with translation vector (0,0,0)
-    rotations = create_rotations()
+    # get quaternion rotations (via 20 degree or 120-cell)
+    rotations = create_rotations2()
     # lock for threads (unsure how this really works)
     lk = ReentrantLock() 
     # rotate protein b by R

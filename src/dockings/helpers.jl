@@ -1,3 +1,6 @@
+using Combinatorics
+using Quaternions
+
 # function to set all very small values to zero
 function zero_small!(M, tol::Float32)
     for ι in eachindex(M)
@@ -38,4 +41,30 @@ function interp!(x::Int32, N::Int32, res::Int32)
     end
 
     return x/res
+end
+
+# function that takes a vector, calculates all permutations
+# convert the result to quaternions and push them in the given array
+function perm_quat!(v::Vector{Float32}, array::Vector{QuaternionF32})
+    for i in permutations(v)
+        push!(array, QuaternionF32(i[1], i[2], i[3], i[4]))
+    end
+end
+
+# function like above, but only pushes even permutations
+function perm_quat_even!(v::Vector{Float32}, array::Vector{QuaternionF32})
+    for i in permutations(v)
+        errors = 0
+        for j in 1:4
+            if i[j] != v[j]
+                errors += 1
+            end
+        end
+
+        # only push if its an even permutation (free interpretation
+        # of even)
+        if (-1)^errors == 1
+            push!(array, QuaternionF32(i[1], i[2], i[3], i[4]))
+        end 
+    end
 end

@@ -27,15 +27,15 @@ include("extract_max.jl")
 include("quaternion_functions.jl")
 include("create_centroids.jl")
 
-N = Int32(64)
+N = Int32(128)
 rotations = create_rotations()
-r = RotXYZ{Float32}(deg2rad(0),deg2rad(0),deg2rad(0))
+r = RotXYZ{Float32}(deg2rad(80),deg2rad(80),deg2rad(-160))
 q = quat_from_rotmatrix(r)
 res = Int32(1)
 centroids = create_centroids(N, res)
-protein_A = load_and_trans_pdb("dummy_protein_vol4.pdb", N)
+protein_A = load_and_trans_pdb("testproteins/3apr_protein.pdb", N)
 roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-protein_B = load_and_trans_pdb("dummy_ligand_vol4.pdb", N)
+protein_B = load_and_trans_pdb("testproteins/3apr_ligand.pdb", N)
 roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
 A = grid_representation(roomcoordiantes_atoms_A, N, centroids, res, false, false)
 # B = grid_representation(roomcoordiantes_atoms_B, N, centroids, true)
@@ -43,7 +43,7 @@ A = grid_representation(roomcoordiantes_atoms_A, N, centroids, res, false, false
 B_r = rotate_atoms(roomcoordiantes_atoms_B, q, N)
 atoms = Vector{Vector3{Float32}}()
 [push!(atoms, i[2]) for i in B_r] 
-h(v::Vector3{Float32}) = Vector3{Float32}(1, 1, 2) + v
+h(v::Vector3{Float32}) = Vector3{Float32}(6, 7, 19) + v
 atoms_translated = h.(atoms)
 atoms_translated_B= [(B_r[i][1], atoms_translated[i]) for i in eachindex(B_r)]
 B_grid = grid_representation(atoms_translated_B, N, centroids, res, true, false)

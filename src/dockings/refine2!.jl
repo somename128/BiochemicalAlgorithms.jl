@@ -1,5 +1,6 @@
 using Rotations
 using Distributions
+using Base.Threads
 
 include("generate_record.jl")
 include("quaternion_functions.jl")
@@ -30,19 +31,22 @@ function refine2!(results_docking::Tuple, runs::Int32)
 
     # sample quaternions Bingham distributed around best quaternion
     rotations = sample_quaternions(μ, λ, runs)
-    
+    # lock for threads (unsure how this really works)
+    lk = ReentrantLock()
     # calculate scorings for sampled rotations
-    for i in rotations
+    @threads for i in eachindex(rotations)
         # generate rotation quaternion
-        R = QuaternionF32(i[1], i[2], i[3], i[4])
+        R = QuaternionF32(rotations[i][1], rotations[i][2], rotations[i][3], rotations[i][4])
         # generate record with new sampled rotation
         record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize, resolution)
         # check if record is better than first one in
         # current results
-        if (results_docking[1][1,:].score[1] < record.score)
-            push!(results_docking[1], record)
-            # sort scoring_table
-            sort!(results_docking[1], [:score], rev=[true])
+        lock(lk) do
+            if (results_docking[1][1,:].score[1] < record.score)
+                push!(results_docking[1], record)
+                # sort scoring_table
+                sort!(results_docking[1], [:score], rev=[true])
+            end
         end
         # println(i,"/",runs)
     end

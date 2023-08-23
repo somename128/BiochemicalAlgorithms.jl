@@ -32,15 +32,10 @@ function refine!(results_docking::Tuple, runs::Int32)
     # generate scatter matrix
     S = scatter_matrix(Q)
 
-    # vector for saving rotations
-    generated_rotations = Vector{Meshes.Point3f}()
-    push!(generated_rotations, Meshes.Point3f(Q[1].v1, Q[1].v2, Q[1].v3))
-    
     # do refine runs number of times
     for i in 1:runs
         # sample new rotation
         R = metropolis_hastings_sampler(Q[1], Λ, V, S, F, Int32(100000))
-        push!(generated_rotations, Meshes.Point3f(R.v1, R.v2, R.v3))
         # generate record with new sampled rotation
         record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize, resolution)
         # check if record is better than first one in
@@ -54,5 +49,5 @@ function refine!(results_docking::Tuple, runs::Int32)
     end
 
     # return new scoring table
-    return results_docking[1], generated_rotations
+    return results_docking[1]
 end

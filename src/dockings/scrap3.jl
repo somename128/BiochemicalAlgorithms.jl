@@ -10,21 +10,18 @@ using LinearAlgebra
 using FFTW
 using FourierTools
 using Rotations
+using DataFrames
+using DelimitedFiles
+using CSV
 
-include("quaternion_functions.jl")
-include("create_rotations.jl")
-include("get_degrees.jl")
-include("create_atomballs.jl")
-include("load_trans_pdb.jl")
-include("extract_roomcoordinates.jl")
+include("evaluation.jl")
 
-# N = Int32(128)
-# protein_A = load_and_trans_pdb("src/dockings/2ptc_protein.pdb", N)
-# roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
-inner_radius = Meshes.Ball(Meshes.Point(0,0,0),1)
-outer_radius = Meshes.Ball(Meshes.Point(0,0,0),2)
+proteinA = "testproteins/2ptc_protein.pdb"
+proteinB = "testproteins/2ptc_ligand.pdb"
+complexAB = "testproteins/2ptc.pdb"
+R = (Float32(-120), Float32(80), Float32(60))
+T = Vector3{Float32}(-2, -1, 2)
 
-p = Meshes.Point(0.9, 0.47, 0)
+eva = evaluation(proteinA, proteinB, complexAB, R, T)
 
-# !Base.in(p,inner_radius) && Base.in(p,outer_radius)
-Base.in(p,inner_radius)
+CSV.write("complex.csv", DataFrame(eva), header = false) 
