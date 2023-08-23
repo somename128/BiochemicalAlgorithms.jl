@@ -52,5 +52,5 @@ function refine2!(results_docking::Tuple, runs::Int32)
     end
 
     # return new scoring table
-    return results_docking[1]
+    return results_docking
 end

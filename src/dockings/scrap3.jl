@@ -19,9 +19,8 @@ include("evaluation.jl")
 proteinA = "testproteins/2ptc_protein.pdb"
 proteinB = "testproteins/2ptc_ligand.pdb"
 complexAB = "testproteins/2ptc.pdb"
-R = (Float32(-120), Float32(80), Float32(60))
-T = Vector3{Float32}(-2, -1, 2)
+R = (Float32(-90), Float32(0), Float32(-90))
+T = Vector3{Float32}(2, -1, 2)
 
-eva = evaluation(proteinA, proteinB, complexAB, R, T)
-
-CSV.write("complex.csv", DataFrame(eva), header = false) 
+evaluation(proteinA, proteinB, complexAB, R, T)
+ 

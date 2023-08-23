@@ -15,20 +15,26 @@ function evaluation(protein_A::String, protein_B::String, protein_complex::Strin
     # perform translation and rotation on protein B
     rigid_transform!(proteinB, rot_and_trans)    
 
-    # process to get the proteinAB molecule for rmsd
-    proteinAB = Molecule("proteinAB")    
-    atoms_A = atoms_df(proteinA)
-    atoms_B = atoms_df(proteinB)
+    # process to get proteinAB molecule and docked protein molecule 
+    # for rmsd
+    proteinAB = Molecule("proteinAB")
+    atoms_AB = unique(atoms_df(complexAB), 2)
+    docked_proteinAB = Molecule("docked_proteinAB")    
+    atoms_A = unique(atoms_df(proteinA), 2)
+    atoms_B = unique(atoms_df(proteinB), 2)
     
-    for i in eachrow(atoms_A)
+    for i in eachrow(atoms_AB)
         Atom(proteinAB, i.number, i.element, i.name, i. atom_type, i.r, i.v, i.F)
+    end
+
+    for i in eachrow(atoms_A)
+        Atom(docked_proteinAB, i.number, i.element, i.name, i. atom_type, i.r, i.v, i.F)
     end
     
     for i in eachrow(atoms_B)
-        Atom(proteinAB, i.number, i.element, i.name, i. atom_type, i.r, i.v, i.F)
+        Atom(docked_proteinAB, i.number, i.element, i.name, i. atom_type, i.r, i.v, i.F)
     end
     
-    return atoms_df(complexAB)
-    # return TrivialAtomBijection(proteinAB, complexAB)
+    return compute_rmsd(TrivialAtomBijection(docked_proteinAB, proteinAB))
 
 end
