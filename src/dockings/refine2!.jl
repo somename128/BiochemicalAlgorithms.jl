@@ -6,7 +6,7 @@ include("generate_record.jl")
 include("quaternion_functions.jl")
 include("bingham_functions_vol2.jl")
 
-function refine2!(results_docking::Tuple, runs::Int32)
+function refine2!(results_docking::Tuple, runs::Int32, vdW::Bool)
 
     # store scoring table, grid of protein A, roomcoordinates of protein b,
     # centroids and gridsize
@@ -27,7 +27,7 @@ function refine2!(results_docking::Tuple, runs::Int32)
 
     # set parameters for quaternion sampling
     μ = [Q[1].s, Q[1].v1, Q[1].v2, Q[1].v3]
-    λ = 5
+    λ = 2
 
     # sample quaternions Bingham distributed around best quaternion
     rotations = sample_quaternions(μ, λ, runs)
@@ -38,7 +38,7 @@ function refine2!(results_docking::Tuple, runs::Int32)
         # generate rotation quaternion
         R = QuaternionF32(rotations[i][1], rotations[i][2], rotations[i][3], rotations[i][4])
         # generate record with new sampled rotation
-        record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize, resolution)
+        record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize, resolution, vdW)
         # check if record is better than first one in
         # current results
         lock(lk) do

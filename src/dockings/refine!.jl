@@ -5,7 +5,7 @@ include("generate_record.jl")
 include("quaternion_functions.jl")
 include("bingham_functions.jl")
 
-function refine!(results_docking::Tuple, runs::Int32)
+function refine!(results_docking::Tuple, runs::Int32, vdW::Bool)
 
     # store scoring table, grid of protein A, roomcoordinates of protein b,
     # centroids and gridsize
@@ -37,7 +37,7 @@ function refine!(results_docking::Tuple, runs::Int32)
         # sample new rotation
         R = metropolis_hastings_sampler(Q[1], Λ, V, S, F, Int32(100000))
         # generate record with new sampled rotation
-        record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize, resolution)
+        record = generate_record(grid_A, R, roomcoordiantes_B, centroids, gridsize, resolution, vdW)
         # check if record is better than first one in
         # current results
         if (results_docking[1][1,:].score[1] < record.score)
@@ -49,5 +49,5 @@ function refine!(results_docking::Tuple, runs::Int32)
     end
 
     # return new scoring table
-    return results_docking[1]
+    return results_docking
 end

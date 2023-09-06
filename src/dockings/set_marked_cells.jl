@@ -31,7 +31,7 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball}, centroids::Array{Meshe
             end
         end
     end
-
+    
     # return cells that represent protein in grid structure
     return colored_cells
 end

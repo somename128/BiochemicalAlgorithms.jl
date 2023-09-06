@@ -1,19 +1,20 @@
 # using JLD2
-using Meshes, MeshViz
-using Makie, WGLMakie
+# using Meshes, MeshViz
+# using Makie, WGLMakie
+using ProfileView
 
 include("correlation_docking.jl")
 include("refine!.jl")
 include("refine2!.jl")
 
-res = Int32(1)
+res = Int32(2)
 
-@time score = correlation_docking("src/dockings/testproteins/2ptc_protein.pdb", "src/dockings/testproteins/2ptc_ligand.pdb", res, false)
+score = correlation_docking("src/dockings/simple_geometry/dot_origin_vdW.pdb", "src/dockings/simple_geometry/dot_origin_vdW.pdb", res, true)
 
 println(score[1])
 # save_object("src/dockings/results_docking.jld2", score)
 
-@time score_refined = refine2!(refine2!(score, Int32(100)), Int32(100))
+score_refined = refine2!(score, Int32(10000), true)
 
 println(score_refined[1])
 # viz(score_refined[2])

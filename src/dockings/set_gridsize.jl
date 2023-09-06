@@ -28,8 +28,8 @@ function set_gridsize(path_protein_A::String, path_protein_B::String)
     push!(diameters, min_max_B[4] - min_max_B[3])
     push!(diameters, min_max_B[6] - min_max_B[5])
     
-    # store the greatest diameter
-    max_d = maximum(diameters)
+    # store the greatest diameter plus buffer
+    max_d = maximum(diameters) + 5
 
     # set the gridsize depending on the double value of the greatest
     # diameter (for fft)
@@ -45,7 +45,7 @@ function set_gridsize(path_protein_A::String, path_protein_B::String)
         gridsize = Int32(16)
     elseif (2*max_d <= 8 && 2*max_d > 4)
         gridsize = Int32(8)
-    elseif (2*max_d <= 4)
+    elseif (2*max_d < 4)
         gridsize = Int32(4)    
     else
         println("Your proteins are to heavy for my program.")

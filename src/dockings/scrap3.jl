@@ -1,7 +1,5 @@
 using BiochemicalAlgorithms
 using BenchmarkTools
-using Makie, WGLMakie
-using Meshes, MeshViz
 using JLD2
 using ProfileView
 using Profile
@@ -14,13 +12,15 @@ using DataFrames
 using DelimitedFiles
 using CSV
 
-include("evaluation.jl")
+include("evaluation_simple.jl")
 
-proteinA = "testproteins/2ptc_protein.pdb"
-proteinB = "testproteins/2ptc_ligand.pdb"
-complexAB = "testproteins/2ptc.pdb"
-R = (Float32(-90), Float32(0), Float32(-90))
-T = Vector3{Float32}(2, -1, 2)
+proteinA = "simple_geometry/cube_origin_huge_A.pdb"
+proteinB = "simple_geometry/cube_origin_huge_B.pdb"
+complexAB = "simple_geometry/cube_origin_huge.pdb"
 
-evaluation(proteinA, proteinB, complexAB, R, T)
+R = (Float32(0), Float32(0), Float32(0))
+T = Vector3{Float32}(-2, -2, -2)
+
+evaluation_simple(proteinA, proteinB, complexAB, R, T)
  
+# CSV.write("equality.csv", DataFrame(eva), header = false)

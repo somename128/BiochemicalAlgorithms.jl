@@ -1,5 +1,7 @@
 using Combinatorics
 using Quaternions
+using Permutations
+using DataFrames
 
 # function to set all very small values to zero
 function zero_small!(M, tol::Float32)
@@ -40,7 +42,7 @@ function interp!(x::Int32, N::Int32, res::Int32)
         x -= N*res
     end
 
-    return x/res
+    return (x-1)/res
 end
 
 # function that takes a vector, calculates all permutations
@@ -53,18 +55,20 @@ end
 
 # function like above, but only pushes even permutations
 function perm_quat_even!(v::Vector{Float32}, array::Vector{QuaternionF32})
-    for i in permutations(v)
-        errors = 0
-        for j in 1:4
-            if i[j] != v[j]
-                errors += 1
-            end
-        end
+    # encode all entries of v in a dictionary
+    d = Dict{Int32, Float32}(1 => v[1], 2 => v[2], 3 => v[3], 4 => v[4])
 
-        # only push if its an even permutation (free interpretation
-        # of even)
-        if (-1)^errors == 1
-            push!(array, QuaternionF32(i[1], i[2], i[3], i[4]))
+    # new "encoded" vector for permutations
+    w = Int32[1, 2, 3, 4]
+    
+    for i in permutations(w)
+        # only push if its an even permutation
+        #println(i) 
+        #println(sign(Permutation(i)))
+        if sign(Permutation(i)) == 1
+            push!(array, QuaternionF32(d[i[1]], d[i[2]], d[i[3]], d[i[4]]))
         end 
     end
 end
+
+

@@ -33,7 +33,7 @@ function set_surface_cells(inner_radius::Vector{Meshes.Ball}, outer_radius::Vect
             end
         end
     end
-
+    
     # return cells that represent protein in grid structure
     return surface_cells
 end

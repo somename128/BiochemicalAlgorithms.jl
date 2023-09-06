@@ -15,12 +15,12 @@ function grid_representation(atoms::Vector{Tuple{String, Vector3{Float32}}}, gri
     roomcoordinates = Vector{Vector3{Float32}}()
     [push!(roomcoordinates, i[2]) for i in atoms] 
     if (vdW)
-        thickness = Float32(2)
+        thickness = Float32(0.5)
         inner_radius = create_atomballs(atoms, -(thickness/2))
         outer_radius = create_atomballs(atoms, thickness/2)
         inner_cells = set_marked_cells(inner_radius, centroids, roomcoordinates, res)
         surface_cells = set_surface_cells(inner_radius, outer_radius, centroids, roomcoordinates, res)
-        inner_outer_grid_3D = create_inner_outer_grid_vdW(inner_cells, surface_cells, gridsize, res)
+        inner_outer_grid_3D = create_inner_outer_grid_vdW(inner_cells, surface_cells, gridsize, res, is_smaller)
     else
         # calculate atomballs around proteins 
         # zero because of no vdW surface calculation
