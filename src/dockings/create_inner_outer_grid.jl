@@ -2,7 +2,7 @@ function create_inner_outer_grid(colored_cells::Vector{Int32}, N::Int32, res::In
     # println("Build 1D grid representation...")
     # M = N*res is the size of the (3D-) arrays needed to store grid
     M = N*res
-    inner_outer_grid = zeros(Float32, M*M*M)
+    inner_outer_grid = zeros(ComplexF32, M*M*M)
 
     # destingish between protein and ligand
     # if ligand set all colored cells to one 
@@ -79,7 +79,7 @@ function create_inner_outer_grid(colored_cells::Vector{Int32}, N::Int32, res::In
     end
     # change 1D to 3D for FFTW library
     # println("Build 3D grid representation...")
-    inner_outer_grid_3D = zeros(Float32, M,M,M)
+    inner_outer_grid_3D = zeros(ComplexF32, M,M,M)
 
     for i in 1:M*M*M
         inner_outer_grid_3D[i] = inner_outer_grid[i]

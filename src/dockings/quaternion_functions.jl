@@ -23,9 +23,6 @@ end
 
 # rotate vector with quaternion
 function rotate_vector(q::QuaternionF32, u::AbstractVector)
-    if length(u) != 3
-        error("Must be a 3-vector")
-    end
     q_u = QuaternionF32(0, u[1], u[2], u[3])
     q_v = q*q_u*conj(q)
     return Vector3{Float32}(imag_part(q_v))

@@ -6,21 +6,20 @@ function create_rotations()
     
     # initialize arrays/vectors for rotation matrices and angles for rotations
     rotations = Vector{QuaternionF32}()
-    angles_x = Vector{Float32}()
-    angles_y = Vector{Float32}()
-    angles_z = Vector{Float32}()
+    angles_x = Array{Float32}(undef, 18)
+    angles_y = Array{Float32}(undef, 10)
+    angles_z = Array{Float32}(undef, 18)
 
-    # fill array with angle values from 0 to 360 stepsize 20
-    for i in 1:19
+    # fill array with angle values from 0 to 340 stepsize 20 (0==360)
+    for i in 1:18
         a = deg2rad((i-1) * 20)
-        push!(angles_x,a)
-        push!(angles_z,a)
+        angles_x[i] = a
+        angles_z[i] = a
     end
 
     # fill array with angle values from 0 to 180 stepsize 20
     for i in 1:10
-        a = deg2rad((i-1) * 20)
-        push!(angles_y,a)
+        angles_y[i] = deg2rad((i-1) * 20)
     end
 
 

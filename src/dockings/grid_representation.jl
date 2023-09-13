@@ -15,7 +15,12 @@ function grid_representation(atoms::Vector{Tuple{String, Vector3{Float32}}}, gri
     roomcoordinates = Vector{Vector3{Float32}}()
     [push!(roomcoordinates, i[2]) for i in atoms] 
     if (vdW)
-        thickness = Float32(0.5)
+        # for simple geometry
+        # thickness = Float32(1)
+        # for huge cube
+        # thickness = Float32(0.5)
+        # for testproteins
+        thickness = Float32(2)
         inner_radius = create_atomballs(atoms, -(thickness/2))
         outer_radius = create_atomballs(atoms, thickness/2)
         inner_cells = set_marked_cells(inner_radius, centroids, roomcoordinates, res)

@@ -1,7 +1,14 @@
-using Meshes
+using Meshes, MeshViz
+using Makie, WGLMakie
+using ProfileView
+using Profile
+using BenchmarkTools
 
-p = Meshes.Point3(0.5,0.5,0.5)
+include("extract_max.jl")
+include("extract_max_fast.jl")
+include("create_rotations.jl")
+include("create_rotations2.jl")
 
-b = Meshes.Ball((0,0,0), 0.75)
-
-Base.in(p,b)
+gridsize = 1
+res = 2
+B = Array{ComplexF32,3}(undef, gridsize*res, gridsize*res, gridsize*res)

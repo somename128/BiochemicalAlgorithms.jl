@@ -29,21 +29,23 @@ function set_gridsize(path_protein_A::String, path_protein_B::String)
     push!(diameters, min_max_B[6] - min_max_B[5])
     
     # store the greatest diameter plus buffer
-    max_d = maximum(diameters) + 5
+    max_d = maximum(diameters) + 2
 
     # set the gridsize depending on the double value of the greatest
     # diameter (for fft)
     gridsize = zero(Int32)
 
-    if (2*max_d <= 128 && 2*max_d > 64)
+    if (2*max_d < 150 && 2*max_d >= 128)
+        gridsize = Int32(150)
+    elseif (2*max_d < 128 && 2*max_d >= 64)
         gridsize = Int32(128)
-    elseif (2*max_d <= 64 && 2*max_d > 32)
+    elseif (2*max_d < 64 && 2*max_d >= 32)
         gridsize = Int32(64)
-    elseif (2*max_d <= 32 && 2*max_d > 16)
+    elseif (2*max_d < 32 && 2*max_d >= 16)
         gridsize = Int32(32)
-    elseif (2*max_d <= 16 && 2*max_d > 8)
+    elseif (2*max_d < 16 && 2*max_d >= 8)
         gridsize = Int32(16)
-    elseif (2*max_d <= 8 && 2*max_d > 4)
+    elseif (2*max_d < 8 && 2*max_d >= 4)
         gridsize = Int32(8)
     elseif (2*max_d < 4)
         gridsize = Int32(4)    
