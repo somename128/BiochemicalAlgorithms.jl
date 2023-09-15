@@ -27,14 +27,14 @@ function create_inner_outer_grid_vdW(inner_cells::Vector{Int32}, surface_cells::
             inner_outer_grid[i] = one(Float32)
         end
     end
-
+    #=
     # change 1D to 3D for FFTW library
     inner_outer_grid_3D = zeros(ComplexF32, M,M,M)
 
     for i in 1:M*M*M
         inner_outer_grid_3D[i] = inner_outer_grid[i]
     end
-
-    return inner_outer_grid_3D
+    =#
+    return reshape(inner_outer_grid_3D, (M, M, M))
 end
 

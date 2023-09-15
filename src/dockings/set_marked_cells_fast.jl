@@ -1,11 +1,13 @@
-using BenchmarkTools
+using Distributed
+using Base.Threads
+using LoopVectorization
 
 include("min_max_atoms.jl")
 
-function set_surface_cells(inner_radius::Vector{Meshes.Ball{3,Float32}}, outer_radius::Vector{Meshes.Ball{3,Float32}}, centroids::Array{Meshes.Point3f,3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
-    # initalize vector for storing index of surface cells
-    surface_cells = Vector{Int32}()
-    
+function set_marked_cells_fast(atomballs::Vector{Meshes.Ball{3,Float32}}, centroids::Array{Meshes.Point3f, 3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
+    # initialize vector for storing index of colored cells
+    colored_cells = Vector{Int32}()
+
     #extract min max (in rounded int +/-2) of atom coordinates of protein
     min_max = min_max_atoms(roomcoordinates)
     min_x = min_max[1]
@@ -19,25 +21,23 @@ function set_surface_cells(inner_radius::Vector{Meshes.Ball{3,Float32}}, outer_r
     # still not sure how this stuff works
     I = LinearIndices(centroids)
     # println("Set marked cells...")
-    # store centroids that are not inside the inner radius but inside the outer radius
-    # in between of the two radians therefore on the surface
-    # inner and outer radius should be of the same length because of the constrution process
+    # store centroids that are inside a atom radius in colored_cells
     for i in CartesianIndices(centroids[min_x*res:max_x*res,min_y*res:max_y*res,min_z*res:max_z*res])
-        for j in eachindex(inner_radius)
+        for j in eachindex(atomballs)
             # move cartesian index i via min_x,min_y,min_z to get right index
             # I[] to get linear index of cartesian index
             index = I[CartesianIndex(min_x*res,min_y*res,min_z*res)+i]
             # check if centroid at index is in atomball j 
-            if(!Base.in(centroids[index],inner_radius[j]) && Base.in(centroids[index],outer_radius[j]))
+            if (Base.in(centroids[index],atomballs[j]))
                 # stores indice of centroid if a centroid i lies
-                # in the surface area j -> stored in surface_cells if not already in storage
-                if(!Base.in(index, surface_cells))
-                    push!(surface_cells, index)
+                # in an atomball j -> stored in colored_cells if not already in storage
+                if (!Base.in(index, colored_cells))
+                    push!(colored_cells, index)
                 end
             end
         end
     end
     
     # return cells that represent protein in grid structure
-    return surface_cells
+    return colored_cells
 end

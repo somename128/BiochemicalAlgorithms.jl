@@ -1,5 +1,5 @@
 using DataFrames
-using Base.Threads
+using ProgressMeter
 
 include("load_trans_pdb.jl")
 include("grid_representation.jl")
@@ -19,6 +19,7 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=(zero(Float32), zero(Float32), zero(Float32)), score=zero(Float32))
     # set gridsize N against protein size of greater protein
     N = set_gridsize(path_to_proteinA, path_to_proteinB)
+    println("Gridsize: ", N)
     # N = Int32(32)
     # load and translate protein a
     protein_A = load_and_trans_pdb(path_to_proteinA, N)
@@ -31,33 +32,39 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     centroids = create_centroids(N, resolution)
     # grid representation protein a
     A = grid_representation(roomcoordiantes_atoms_A, N, centroids, resolution, false, vdW)
+    println("Grid representation protein A done.")
     # get quaternion rotations (via 20 degree or 120-cell)
     rotations = create_rotations()
     # lock for threads (unsure how this really works)
-    lk = ReentrantLock() 
+    # lk = ReentrantLock() 
+    # for progress bar
+    p = Progress(length(rotations))
     # rotate protein b by R
-    @threads for i in eachindex(rotations)
+    println("Start loop...")
+    for i in eachindex(rotations)
         # generate record for scoring table
         record = generate_record(A, rotations[i], roomcoordiantes_atoms_B, centroids, N, resolution, vdW)
-        lock(lk)
-        try
+        # lock(lk)
+        # try
             push!(scoring_table, record)
-        finally
-            unlock(lk)
-        end
+            next!(p)
+        # finally
+            # unlock(lk)
+        # end
             #=
             if(scoring_table.score[1] < record.score)
                 scoring_table[1,:] = (α=record.α, β=record.β, γ=record.γ, R=record.R, score=record.score)
                 println(i)
             end
             =#
-        # println(i,"/",length(rotations))
     end
+    # finish progress 
+    finish!(p)
 
     # sort scoring_table
     sort!(scoring_table, [:score], rev=[true])
 
-    # return five greatest values, grid representation of A,
+    # return x greatest values, grid representation of A,
     # roomcoordinates of B, centroids and gridsize for refinement
     return scoring_table[1:10, :], A, roomcoordiantes_atoms_B, centroids, N, resolution
 end

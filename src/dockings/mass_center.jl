@@ -1,14 +1,14 @@
 function mass_center(atoms::Vector{Vector3{Float32}})
     # initalize vectors for storing x y z coordinates seperately
-    X = Vector{Float32}()
-    Y = Vector{Float32}()
-    Z = Vector{Float32}()
+    X = Array{Float32}(undef, length(atoms))
+    Y = Array{Float32}(undef, length(atoms))
+    Z = Array{Float32}(undef, length(atoms))
 
     # fill vectors with coordinates
-    for i in atoms
-        push!(X, i[1])
-        push!(Y, i[2])
-        push!(Z, i[3])
+    for i in eachindex(atoms)
+        X[i] =  atoms[i][1]
+        Y[i] =  atoms[i][2]
+        Z[i] =  atoms[i][3]
     end
 
     # calculate center for every axis by sum up and divide by length

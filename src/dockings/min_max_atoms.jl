@@ -3,15 +3,15 @@ include("helpers.jl")
 function min_max_atoms(roomcoordinates::Vector{Vector3{Float32}})
     
     # initalize vectors for storing x y z coordinates seperately
-    X = Vector{Float32}()
-    Y = Vector{Float32}()
-    Z = Vector{Float32}()
+    X = Array{Float32}(undef,length(roomcoordinates))
+    Y = Array{Float32}(undef,length(roomcoordinates))
+    Z = Array{Float32}(undef,length(roomcoordinates))
 
     # fill vectors with coordinates
-    for i in roomcoordinates
-        push!(X, i[1])
-        push!(Y, i[2])
-        push!(Z, i[3])
+    for i in eachindex(roomcoordinates)
+        X[i] = roomcoordinates[i][1]
+        Y[i] = roomcoordinates[i][2]
+        Z[i] = roomcoordinates[i][3]
     end
 
     # calculate min max per axis and round+int it (for relevant

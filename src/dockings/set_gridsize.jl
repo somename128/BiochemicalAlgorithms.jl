@@ -10,23 +10,23 @@ function set_gridsize(path_protein_A::String, path_protein_B::String)
     atoms_A = extract_roomcoordinates(protein_A)
     atoms_B = extract_roomcoordinates(protein_B)
     # extract roomcoordinates from tuples
-    atomsA = Vector{Vector3{Float32}}()
-    [push!(atomsA, i[2]) for i in atoms_A]
-    atomsB = Vector{Vector3{Float32}}()
-    [push!(atomsB, i[2]) for i in atoms_B]
+    atomsA = Array{Vector3{Float32}}(undef, length(atoms_A))
+    [atomsA[i] = atoms_A[i][2] for i in eachindex(atoms_A)]
+    atomsB = Array{Vector3{Float32}}(undef, length(atoms_B))
+    [atomsB[i] = atoms_B[i][2] for i in eachindex(atoms_B)]
 
     # function for extracting min and max in xyz direction
     min_max_A = extract_min_max(atomsA)
     min_max_B = extract_min_max(atomsB)
 
     # get the diameters via maximum - minimum for each dimension xyz
-    diameters = Vector{Float32}()
-    push!(diameters, min_max_A[2] - min_max_A[1])
-    push!(diameters, min_max_A[4] - min_max_A[3])
-    push!(diameters, min_max_A[6] - min_max_A[5])
-    push!(diameters, min_max_B[2] - min_max_B[1])
-    push!(diameters, min_max_B[4] - min_max_B[3])
-    push!(diameters, min_max_B[6] - min_max_B[5])
+    diameters = Array{Float32}(undef, 6)
+    diameters[1] = min_max_A[2] - min_max_A[1]
+    diameters[2] = min_max_A[4] - min_max_A[3]
+    diameters[3] = min_max_A[6] - min_max_A[5]
+    diameters[4] = min_max_B[2] - min_max_B[1]
+    diameters[5] = min_max_B[4] - min_max_B[3]
+    diameters[6] = min_max_B[6] - min_max_B[5]
     
     # store the greatest diameter plus buffer
     max_d = maximum(diameters) + 2

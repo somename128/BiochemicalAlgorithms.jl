@@ -5,15 +5,14 @@ include("set_surface_cells.jl")
 include("create_inner_outer_grid_vdW.jl")
 
 function grid_representation(atoms::Vector{Tuple{String, Vector3{Float32}}}, gridsize::Int32, centroids::Array{Meshes.Point3f, 3}, res::Int32, is_smaller::Bool, vdW::Bool)
-
     # if vdW is enabled surface is defined as the difference "line" between two balls
     # called thinkness
     # inner points are defined as all points which are maximum [radius-thickness] 
     # angström away from atom point
 
     # extract roomcoordinates from tuple
-    roomcoordinates = Vector{Vector3{Float32}}()
-    [push!(roomcoordinates, i[2]) for i in atoms] 
+    roomcoordinates = Array{Vector3{Float32}}(undef, length(atoms))
+    [roomcoordinates[i] = atoms[i][2] for i in eachindex(atoms)] 
     if (vdW)
         # for simple geometry
         # thickness = Float32(1)

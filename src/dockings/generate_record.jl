@@ -15,7 +15,6 @@ function generate_record(A::Array{ComplexF32,3}, rotation::QuaternionF32, roomco
     C = ifft(fft(A).*conj(fft(B)))
     # safe α,β,γ of max fft-scoring (c)
     max = extract_max_fast(C)
-    
     # build record for scoring table
     # transfer position of greatest value of C into shifts 
     # in xyz direction

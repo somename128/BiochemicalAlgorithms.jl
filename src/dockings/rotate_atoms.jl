@@ -1,14 +1,9 @@
 include("quaternion_functions.jl")
 
 function rotate_atoms(roomcoordinates::Vector{Tuple{String, Vector3{Float32}}}, rotation::QuaternionF32, gridsize::Int32)
-    # needed because of race conditions of every thread
-    # every thread makes a copy of roomcoordinates
-    # otherwise error (dont know why)
-    # maybe shared array
-    roomcoor = roomcoordinates
     # extract roomcoordinates from tuple
-    atoms = Array{Vector3{Float32}}(undef, length(roomcoor))
-    [atoms[i] = roomcoor[i][2] for i in eachindex(roomcoor)] 
+    atoms = Array{Vector3{Float32}}(undef, length(roomcoordinates))
+    [atoms[i] = roomcoordinates[i][2] for i in eachindex(roomcoordinates)] 
     # idea:
     # 1. translate in origin (0,0,0) 
     # 2. rotate
@@ -40,7 +35,7 @@ function rotate_atoms(roomcoordinates::Vector{Tuple{String, Vector3{Float32}}}, 
     end
 
     # put back together tuple
-    rotated_tuple = [(roomcoor[i][1], atoms[i]) for i in eachindex(roomcoor)]
+    rotated_tuple = [(roomcoordinates[i][1], atoms[i]) for i in eachindex(roomcoordinates)]
     
     return rotated_tuple
 end

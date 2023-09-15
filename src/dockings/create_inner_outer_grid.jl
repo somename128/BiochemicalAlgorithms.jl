@@ -77,6 +77,7 @@ function create_inner_outer_grid(colored_cells::Vector{Int32}, N::Int32, res::In
             inner_outer_grid[i] = one(Float32)
         end
     end
+    #=
     # change 1D to 3D for FFTW library
     # println("Build 3D grid representation...")
     inner_outer_grid_3D = zeros(ComplexF32, M,M,M)
@@ -84,6 +85,6 @@ function create_inner_outer_grid(colored_cells::Vector{Int32}, N::Int32, res::In
     for i in 1:M*M*M
         inner_outer_grid_3D[i] = inner_outer_grid[i]
     end
-
-    return inner_outer_grid_3D
+    =#
+    return reshape(inner_outer_grid, (M, M, M))
 end

@@ -1,8 +1,10 @@
-using BenchmarkTools
+using Distributed
+using Base.Threads
+using LoopVectorization
 
 include("min_max_atoms.jl")
 
-function set_surface_cells(inner_radius::Vector{Meshes.Ball{3,Float32}}, outer_radius::Vector{Meshes.Ball{3,Float32}}, centroids::Array{Meshes.Point3f,3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
+function set_surface_cells_fast(inner_radius::Vector{Meshes.Ball{3,Float32}}, outer_radius::Vector{Meshes.Ball{3,Float32}}, centroids::Array{Meshes.Point3f,3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
     # initalize vector for storing index of surface cells
     surface_cells = Vector{Int32}()
     
@@ -28,11 +30,13 @@ function set_surface_cells(inner_radius::Vector{Meshes.Ball{3,Float32}}, outer_r
             # I[] to get linear index of cartesian index
             index = I[CartesianIndex(min_x*res,min_y*res,min_z*res)+i]
             # check if centroid at index is in atomball j 
-            if(!Base.in(centroids[index],inner_radius[j]) && Base.in(centroids[index],outer_radius[j]))
-                # stores indice of centroid if a centroid i lies
-                # in the surface area j -> stored in surface_cells if not already in storage
-                if(!Base.in(index, surface_cells))
-                    push!(surface_cells, index)
+            if (!Base.in(centroids[index],inner_radius[j]))
+                if (Base.in(centroids[index],outer_radius[j]))
+                    # stores indice of centroid if a centroid i lies
+                    # in the surface area j -> stored in surface_cells if not already in storage
+                    if (!Base.in(index, surface_cells))
+                        push!(surface_cells, index)
+                    end
                 end
             end
         end
