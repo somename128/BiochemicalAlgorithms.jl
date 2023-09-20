@@ -12,7 +12,7 @@ include("correlation_docking.jl")
 include("refine!.jl")
 include("refine2!.jl")
 
-#=
+
 # for timetracking
 # const to = TimerOutput()
 res = Int32(1)
@@ -30,19 +30,4 @@ println("Initialization done.")
 # show(to)
 # println(sc[1])
 # save_object("src/dockings/results_docking.jld2", score)
-=# 
 
-sc = load_object("src/dockings/testrun_huge/2hhb_vdW_120.jld2")
-println(sc[1])
-# refine2!(sc, Int32(10), false)
-@time score_refined = refine2!(sc, Int32(50), true)
-println(score_refined[1][1:10, :])
-
-@time score_refined = refine2!(sc, Int32(100), true)
-println(score_refined[1][1:10, :])
-
-@time score_refined = refine2!(sc, Int32(150), true)
-println(score_refined[1][1:10, :])
-
-y, fs = wavread(raw"src/dockings/ff_victory.wav")
-wavplay(y, fs)

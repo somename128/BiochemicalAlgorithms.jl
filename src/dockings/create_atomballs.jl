@@ -21,7 +21,7 @@ function create_atomballs(atoms::Vector{Tuple{String, Vector3{Float32}}}, thickn
         # for huge cube
         # radius = Float32(0.75)
         # for testproteins default = 1.8
-        radius = get(radii, i[1], Float32(1.8))
+        radius = get(radii, atoms[i][1], Float32(1.8))
         atomballs[i] = Meshes.Ball{3,Float32}(atoms[i][2], radius+thickness)
     end
 
