@@ -1,3 +1,5 @@
+using Meshes
+
 include("min_max_atoms.jl")
 
 function set_marked_cells(atomballs::Vector{Meshes.Ball{3,Float32}}, centroids::Array{Meshes.Point3f, 3}, roomcoordinates::Vector{Vector3{Float32}}, res::Int32)
@@ -24,7 +26,7 @@ function set_marked_cells(atomballs::Vector{Meshes.Ball{3,Float32}}, centroids::
             # I[] to get linear index of cartesian index
             index = I[CartesianIndex(min_x*res,min_y*res,min_z*res)+i]
             # check if centroid at index is in atomball j 
-            if (Base.in(centroids[index],atomballs[j]))
+            if (Meshes.in(centroids[index], atomballs[j]))
                 # stores indice of centroid if a centroid i lies
                 # in an atomball j -> stored in colored_cells if not already in storage
                 if (!Base.in(index, colored_cells))

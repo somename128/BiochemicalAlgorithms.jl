@@ -14,13 +14,16 @@ include("create_rotations2.jl")
 # it also gets a boolean if vdW surface is choosen
 # additionally it gets the resolution which means how small the cubes of the
 # grid representation should be
-function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, resolution::Int32, vdW::Bool)
+function correlation_docking(path_to_proteinA::String, path_to_proteinB::String, resolution::Int32, vdW::Bool, hypercube::Bool, init::Bool, init_N::Int32)
     # initialize scoring table
     scoring_table = DataFrame(α=zero(Float32), β=zero(Float32), γ=zero(Float32), R=(zero(Float32), zero(Float32), zero(Float32)), score=zero(Float32))
     # set gridsize N against protein size of greater protein
-    N = set_gridsize(path_to_proteinA, path_to_proteinB)
+    if (init)
+        N = init_N
+    else
+        N = set_gridsize(path_to_proteinA, path_to_proteinB)
+    end
     println("Gridsize: ", N)
-    # N = Int32(32)
     # load and translate protein a
     protein_A = load_and_trans_pdb(path_to_proteinA, N)
     roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
@@ -34,7 +37,11 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
     A = grid_representation(roomcoordiantes_atoms_A, N, centroids, resolution, false, vdW)
     println("Grid representation protein A done.")
     # get quaternion rotations (via 20 degree or 120-cell)
-    rotations = create_rotations()
+    if (hypercube)
+        rotations = create_rotations2()
+    else
+        rotations = create_rotations()
+    end
     # lock for threads (unsure how this really works)
     # lk = ReentrantLock() 
     # for progress bar

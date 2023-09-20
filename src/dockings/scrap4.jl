@@ -28,11 +28,11 @@ include("quaternion_functions.jl")
 include("create_centroids.jl")
 include("set_gridsize.jl")
 
-path_to_proteinA = "src/dockings/simple_geometry/cube_origin_huge_A.pdb"
-path_to_proteinB = "src/dockings/simple_geometry/cube_origin_huge_B.pdb"
-vdW = true
-# N = set_gridsize(path_to_proteinA, path_to_proteinB)
-N = Int32(32)
+path_to_proteinA = "src/dockings/testproteins/2hhb_alpha_chain.pdb"
+path_to_proteinB = "src/dockings/testproteins/2hhb_beta_chain.pdb"
+vdW = false
+N = set_gridsize(path_to_proteinA, path_to_proteinB)
+# N = Int32(32)
 rotations = create_rotations()
 r = RotXYZ{Float32}(deg2rad(0),deg2rad(0),deg2rad(0))
 q = quat_from_rotmatrix(r)
@@ -52,7 +52,7 @@ A = real(grid_representation(roomcoordiantes_atoms_A, N, centroids, res, false, 
 B_r = rotate_atoms(roomcoordiantes_atoms_B, q, N)
 atoms = Vector{Vector3{Float32}}()
 [push!(atoms, i[2]) for i in B_r] 
-h(v::Vector3{Float32}) = Vector3{Float32}(1, 1, 1) + v
+h(v::Vector3{Float32}) = Vector3{Float32}(0, 0, 0) + v
 atoms_translated = h.(atoms)
 atoms_translated_B = [(B_r[i][1], atoms_translated[i]) for i in eachindex(B_r)]
 B_grid = real(grid_representation(atoms_translated_B, N, centroids, res, true, vdW))
@@ -83,7 +83,7 @@ for i in eachindex(B_grid)
         alphas[i] = 1.0
     end
 end
-
+#=
 # for i in CartesianIndices(A)
 # inner
 for i in eachindex(A)
@@ -91,7 +91,7 @@ for i in eachindex(A)
     #if (A[i] != 0)
         # v = (i[1]/res-1/2res,i[2]/res-1/2res,i[3]/res-1/2res)
         # push!(atoms_in_space_points, v)
-        colors[i] = :green
+        colors[i] = :red
         alphas[i] = 1.0
     end
 end
@@ -104,10 +104,10 @@ for i in eachindex(A)
         # v = (i[1]/res-1/2res,i[2]/res-1/2res,i[3]/res-1/2res)
         # push!(atoms_in_space_points, v)
         colors[i] = :red
-        alphas[i] = 0.2
+        alphas[i] = 1.0
     end
 end
-
+=#
 count = 0
 for i in CartesianIndices(A)
     if (A[i] * B_grid[i] == -15)

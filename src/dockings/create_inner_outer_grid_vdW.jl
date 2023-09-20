@@ -8,23 +8,25 @@ function create_inner_outer_grid_vdW(inner_cells::Vector{Int32}, surface_cells::
         # bigger protein
         # set inner grid cells to -15
         for i in inner_cells
-            inner_outer_grid[i] = Float32(-15)
+            inner_outer_grid[i] = ComplexF32(-15)
         end
 
         # set surface grid cells to 1
         for i in surface_cells
-            inner_outer_grid[i] = one(Float32)
+            #if (inner_outer_grid[i] == zero(ComplexF32))
+                inner_outer_grid[i] = one(ComplexF32)
+            #end
         end
     else
         # smaller protein
         # set inner grid cells to 1
         for i in inner_cells
-            inner_outer_grid[i] = one(Float32)
+            inner_outer_grid[i] = one(ComplexF32)
         end
 
         # set surface grid cells to 1
         for i in surface_cells
-            inner_outer_grid[i] = one(Float32)
+            inner_outer_grid[i] = one(ComplexF32)
         end
     end
     #=
@@ -35,6 +37,6 @@ function create_inner_outer_grid_vdW(inner_cells::Vector{Int32}, surface_cells::
         inner_outer_grid_3D[i] = inner_outer_grid[i]
     end
     =#
-    return reshape(inner_outer_grid_3D, (M, M, M))
+    return reshape(inner_outer_grid, (M, M, M))
 end
 

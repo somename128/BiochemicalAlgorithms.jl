@@ -12,15 +12,28 @@ using DataFrames
 using DelimitedFiles
 using CSV
 
-include("evaluation_simple.jl")
+#=
+include("eval.jl")
+include("eval_hhb.jl")
 
-proteinA = "simple_geometry/cube_origin_huge_A.pdb"
-proteinB = "simple_geometry/cube_origin_huge_B.pdb"
-complexAB = "simple_geometry/cube_origin_huge.pdb"
+proteinA = "testproteins/2hhb_alpha_chain.pdb"
+proteinB = "testproteins/2hhb_beta_chain.pdb"
+complexAB = "testproteins/2hhb.pdb"
 
-R = (Float32(0), Float32(0), Float32(0))
-T = Vector3{Float32}(-2, -2, -2)
+t = Vector3{Float32}(0, -1, -1)
+R = (Float32(163.477), Float32(-13.0854), Float32(5.47113))
 
-evaluation_simple(proteinA, proteinB, complexAB, R, T)
+eva = eval_hhb(proteinA, proteinB, complexAB, R, t)
  
 # CSV.write("equality.csv", DataFrame(eva), header = false)
+=#
+
+include("bingham_functions_vol2.jl")
+include("vmf.jl")
+
+q = Float32[0.235, 0.568, 0.323, 0.6845]
+
+# sample_quaternions(q, Int32(2), Int32(10))
+for i in 1:10
+    println(sampleVMF(q, 2))
+end

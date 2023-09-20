@@ -1,4 +1,4 @@
-using BenchmarkTools
+using Meshes
 
 include("min_max_atoms.jl")
 
@@ -28,7 +28,7 @@ function set_surface_cells(inner_radius::Vector{Meshes.Ball{3,Float32}}, outer_r
             # I[] to get linear index of cartesian index
             index = I[CartesianIndex(min_x*res,min_y*res,min_z*res)+i]
             # check if centroid at index is in atomball j 
-            if(!Base.in(centroids[index],inner_radius[j]) && Base.in(centroids[index],outer_radius[j]))
+            if(!(Meshes.in(centroids[index],inner_radius[j])) && Meshes.in(centroids[index],outer_radius[j]))
                 # stores indice of centroid if a centroid i lies
                 # in the surface area j -> stored in surface_cells if not already in storage
                 if(!Base.in(index, surface_cells))

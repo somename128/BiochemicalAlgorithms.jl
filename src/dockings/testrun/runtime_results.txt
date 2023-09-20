@@ -1,0 +1,270 @@
+-------------------
+grid surface, 20 deg
+-------------------
+2hhb
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:17:26
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 4:42:06
+16931.168812 seconds (9.86 M allocations: 662.629 GiB, 0.09% gc time, 0.00% compilation time)
+
+
+2mhb
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:08:06
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:58:33
+3514.745875 seconds (5.15 M allocations: 409.330 GiB, 0.08% gc time)
+
+
+2ptc
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:08:13
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:17:54
+1076.179546 seconds (2.89 M allocations: 407.085 GiB, 0.42% gc time)
+
+
+3apr
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:08:30
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:18:03
+1089.478079 seconds (2.62 M allocations: 652.280 GiB, 1.54% gc time, 0.11% compilation time)
+
+
+3ts1
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:17:20
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:21:00
+1266.091839 seconds (2.01 M allocations: 655.356 GiB, 0.84% gc time)
+
+
+-------------------
+grid surface, 120-cell
+-------------------
+2hhb
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:18
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:48:30
+2914.964686 seconds (3.42 M allocations: 122.871 GiB, 0.13% gc time, 0.00% compilation time)
+
+
+2mhb
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:01:31
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:10:19
+620.583586 seconds (1.66 M allocations: 75.899 GiB, 0.21% gc time)
+
+
+2ptc
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:01:42
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:23
+205.638532 seconds (1.21 M allocations: 75.473 GiB, 0.20% gc time)
+
+
+3apr
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:01:46
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:15
+201.042088 seconds (1.99 M allocations: 120.967 GiB, 1.15% gc time, 0.58% compilation time)
+
+
+3ts1
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:12
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:51
+236.656142 seconds (1.29 M allocations: 121.497 GiB, 0.85% gc time)
+
+
+-------------------
+vdW surface, 20 deg
+-------------------
+2hhb
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:16:59
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 5:16:28
+18996.917426 seconds (9.86 M allocations: 662.874 GiB, 0.06% gc time, 0.00% compilation time)
+
+
+2mhb
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:08:11
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 1:06:05
+3967.433028 seconds (5.16 M allocations: 409.453 GiB, 0.18% gc time)
+
+
+2ptc
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:09:07
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:21:07
+1271.362658 seconds (2.89 M allocations: 407.126 GiB, 0.64% gc time)
+
+
+3apr
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:09:56
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:17:45
+1075.837172 seconds (2.61 M allocations: 652.261 GiB, 1.33% gc time, 0.11% compilation time)
+
+3ts1
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:17:24
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:22:19
+1350.429201 seconds (2.00 M allocations: 655.341 GiB, 1.20% gc time)
+
+
+-------------------
+vdW surface, 120-cell
+-------------------
+2hhb
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:18
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:54:52
+3299.663010 seconds (3.40 M allocations: 122.894 GiB, 0.10% gc time, 0.00% compilation time)
+
+
+2mhb
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:01:31
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:11:27
+689.122365 seconds (1.65 M allocations: 75.908 GiB, 0.10% gc time)
+
+
+2ptc
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:01:39
+Initialization done.
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:31
+214.799100 seconds (1.19 M allocations: 75.466 GiB, 0.52% gc time)
+
+
+3apr
+Gridsize: 128
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:01:43
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:12
+202.309076 seconds (1.96 M allocations: 120.940 GiB, 0.96% gc time, 0.58% compilation time)
+
+
+3ts1
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:19
+Initialization done.
+Gridsize: 150
+Grid representation protein A done.
+Start loop...
+Progress: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| Time: 0:03:55
+245.595137 seconds (1.26 M allocations: 121.471 GiB, 0.69% gc time)
+

@@ -1,6 +1,7 @@
 using Distributed
 using Base.Threads
 using LoopVectorization
+using Meshes
 
 include("min_max_atoms.jl")
 
@@ -30,8 +31,8 @@ function set_surface_cells_fast(inner_radius::Vector{Meshes.Ball{3,Float32}}, ou
             # I[] to get linear index of cartesian index
             index = I[CartesianIndex(min_x*res,min_y*res,min_z*res)+i]
             # check if centroid at index is in atomball j 
-            if (!Base.in(centroids[index],inner_radius[j]))
-                if (Base.in(centroids[index],outer_radius[j]))
+            if (!Meshes.in(centroids[index],inner_radius[j]))
+                if (Meshes.in(centroids[index],outer_radius[j]))
                     # stores indice of centroid if a centroid i lies
                     # in the surface area j -> stored in surface_cells if not already in storage
                     if (!Base.in(index, surface_cells))
