@@ -15,27 +15,46 @@ sc = load_object("src/dockings/testrun_huge/2hhb_vdW_120.jld2")
 proteinA = "src/dockings/testproteins/2hhb_alpha_chain.pdb"
 proteinB = "src/dockings/testproteins/2hhb_beta_chain.pdb"
 complexAB = "src/dockings/testproteins/2hhb.pdb"
+insertcols!(sc[1], :rmsd => Float32[typemax(Float32), typemax(Float32), typemax(Float32), typemax(Float32), typemax(Float32), typemax(Float32), typemax(Float32), typemax(Float32), typemax(Float32), typemax(Float32)])
 # print initalization result
 println(sc[1])
-# store results
-results_rmsd = Float32[]
 
 # set rmsd to infinity
-rmsd = typemax(Float32)
-
-@time while 0 < rmsd
+# rmsd_min = typemax(Float32)
+# standard deviation
+λ = Float32(100)
+# counter = 1
+@time while Float32(2.5) < sc[1][1, :].rmsd
     # refine
-    @time score_refined = refine2!(sc, Int32(100), vdW)
-    println(score_refined[1][1:10, :])
+    @time global sc = refine2!(sc, λ, Int32(5), vdW)
 
+    #=
     # eval
-    t = Vector3{Float32}(sc[1][1, :].α, sc[1][1, :].β, sc[1][1, :].β)
-    R = (sc[1][1, :].R[1], sc[1][1, :].R[2], sc[1][1, :].R[3])
-    global rmsd = eval_hhb(proteinA, proteinB, complexAB, R, t)
-    # store and print rmsd
-    push!(results_rmsd, rmsd)
-    println(rmsd)
+    for i in 1:10
+        t = Vector3{Float32}(sc[1][i, :].α, sc[1][i, :].β, sc[1][i, :].γ)
+        R = (sc[1][i, :].R[1], sc[1][i, :].R[2], sc[1][i, :].R[3])
+        rmsd = eval_hhb(proteinA, proteinB, complexAB, R, t)
+        # println(rmsd)
+        
+        if (rmsd_min >= rmsd)
+            global rmsd_min = rmsd
+        end
+
+    end
+    =#
+    println(sc[1])
+    println("Aktuelles Minimum: ", sc[1][1, :].rmsd)
+    println(λ)
+
+    # every second time half the standard deviation
+    # global  counter += 1
+    # if (counter % 2 == 0)
+    global λ *= Float32(0.75)
+    # end
+    # else
+    #     global λ += λ - 10
+    # end
+    
 end
 
-save_object("src/dockings/results_rmsd.jld2", results_rmsd)
-results_rmsd
+

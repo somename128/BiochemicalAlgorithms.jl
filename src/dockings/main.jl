@@ -17,14 +17,14 @@ include("refine2!.jl")
 # const to = TimerOutput()
 res = Int32(1)
 vdW = false
-hypercube = true
+hypercube = false
 init = false
-init_N = Int(32)
+init_N = Int32(150)
 init_A = "src/dockings/simple_geometry/cube_origin.pdb"
 init_B = "src/dockings/simple_geometry/cube_origin.pdb"
 path_A = "src/dockings/testproteins/2hhb_alpha_chain.pdb"
 path_B = "src/dockings/testproteins/2hhb_beta_chain.pdb"
-correlation_docking(init_A, init_B, res, vdW, hypercube, init, init_N)
+correlation_docking(init_A, init_B, res, vdW, hypercube, true, init_N)
 println("Initialization done.")
 @time correlation_docking(path_A, path_B, res, vdW, hypercube, init, init_N)
 # show(to)

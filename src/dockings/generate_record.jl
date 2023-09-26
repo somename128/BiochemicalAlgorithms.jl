@@ -9,12 +9,16 @@ include("extract_max_fast.jl")
 function generate_record(A::Array{ComplexF32,3}, rotation::QuaternionF32, roomcoordinates::Vector{Tuple{String, Vector3{Float32}}}, centroids::Array{Meshes.Point3f, 3}, gridsize::Int32, res::Int32, vdW::Bool)
     # rotate atoms roomcoordinates by rotation
     atoms = rotate_atoms(roomcoordinates, rotation, gridsize)
+    println("atoms rotated.")
     # grid representation protein b
     B = grid_representation(atoms, gridsize, centroids, res, true, vdW)
+    println("grid build.")
     # fft-scoring
     C = ifft(fft(A).*conj(fft(B)))
+    println("fft done.")
     # safe α,β,γ of max fft-scoring (c)
     max = extract_max_fast(C)
+    println("max extracted.")
     # build record for scoring table
     # transfer position of greatest value of C into shifts 
     # in xyz direction

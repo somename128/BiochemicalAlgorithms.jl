@@ -28,6 +28,7 @@ path_A = "src/dockings/testproteins/2hhb_alpha_chain.pdb"
 path_B = "src/dockings/testproteins/2hhb_beta_chain.pdb"
 @time score = correlation_docking(path_A, path_B, res, vdW, hypercube, init, init_N)
 save_object("src/dockings/testrun/2hhb_vdW_20.jld2", score[1])
+save_object("src/dockings/testrun_huge/2hhb_vdW_20.jld2", score)
 println("\n")
 # 2mhb
 println("2mhb")
@@ -42,6 +43,7 @@ path_A = "src/dockings/testproteins/2mhb_alpha_chain.pdb"
 path_B = "src/dockings/testproteins/2mhb_beta_chain.pdb"
 @time score = correlation_docking(path_A, path_B, res, vdW, hypercube, init, init_N)
 save_object("src/dockings/testrun/2mhb_vdW_20.jld2", score[1])
+save_object("src/dockings/testrun_huge/2mhb_vdW_20.jld2", score)
 println("\n")
 # 2ptc
 println("2ptc")
@@ -56,6 +58,7 @@ path_A = "src/dockings/testproteins/2ptc_proteinase.pdb"
 path_B = "src/dockings/testproteins/2ptc_inhibitor.pdb"
 @time score = correlation_docking(path_A, path_B, res, vdW, hypercube, init, init_N)
 save_object("src/dockings/testrun/2ptc_vdW_20.jld2", score[1])
+save_object("src/dockings/testrun_huge/2ptc_vdW_20.jld2", score)
 println("\n")
 # 3apr
 println("3apr")
@@ -70,8 +73,10 @@ path_A = "src/dockings/testproteins/3apr_proteinase.pdb"
 path_B = "src/dockings/testproteins/3apr_inhibitor.pdb"
 @time score = correlation_docking(path_A, path_B, res, vdW, hypercube, init, init_N)
 save_object("src/dockings/testrun/3apr_vdW_20.jld2", score[1])
+save_object("src/dockings/testrun_huge/3apr_vdW_20.jld2", score)
 println("\n")
 # 3ts1
+println("3ts1")
 init = true
 init_N = Int32(150)
 init_A = "src/dockings/simple_geometry/cube_origin.pdb"
@@ -83,4 +88,5 @@ path_A = "src/dockings/testproteins/3ts1_protein.pdb"
 path_B = "src/dockings/testproteins/3ts1_ligand.pdb"
 @time score = correlation_docking(path_A, path_B, res, vdW, hypercube, init, init_N)
 save_object("src/dockings/testrun/3ts1_vdW_20.jld2", score[1])
+save_object("src/dockings/testrun_huge/3ts1_vdW_20.jld2", score)
 println("\n")

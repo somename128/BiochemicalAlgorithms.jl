@@ -3,7 +3,6 @@ using Base.Threads
 using SharedArrays
 using Meshes
 
-include("min_max_atoms.jl")
 include("transform_cells!.jl")
 
 function set_grid_vdW(inner::Vector{Meshes.Ball{3,Float32}}, outer::Vector{Meshes.Ball{3,Float32}}, centroids::Array{Meshes.Point3f, 3}, roomcoordinates::Vector{Vector3{Float32}}, N::Int32, res::Int32, is_smaller::Bool)
@@ -12,33 +11,30 @@ function set_grid_vdW(inner::Vector{Meshes.Ball{3,Float32}}, outer::Vector{Meshe
     # using shared array
     # grid = SharedArray{ComplexF32, 3}(Int64(N*res), Int64(N*res), Int64(N*res))
 
-    #extract min max (in rounded int +/-2) of atom coordinates of protein
-    min_max = min_max_atoms(roomcoordinates)
-    min_x = min_max[1]
-    max_x = min_max[2]
-    min_y = min_max[3]
-    max_y = min_max[4]
-    min_z = min_max[5]
-    max_z = min_max[6]
-
-    I = LinearIndices(centroids)
-
     # set grid cell where centroid inside atomball to one
-    @threads for i in CartesianIndices(centroids[min_x*res:max_x*res,min_y*res:max_y*res,min_z*res:max_z*res])
-        for j in eachindex(inner)
+    @threads for i in eachindex(outer)
+        # set mini grid around outer radius of atomballs 
+        min_x = Int32(round(outer[i].center.coords[1])) - Int32(3)
+        max_x = Int32(round(outer[i].center.coords[1])) + Int32(3)
+        min_y = Int32(round(outer[i].center.coords[2])) - Int32(3)
+        max_y = Int32(round(outer[i].center.coords[2])) + Int32(3)
+        min_z = Int32(round(outer[i].center.coords[3])) - Int32(3)
+        max_z = Int32(round(outer[i].center.coords[3])) + Int32(3)
+
+        for j in CartesianIndices(centroids[min_x*res:max_x*res,min_y*res:max_y*res,min_z*res:max_z*res]) 
             # real index because indexing starts at one
-            index = CartesianIndex(min_x*res,min_y*res,min_z*res)+i
+            index = CartesianIndex(min_x*res,min_y*res,min_z*res)+j
             if (!is_smaller)
-                # check if centroid at index is in atomball j 
-                if (Meshes.in(centroids[index], inner[j]) && grid[index] == zero(ComplexF32))
+                # check if centroid at index is in atomball i 
+                if (Meshes.in(centroids[index], inner[i]) && grid[index] == zero(ComplexF32))
                     grid[index] = ComplexF32(-15)
                 else
-                    if (Meshes.in(centroids[index], outer[j]) && grid[index] == zero(ComplexF32))
+                    if (Meshes.in(centroids[index], outer[i]) && grid[index] == zero(ComplexF32))
                         grid[index] = one(ComplexF32)
                     end
                 end
             else
-                if (Meshes.in(centroids[index], outer[j]) && grid[index] == zero(ComplexF32))
+                if (Meshes.in(centroids[index], outer[i]) && grid[index] == zero(ComplexF32))
                     grid[index] = one(ComplexF32)
                 end
             end

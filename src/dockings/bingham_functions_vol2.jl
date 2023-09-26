@@ -28,13 +28,20 @@ function sample(M::Matrix{Float32}, Z::Diagonal{Float32, Vector{Float32}}, nsamp
     # Kent uses f^*_bing = exp(-x A x^t), with A = -M Z M^T
     # the minus sign is unconventional but simplifies notation
     A = -M * Z * transpose(M)
-
     Ω = Matrix{Float32}(I + 2.0 .* A./b₀)
     M_star = Float32(exp(-(n-b₀)/2.0)*((n/b₀)^(n/2.0)))
-
+    # get minimum eigvals to make all eigvals positive
+    # if complex eigenvalues take only the real part
+    a = Float32((minimum(real(eigvals(inv(Ω)))))) 
+    if (a < 0)
+        Ω = inv(Ω) - (a-1)*I
+    else
+        Ω = inv(Ω)
+    end
     # now, perform the rejection sampling
     samples = Vector{Vector{Float32}}()
-    proposal_density = MvNormal(zeros(Float32, n), Hermitian(inv(Ω)))
+    # make all eigvals positive through a
+    proposal_density = MvNormal(zeros(Float32, n), Hermitian(Ω))
 
     current_sample = zero(Int32)
     while current_sample < nsamples
@@ -52,7 +59,7 @@ function sample(M::Matrix{Float32}, Z::Diagonal{Float32, Vector{Float32}}, nsamp
     samples
 end
 
-function sample_quaternions(μ::Vector{Float32}, λ::Int32, nsamples::Int32=one(Int32))
+function sample_quaternions(μ::Vector{Float32}, λ::Float32, nsamples::Int32=one(Int32))
     # construct orthonormal matrix with normalized μ as first column
     axis = normalize(μ)
 
