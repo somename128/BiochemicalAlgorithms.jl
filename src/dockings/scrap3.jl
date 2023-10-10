@@ -11,12 +11,32 @@ using Rotations
 using DataFrames
 using DelimitedFiles
 using CSV
-using Meshes
+using Meshes, MeshViz
+using Makie, WGLMakie
+using Plots
+using WAV
+using PDBTools
 
+include("eval_hhb.jl")
+include("eval.jl")
+include("quaternion_functions.jl")
 
-include("bingham_functions_vol2.jl")
+#=
+pathA = "src/dockings/testproteins/2hhb_alpha_chain.pdb"
+proteinA = molecules(load_pdb(pathA))[1]
+for i in eachrow(atoms_df(proteinA))
+    println(i.r[1])
+end
+=#
 
-μ = Float32[0.234, 0.345, 0.235, -0.46347]
-λ = Float32(100)
+protein = readPDB("src/dockings/ballview/2hhb.pdb")
 
-sample_quaternions(μ, λ, Int32(10))
+for i in eachrow(protein)
+    protein.i[1].x
+end
+
+# sound
+#=
+y, fs = wavread(raw"src/dockings/ff_victory.wav")
+wavplay(y, fs)
+=#

@@ -4,12 +4,7 @@ using Rotations
 include("mass_center.jl")
 include("helpers.jl")
 
-function eval_hhb(protein_A::String, protein_B::String, protein_complex::String, rotation::Tuple, translation::Vector3{Float32})
-    # load protein A,B and complex AB
-    proteinA = molecules(load_pdb(protein_A))[1]
-    proteinB = molecules(load_pdb(protein_B))[1]
-    complexAB = molecules(load_pdb(protein_complex))[1]
- 
+function eval_hhb(proteinA::Molecule{Float32}, proteinB::Molecule{Float32}, complexAB::Molecule{Float32}, rotation::Tuple, translation::Vector3{Float32})
     # translate protein A and B in origin
     # see load_and_trans_pdb.jl
     
@@ -25,13 +20,12 @@ function eval_hhb(protein_A::String, protein_B::String, protein_complex::String,
     # create rotation matrix for rigid body transform
     # out of rotation tuple
     rot_matrix = Matrix3(RotXYZ(rotation[1], rotation[2], rotation[3]))
-    # create rigid transform for function 
-    rot_and_trans = RigidTransform(rot_matrix, translation)
     # perform translation and rotation on protein B
-    rigid_transform!(proteinB, rot_and_trans)  
+    rigid_transform!(proteinB, RigidTransform(rot_matrix, translation))  
 
     # process to get proteinAB molecule for rmsd
-    proteinAB = Molecule("proteinAB")   
+    sys = System()
+    proteinAB = Molecule(sys, "proteinAB")   
     atoms_A = atoms_df(proteinA)[1:1069, :]
     atoms_B = atoms_df(proteinB)[1:1123, :]
     atoms_C = atoms_df(proteinA)[1070:2138, :]

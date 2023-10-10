@@ -24,15 +24,15 @@ function correlation_docking(path_to_proteinA::String, path_to_proteinB::String,
         N = set_gridsize(path_to_proteinA, path_to_proteinB)
     end
     println("Gridsize: ", N)
+    # calculate centroids in a NxNxN grid with cells
+    # of 1 angström, only done once
+    centroids = create_centroids(N, resolution)
     # load and translate protein a
     protein_A = load_and_trans_pdb(path_to_proteinA, N)
     roomcoordiantes_atoms_A = extract_roomcoordinates(protein_A)
     # load and translate protein b
     protein_B = load_and_trans_pdb(path_to_proteinB, N)
     roomcoordiantes_atoms_B = extract_roomcoordinates(protein_B)
-    # calculate centroids in a NxNxN grid with cells
-    # of 1 angström, only done once
-    centroids = create_centroids(N, resolution)
     # grid representation protein a
     A = grid_representation(roomcoordiantes_atoms_A, N, centroids, resolution, false, vdW)
     println("Grid representation protein A done.")
