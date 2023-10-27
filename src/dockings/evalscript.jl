@@ -60,14 +60,15 @@ function evalscript(proteinA::Molecule{Float32}, proteinB::Molecule{Float32}, co
     # --------------
     # |CHANGE HERE!|
     # --------------
-    open("src/dockings/latex/3apr/refine_vdW_20.txt", "a") do io
+    #=
+    open("src/dockings/latex/3ts1/refine_vdW_120.txt", "a") do io
         show(io, MIME("text/latex"), sc[1])
     end
     # add new line
     # --------------
     # |CHANGE HERE!|
     # --------------
-    write(open("src/dockings/latex/3apr/refine_vdW_20.txt", "a") , "\n")
-
+    write(open("src/dockings/latex/3ts1/refine_vdW_120.txt", "a") , "\n")
+    =#
     return rmsds
 end
