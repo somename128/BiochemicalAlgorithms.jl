@@ -38,7 +38,7 @@ WGLMakie = "276b4fcb-3e11-5398-bf8b-a0c2d153d008"
 
 [compat]
 AutoHashEquals = "0.2"
-BioStructures = "1, 2"
+BioStructures = "1, 2, 4"
 BioSymbols = "4, 5"
 DataFrames = "1"
 DataFramesMeta = "0.12, 0.13, 0.14"
